@@ -9,7 +9,7 @@
     "express": "3.4.7",
     "jade": "*"
   },
-   "devDependencies": {
+  "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.0",
@@ -27,6 +27,7 @@
     "grunt-express": "~1.2.1",
     "grunt-coffee-percolator": "~0.2.3",
     "grunt-express-server": "~0.4.11",
-    "grunt-contrib-connect": "~0.6.0"
+    "grunt-contrib-connect": "~0.6.0",
+    "grunt-bowercopy": "~0.7.0"
   }
 }
