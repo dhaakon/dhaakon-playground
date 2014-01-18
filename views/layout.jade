@@ -1,7 +1,14 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		script(src='/javascripts/d3.min.js')
+		script(src='/javascripts/jquery.min.js')
+		script(src='/javascripts/topojson.min.js')
+		//-script(src='/javascripts/backbone-min.js')
+		script(src='/javascripts/underscore-min.js')
+		script(src='/javascripts/d3-geo-projections.min.js')
+		script(src='/javascripts/Main.js')
+	body
+		block content
