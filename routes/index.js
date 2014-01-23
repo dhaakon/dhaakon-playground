@@ -1,5 +1,5 @@
 exports.index = function(req, res) {
   return res.render('index', {
-    title: 'Express'
+    title: 'd3-gyg-viz'
   });
 };

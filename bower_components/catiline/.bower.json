@@ -1,0 +1,28 @@
+{
+  "name": "catiline",
+  "version": "2.9.3",
+  "main": "dist/catiline.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "bower_components",
+    "test",
+    "tests",
+    "website",
+    "*.md",
+    "*~",
+    "src"
+  ],
+  "homepage": "https://github.com/calvinmetcalf/catiline",
+  "_release": "2.9.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.9.3",
+    "commit": "9d219ab948e049dce03d7175b236d3ea88045746"
+  },
+  "_source": "git://github.com/calvinmetcalf/catiline.git",
+  "_target": "~2.9.3",
+  "_originalSource": "catiline",
+  "_direct": true
+}

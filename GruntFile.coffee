@@ -7,8 +7,8 @@ module.exports = (grunt) ->
 				files		:	['src/sass/**/*.scss']
 				tasks		:	['compass:dev']
 			coffee		:
-				files		:	['src/app/**/*.coffee']
-				tasks		:	['percolator:main']
+				files		:	['src/app/**/*.coffee', 'src/routes/**/*.coffee']
+				tasks		:	['percolator:main', 'coffee:compile']
 		compass  :
 			dev      :
 				options  :
@@ -17,7 +17,7 @@ module.exports = (grunt) ->
 		copy  :
 			main	:
 				cwd			:	'./'
-				src			:	'bower_components/**/*min.js'
+				src			:	[ 'bower_components/**/*min.js', 'bower_components/**/**/*min.js']
 				dest		:	'./public/javascripts/'
 				flatten		:	true
 				expand		:	true
