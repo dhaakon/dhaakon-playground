@@ -1,68 +1,70 @@
 class Map
-	NEIGHBORS		:	'neighbors'
-	COUNTRIES		:	'countries'
 
-	projector		:	d3.geo
-	color			:	d3.scale.category10()
+	NEIGHBORS				:	'neighbors'
+	COUNTRIES				:	'countries'
 
-	renderer		:	Config.Settings.renderer
+	projector				:	d3.geo
+	color						:	d3.scale.category10()
 
-	type			:	'countries'
+	renderer				:	Config.Settings.renderer
 
+	type						:	'countries'
 	projectionType	:	Config.Map.projections[	Config.Map.projectionKey ]
-	scale			:	Config.Map.scale
-	xOffset			:	Config.Map.xOffset
-	yOffset			:	Config.Map.yOffset
-	scaleMin		:	Config.Map.scaleMin
-	scaleMax		:	Config.Map.scaleMax
+
+	scale						:	Config.Map.scale
+	xOffset					:	Config.Map.xOffset
+	yOffset					:	Config.Map.yOffset
+	scaleMin				:	Config.Map.scaleMin
+	scaleMax				:	Config.Map.scaleMax
 
 	t_lat_source		:	Config.Map.tour_lat_source
 	t_lon_source		:	Config.Map.tour_lon_source
 	b_lat_source		:	Config.Map.booker_lat_source
 	b_lon_source		:	Config.Map.booker_lon_source
 
-	markerSize		:	Config.Map.markerSize
+	markerSize			:	Config.Map.markerSize
+	svg							:	null
+	canvas					:	null
+	group						:	null
 
+	width						:	null
+	height					:	null
+	container				:	null
+	projection			:	null
 
-	svg				:	null
-	canvas			:	null
-	group			:	null
-
-	width			:	null
-	height			:	null
-	container		:	null
-	projection		:	null
-
-	data			:	null
-	countries		:	null
-	neighbors		:	null
+	data						:	null
+	countries				:	null
+	neighbors				:	null
 
 	constructor		:	(@src, @width, @height, @container)->
 		@addListeners()
-		@createSVG()
-		@createCanvas()
+
+		if @renderer is 'canvas'
+			@createCanvas()
+		else
+			@createSVG()
+
 		@readJSON()
 
 	addListeners	:	()->
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
-					  .append('svg')
-					  .attr('id', 'svg-map')
-					  .attr('width', @width)
-					  .attr('height', @height)
+						  .append('svg')
+						  .attr('id', 'svg-map')
+						  .attr('width', @width)
+						  .attr('height', @height)
 					  
 		@group	=	@svg.append('g')
 
 	createCanvas	:	()->
 		@canvas	=	d3.select(@container)
-					  .append('canvas')
-					  .attr('width', @width)
-					  .attr('height', @height)
-					  .attr('id', 'marker-canvas').call(d3.behavior.zoom().scaleExtent([@scaleMin,@scaleMax]).on('zoom', @zoomed))
+							  .append('canvas')
+							  .attr('width', @width)
+							  .attr('height', @height)
+							  .attr('id', 'marker-canvas').call(d3.behavior.zoom().scaleExtent([@scaleMin,@scaleMax]).on('zoom', @zoomed))
 
-		@context =	@canvas.node()
-						   .getContext('2d')
+		@context =	@canvas.node().getContext('2d')
 		 
 	readJSON		:	()->
 		d3.json		@src, @onDataRead
@@ -72,41 +74,41 @@ class Map
 		@drawGrid()
 		@drawCountries()
 
-		console.log 'drawing map'
-
 	drawGrid		:	()->
-		@group.append("path")
-			.datum(d3.geo.graticule())
-			.attr("d", @path)
-			.style("fill", "none")
-			.style("stroke", "#ffffff")
-			.style("stroke-width", "0.5px")
+		switch @renderer
+			when 'svg'
+				@group.append("path")
+							.datum(d3.geo.graticule())
+							.attr("d", @path)
+							.style("fill", "none")
+							.style("stroke", "#ffffff")
+							.style("stroke-width", "0.5px")
 
 	drawBackground	:	()->
-		@group.append("path")
-			.datum({type: "Sphere"})
-			.attr("d", @path)
-			.style("fill", "#93C2FF")
+		switch @renderer
+			when 'svg'
+				@group.append("path")
+					.datum({type: "Sphere"})
+					.attr("d", @path)
+					.style("fill", "#93C2FF")
 
 	createPoints	:	( @data )->
-		console.log 'draw points'
-		@drawPointsOnCanvas()
+		switch @renderer
+			when 'svg'
+				@group.selectAll('circle')
+					.data(data)
+					.enter()
+					.append('circle')
+					.attr('r', @markerSize )
+					.attr('fill', 'rgba(150,0,0,0.4)')
+					.attr('transform', (d)=>
+						#coords = @projection([d[@t_lon_source], d[@t_lat_source]])
+						coords = @projection([d[@b_lon_source], d[@b_lat_source]])
+						return 'translate(' + coords + ')'
+					)
+					.on('mouseover', @onMarkerMouseOver)
 
-		return
-
-		@group.selectAll('circle')
-			.data(data)
-			.enter()
-			.append('circle')
-			.attr('r', @markerSize )
-			.attr('fill', 'rgba(150,0,0,0.4)')
-			.attr('transform', (d)=>
-				coords = @projection([d[@t_lon_source], d[@t_lat_source]])
-				#coords = @projection([d[@b_lon_source], d[@b_lat_source]])
-				return 'translate(' + coords + ')'
-			)
-			.on('mouseover', @onMarkerMouseOver)
-
+	
 	onMarkerMouseOver	:	(d)=>
 		EventManager.emitEvent Events.MARKER_FOCUS, [d]
 
@@ -123,13 +125,26 @@ class Map
 		return colorString
 
 	drawCountries	:	()->
-		@group.selectAll('.country')
-			.data(@countries)
-			.enter().insert('path', '.graticule')
-			.attr('class', 'country')
-			.attr('d', @path)
-			.style('fill', @fillNeighbors)
-			.style('stroke', 'rgba(100,100,255,1)')
+		switch @renderer
+			when 'svg'
+				@group.selectAll('.country')
+					.data(@countries)
+					.enter().insert('path', '.graticule')
+					.attr('class', 'country')
+					.attr('d', @path)
+					.style('fill', @fillNeighbors)
+					.style('stroke', 'rgba(100,100,255,1)')
+			when 'canvas'
+				@context.fillStyle = '#d7c7ad'
+				@context.beginPath()
+				@path(@neighbors)
+				@context.fill()
+				@path(@countries)
+				@context.stroke()
+
+				console.log @path(@countries)
+				console.log @context
+
 
 	onMouseMove				:	()->
 		m = d3.mouse @
@@ -139,7 +154,6 @@ class Map
 
 	zoomed			:	()=>
 		@updateSVG(d3.event.translate, d3.event.scale)
-		#@updateCanvas(d3.event.translate, d3.event.scale)
 
 
 	updateSVG		:	( pos, scale)	=>
@@ -162,8 +176,15 @@ class Map
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
 
 	createPath			:	()=>
-		@path	=	d3.geo.path()
-						  .projection(@projection)
+		switch @renderer
+			when 'canvas'
+				@path	=	d3.geo.path()
+								  .projection(@projection)
+									.context(@context)
+				console.log d3.geo.path().projection(@projection).context(@context)(@countries)			
+			when 'svg'
+				@path = d3.geo.path()
+									.projection(@projection)
 
 	drawPointsOnCanvas :	()=>
 		#return
@@ -171,7 +192,6 @@ class Map
 
 		i = -1
 		n = @data.length - 1
-
 		
 		while ++i < n
 			d = @data[i]

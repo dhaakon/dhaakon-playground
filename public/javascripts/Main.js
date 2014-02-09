@@ -162,8 +162,11 @@
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
       this.addListeners();
-      this.createSVG();
-      this.createCanvas();
+      if (this.renderer === 'canvas') {
+        this.createCanvas();
+      } else {
+        this.createSVG();
+      }
       this.readJSON();
     }
 
@@ -186,31 +189,36 @@
     Map.prototype.drawMap = function() {
       this.drawBackground();
       this.drawGrid();
-      this.drawCountries();
-      return console.log('drawing map');
+      return this.drawCountries();
     };
 
     Map.prototype.drawGrid = function() {
-      return this.group.append("path").datum(d3.geo.graticule()).attr("d", this.path).style("fill", "none").style("stroke", "#ffffff").style("stroke-width", "0.5px");
+      switch (this.renderer) {
+        case 'svg':
+          return this.group.append("path").datum(d3.geo.graticule()).attr("d", this.path).style("fill", "none").style("stroke", "#ffffff").style("stroke-width", "0.5px");
+      }
     };
 
     Map.prototype.drawBackground = function() {
-      return this.group.append("path").datum({
-        type: "Sphere"
-      }).attr("d", this.path).style("fill", "#93C2FF");
+      switch (this.renderer) {
+        case 'svg':
+          return this.group.append("path").datum({
+            type: "Sphere"
+          }).attr("d", this.path).style("fill", "#93C2FF");
+      }
     };
 
     Map.prototype.createPoints = function(data) {
       var _this = this;
       this.data = data;
-      console.log('draw points');
-      this.drawPointsOnCanvas();
-      return;
-      return this.group.selectAll('circle').data(data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,0.4)').attr('transform', function(d) {
-        var coords;
-        coords = _this.projection([d[_this.t_lon_source], d[_this.t_lat_source]]);
-        return 'translate(' + coords + ')';
-      }).on('mouseover', this.onMarkerMouseOver);
+      switch (this.renderer) {
+        case 'svg':
+          return this.group.selectAll('circle').data(data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,0.4)').attr('transform', function(d) {
+            var coords;
+            coords = _this.projection([d[_this.b_lon_source], d[_this.b_lat_source]]);
+            return 'translate(' + coords + ')';
+          }).on('mouseover', this.onMarkerMouseOver);
+      }
     };
 
     Map.prototype.onMarkerMouseOver = function(d) {
@@ -232,7 +240,19 @@
     };
 
     Map.prototype.drawCountries = function() {
-      return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
+      switch (this.renderer) {
+        case 'svg':
+          return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
+        case 'canvas':
+          this.context.fillStyle = '#d7c7ad';
+          this.context.beginPath();
+          this.path(this.neighbors);
+          this.context.fill();
+          this.path(this.countries);
+          this.context.stroke();
+          console.log(this.path(this.countries));
+          return console.log(this.context);
+      }
     };
 
     Map.prototype.onMouseMove = function() {
@@ -271,7 +291,13 @@
     };
 
     Map.prototype.createPath = function() {
-      return this.path = d3.geo.path().projection(this.projection);
+      switch (this.renderer) {
+        case 'canvas':
+          this.path = d3.geo.path().projection(this.projection).context(this.context);
+          return console.log(d3.geo.path().projection(this.projection).context(this.context)(this.countries));
+        case 'svg':
+          return this.path = d3.geo.path().projection(this.projection);
+      }
     };
 
     Map.prototype.drawPointsOnCanvas = function() {

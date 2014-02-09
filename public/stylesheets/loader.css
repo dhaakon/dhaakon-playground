@@ -1,0 +1,953 @@
+/*$ease    : cubic-bezier( $a, $b, $c, $d );*/
+/* line 63, ../../src/sass/loader.scss */
+body {
+  background: #e3edab;
+}
+
+/* line 67, ../../src/sass/loader.scss */
+li {
+  display: block;
+  background: #777777;
+  position: absolute;
+}
+
+/* line 75, ../../src/sass/loader.scss */
+#loader-container {
+  width: 130px;
+  margin: 50px auto;
+  /*border						:		1px solid #d3d3d3;*/
+  /*background				:		$bg;*/
+  opacity: 0;
+  padding-bottom: 15px;
+  border-radius: 5px;
+  /*box-shadow				:		0px 0px 16px 2px rgba( 150, 150, 200, 0.1);*/
+  -moz-animation: fade-in 500ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: 1;
+  -moz-animation-delay: 300ms;
+  -moz-animation-fill-mode: normal;
+  -o-animation: fade-in 500ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: 1;
+  -o-animation-delay: 300ms;
+  -o-animation-fill-mode: normal;
+  -webkit-animation: fade-in 500ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-delay: 300ms;
+  -webkit-animation-fill-mode: normal;
+  -ms-animation: fade-in 500ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: 1;
+  -ms-animation-delay: 300ms;
+  -ms-animation-fill-mode: normal;
+}
+
+/* line 95, ../../src/sass/loader.scss */
+#loader {
+  width: 80px;
+  height: 80px;
+  padding-top: 25px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  background: none;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(1) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 1.1px;
+  height: 1.1px;
+  left: 44.95px;
+  top: 4.95pxpx;
+  border-radius: 0.55px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 472ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 472ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 472ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 472ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(2) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 2.2px;
+  height: 2.2px;
+  left: 44.4px;
+  top: 4.4pxpx;
+  border-radius: 1.1px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 444ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 444ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 444ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 444ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(3) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 3.3px;
+  height: 3.3px;
+  left: 43.85px;
+  top: 3.85pxpx;
+  border-radius: 1.65px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 416ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 416ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 416ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 416ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(4) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 4.4px;
+  height: 4.4px;
+  left: 43.3px;
+  top: 3.3pxpx;
+  border-radius: 2.2px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 388ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 388ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 388ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 388ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(5) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 5.5px;
+  height: 5.5px;
+  left: 42.75px;
+  top: 2.75pxpx;
+  border-radius: 2.75px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 360ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 360ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 360ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 360ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(6) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 6.6px;
+  height: 6.6px;
+  left: 42.2px;
+  top: 2.2pxpx;
+  border-radius: 3.3px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 332ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 332ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 332ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 332ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(7) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 7.7px;
+  height: 7.7px;
+  left: 41.65px;
+  top: 1.65pxpx;
+  border-radius: 3.85px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 304ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 304ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 304ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 304ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(8) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 8.8px;
+  height: 8.8px;
+  left: 41.1px;
+  top: 1.1pxpx;
+  border-radius: 4.4px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 276ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 276ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 276ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 276ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(9) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 9.9px;
+  height: 9.9px;
+  left: 40.55px;
+  top: 0.55pxpx;
+  border-radius: 4.95px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 248ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 248ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 248ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 248ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* line 105, ../../src/sass/loader.scss */
+#loader li:nth-child(10) {
+  /*opacity			 : $i/30;*/
+  -moz-transform: translate3d(0px, 0px, 1em);
+  -webkit-transform: translate3d(0px, 0px, 1em);
+  transform: translate3d(0px, 0px, 1em);
+  width: 11px;
+  height: 11px;
+  left: 40px;
+  top: 0pxpx;
+  border-radius: 5.5px;
+  -moz-animation: animate-round 1100ms ease-in-out forwards;
+  -moz-animation-direction: normal;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 220ms;
+  -moz-animation-fill-mode: both;
+  -o-animation: animate-round 1100ms ease-in-out forwards;
+  -o-animation-direction: normal;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 220ms;
+  -o-animation-fill-mode: both;
+  -webkit-animation: animate-round 1100ms ease-in-out forwards;
+  -webkit-animation-direction: normal;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 220ms;
+  -webkit-animation-fill-mode: both;
+  -ms-animation: animate-round 1100ms ease-in-out forwards;
+  -ms-animation-direction: normal;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 220ms;
+  -ms-animation-fill-mode: both;
+}
+
+/* simple-transform($scale, $rotate, $trans-x, $trans-y, $skew-x, $skew-y, $origin-x, $origin-y) */
+/*sin(180) * $radius + px;*/
+/*cos(180) * $radius + px;*/
+/* line 149, ../../src/sass/loader.scss */
+#title {
+  width: 75px;
+  margin: 0 auto;
+  font-family: HelveticaNeue;
+  font-size: 0.6em;
+  letter-spacing: 2px;
+  margin-top: 26px;
+  color: #777777;
+  text-transform: uppercase;
+}
+
+/* line 160, ../../src/sass/loader.scss */
+#title p {
+  display: inline;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(1) {
+  opacity: 0.45;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 535ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 535ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 535ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 535ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(2) {
+  opacity: 0.4;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 570ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 570ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 570ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 570ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(3) {
+  opacity: 0.35;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 605ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 605ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 605ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 605ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(4) {
+  opacity: 0.3;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 640ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 640ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 640ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 640ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(5) {
+  opacity: 0.25;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 675ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 675ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 675ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 675ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(6) {
+  opacity: 0.2;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 710ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 710ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 710ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 710ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(7) {
+  opacity: 0.15;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 745ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 745ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 745ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 745ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(8) {
+  opacity: 0.1;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 780ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 780ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 780ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 780ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(9) {
+  opacity: 0.05;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 815ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 815ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 815ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 815ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(10) {
+  opacity: 0;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 850ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 850ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 850ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 850ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+/* line 165, ../../src/sass/loader.scss */
+#title p:nth-child(11) {
+  opacity: -0.05;
+  -moz-animation: shimmer 800ms ease-in-out forwards;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay: 885ms;
+  -moz-animation-fill-mode: backwards;
+  -o-animation: shimmer 800ms ease-in-out forwards;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-delay: 885ms;
+  -o-animation-fill-mode: backwards;
+  -webkit-animation: shimmer 800ms ease-in-out forwards;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 885ms;
+  -webkit-animation-fill-mode: backwards;
+  -ms-animation: shimmer 800ms ease-in-out forwards;
+  -ms-animation-direction: alternate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-delay: 885ms;
+  -ms-animation-fill-mode: backwards;
+}
+
+@-moz-keyframes animate-round {
+  /* line 181, ../../src/sass/loader.scss */
+  0% {
+    -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+
+  /* line 185, ../../src/sass/loader.scss */
+  15% {
+    opacity: 1;
+  }
+
+  /* line 187, ../../src/sass/loader.scss */
+  50% {
+    opacity: 1;
+    background: #000064;
+  }
+
+  /* line 190, ../../src/sass/loader.scss */
+  100% {
+    -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+}
+@-webkit-keyframes animate-round {
+  /* line 181, ../../src/sass/loader.scss */
+  0% {
+    -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+
+  /* line 185, ../../src/sass/loader.scss */
+  15% {
+    opacity: 1;
+  }
+
+  /* line 187, ../../src/sass/loader.scss */
+  50% {
+    opacity: 1;
+    background: #000064;
+  }
+
+  /* line 190, ../../src/sass/loader.scss */
+  100% {
+    -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+}
+@-ms-keyframes animate-round {
+  /* line 181, ../../src/sass/loader.scss */
+  0% {
+    -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+
+  /* line 185, ../../src/sass/loader.scss */
+  15% {
+    opacity: 1;
+  }
+
+  /* line 187, ../../src/sass/loader.scss */
+  50% {
+    opacity: 1;
+    background: #000064;
+  }
+
+  /* line 190, ../../src/sass/loader.scss */
+  100% {
+    -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+}
+@-o-keyframes animate-round {
+  /* line 181, ../../src/sass/loader.scss */
+  0% {
+    -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+
+  /* line 185, ../../src/sass/loader.scss */
+  15% {
+    opacity: 1;
+  }
+
+  /* line 187, ../../src/sass/loader.scss */
+  50% {
+    opacity: 1;
+    background: #000064;
+  }
+
+  /* line 190, ../../src/sass/loader.scss */
+  100% {
+    -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -o-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -webkit-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
+    -moz-transform-origin: 0px 40px;
+    -ms-transform-origin: 0px 40px;
+    -o-transform-origin: 0px 40px;
+    -webkit-transform-origin: 0px 40px;
+    transform-origin: 0px 40px;
+    opacity: 1;
+    background: #777777;
+  }
+}
+@-moz-keyframes shimmer {
+  /* line 199, ../../src/sass/loader.scss */
+  0% {
+    opacity: 1;
+  }
+
+  /* line 201, ../../src/sass/loader.scss */
+  100% {
+    opacity: 0.2;
+  }
+}
+@-webkit-keyframes shimmer {
+  /* line 199, ../../src/sass/loader.scss */
+  0% {
+    opacity: 1;
+  }
+
+  /* line 201, ../../src/sass/loader.scss */
+  100% {
+    opacity: 0.2;
+  }
+}
+@-ms-keyframes shimmer {
+  /* line 199, ../../src/sass/loader.scss */
+  0% {
+    opacity: 1;
+  }
+
+  /* line 201, ../../src/sass/loader.scss */
+  100% {
+    opacity: 0.2;
+  }
+}
+@-o-keyframes shimmer {
+  /* line 199, ../../src/sass/loader.scss */
+  0% {
+    opacity: 1;
+  }
+
+  /* line 201, ../../src/sass/loader.scss */
+  100% {
+    opacity: 0.2;
+  }
+}
+@-moz-keyframes fade-in {
+  /* line 207, ../../src/sass/loader.scss */
+  0% {
+    opacity: 0;
+    color: #777777;
+  }
+
+  /* line 210, ../../src/sass/loader.scss */
+  100% {
+    opacity: 1;
+    color: #000064;
+  }
+}
+@-webkit-keyframes fade-in {
+  /* line 207, ../../src/sass/loader.scss */
+  0% {
+    opacity: 0;
+    color: #777777;
+  }
+
+  /* line 210, ../../src/sass/loader.scss */
+  100% {
+    opacity: 1;
+    color: #000064;
+  }
+}
+@-ms-keyframes fade-in {
+  /* line 207, ../../src/sass/loader.scss */
+  0% {
+    opacity: 0;
+    color: #777777;
+  }
+
+  /* line 210, ../../src/sass/loader.scss */
+  100% {
+    opacity: 1;
+    color: #000064;
+  }
+}
+@-o-keyframes fade-in {
+  /* line 207, ../../src/sass/loader.scss */
+  0% {
+    opacity: 0;
+    color: #777777;
+  }
+
+  /* line 210, ../../src/sass/loader.scss */
+  100% {
+    opacity: 1;
+    color: #000064;
+  }
+}

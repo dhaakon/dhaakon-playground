@@ -1,0 +1,9 @@
+extends layout
+
+block added-scripts
+	script(src='/javascripts/Main.js')
+
+block content
+	div(id= 'map-container' data-renderer= renderer.name + '-renderer')
+		if renderer.isCanvas
+			//-canvas#map-container

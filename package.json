@@ -31,6 +31,7 @@
     "grunt-bowercopy": "~0.7.0",
     "backbone": "~1.1.0",
     "grunt-contrib-coffee": "~0.8.2",
-    "hamljs": "~0.6.1"
+    "hamljs": "~0.6.1",
+    "grunt-foreman": "0.0.4"
   }
 }

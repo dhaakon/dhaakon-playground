@@ -1,6 +1,6 @@
 EventManager	=	 new EventEmitter()
 
 Events	=	
-	MAP_LOADED		:	'onMapLoaded'
+	MAP_LOADED			:	'onMapLoaded'
 	BOOKING_LOADED	:	'onBookingLoaded'
-	MARKER_FOCUS	:	'onMarkerFocus'
+	MARKER_FOCUS		:	'onMarkerFocus'

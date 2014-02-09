@@ -9,9 +9,9 @@ insert_final_newline = true
 ; 4 tabs indentation
 [*]
 indent_style = tab
-indent_size = 4
+indent_size = 2
 
 ; 4 tabs indentation
 [*.js]
 indent_style = tab
-indent_size = 4
+indent_size = 2

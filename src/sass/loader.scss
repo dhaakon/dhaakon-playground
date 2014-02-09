@@ -1,0 +1,214 @@
+@import "compass/css3/transform";
+
+$amount					:	10;
+$radius					:	40;
+$initialDelay		:	500;
+$delayScale			:	28;
+
+$color			:	#777;
+$bg					:	white;
+$fadeColor	:	rgba(0,0,100, 1.0);
+
+$a			:	1;
+$b			:	0.6;
+$c			:	0.6;
+$d			:	1;
+/*$ease    : cubic-bezier( $a, $b, $c, $d );*/
+$ease			:	ease-in-out;
+
+$transXa	:	0px;
+$transYa	:	0px;
+
+$mode			:	normal;
+$fillMode	:	both;
+
+$vendors		:	('moz', 'o', 'webkit', 'ms');
+$midPoint		:	50;
+
+$timeFactor					:	110;
+$time								:	$amount * $timeFactor;
+
+$shimmerTimeFactor	:	80;
+$shimmerDelayOffset	:	500;
+$shimmerDelayFactor	:	35;
+$shimmerEase				:	ease-in-out;
+$shimmerTime				:	$amount * $shimmerTimeFactor;
+
+$sizeFactor	:	1.1;
+$sizeScale	:	$amount / ($amount * $sizeFactor);
+
+$shimmerHigh	:	1;
+$shimmerLow		:	0.2;
+  
+@mixin size	( $width, $height ){
+	width		:	$width + px;
+	height	:	$height + px;
+}
+
+@mixin keyframes( $name ){
+	@-moz-keyframes #{$name}{
+		@content;
+	}
+	@-webkit-keyframes #{$name}{
+		@content;
+	}
+	@-ms-keyframes #{$name}{
+		@content;
+	}
+	@-o-keyframes #{$name}{
+		@content;
+	}
+}
+ 
+body{
+  background					:				#e3edab;
+}
+
+li{
+  display							:				block;
+  background					:				$color;
+  position						:				absolute;
+}
+	
+$offsetSize					:		50;
+ 
+#loader-container{
+	width							:		($radius * 2) + $offsetSize + px;
+	margin						:		50px auto;
+	/*border						:		1px solid #d3d3d3;*/
+	/*background				:		$bg;*/
+	opacity						:		0;
+	padding-bottom		:		15px;
+	border-radius			:		5px;
+	/*box-shadow				:		0px 0px 16px 2px rgba( 150, 150, 200, 0.1);*/
+
+	@each $vendor in $vendors{
+		-#{$vendor}-animation										:	fade-in + " " + 500 + ms + " " + $ease + ' forwards';
+		-#{$vendor}-animation-direction					:	alternate;
+		-#{$vendor}-animation-iteration-count		:	1;
+		-#{$vendor}-animation-delay							:	300ms;
+		-#{$vendor}-animation-fill-mode					:	normal;
+	}
+
+}
+	    
+#loader{
+	@include					size		($radius * 2, $radius * 2);
+	padding-top				:				$offsetSize /2 + px;
+	margin						:				0 auto;
+	display						:				block;
+	position					:				relative;
+	background				:				none;
+}
+
+@for $i from 1 through $amount{
+	#loader li:nth-child(#{$i}){
+		$size					:	$i * $sizeFactor;
+		$timeOffset		:	$i;
+		$delayOffset	:	$initialDelay - $timeOffset;
+		$delay				:	($i - ($i * $delayScale)) + $delayOffset;
+		$maxSize			:	$amount * $sizeFactor;
+		/*opacity			 : $i/30;*/
+    
+		@include translate3d( $transXa, $transYa );
+		@include size   ($size, $size);
+      
+		left		:	$radius + (($maxSize - $size)/2) + px;
+		top			:	0px + (($maxSize - $size)/2) + px;
+
+		border-radius  : $size/2 + px;
+      
+		@each $vendor in $vendors{
+			-#{$vendor}-animation										:	animate-round + " " + ($time) + ms + " " + $ease + ' forwards';
+			-#{$vendor}-animation-direction					:	$mode;
+			-#{$vendor}-animation-iteration-count		:	infinite;
+			-#{$vendor}-animation-delay							:	$delay + ms;
+			-#{$vendor}-animation-fill-mode					:	$fillMode;
+		}
+	}
+}
+  /* simple-transform($scale, $rotate, $trans-x, $trans-y, $skew-x, $skew-y, $origin-x, $origin-y) */
+
+$rotateA	:		0deg;
+$rotateB	:		360deg;
+ 
+$transXb	:	 0px;/*sin(180) * $radius + px;*/
+$transYb	:	 0px;/*cos(180) * $radius + px;*/
+    
+$scale		:	1;
+    
+$skewX		:	0deg;
+$skewY		:	0deg;
+    
+$originY	:	$radius + px;
+$originX	:	0px;
+  
+$loading					:	('l','o','a','d','i','n','g','.','.','.');
+$loadingLength		:	length($loading);
+
+#title{
+	width						:	$loadingLength * 7.5 + px;
+	margin					:	0 auto;
+	font-family			:	HelveticaNeue;
+	font-size				:	0.6em;
+	letter-spacing	:	2px;
+	margin-top			:	26px;
+	color						:	$color;
+	text-transform	:	uppercase;
+}
+
+#title p{
+	display					:	inline;
+}
+
+@for $i from 1 through $loadingLength + 1{
+	#title p:nth-child(#{$i}){
+		opacity				:	($loadingLength - $i) / 20;
+		$shimmerDelay	:	($i * $shimmerDelayFactor) + $shimmerDelayOffset;
+
+		@each $vendor in $vendors{
+			-#{$vendor}-animation										:	shimmer + " " + ($shimmerTime) + ms + " " + $shimmerEase + ' forwards';
+			-#{$vendor}-animation-direction					:	alternate;
+			-#{$vendor}-animation-iteration-count		:	infinite;
+			-#{$vendor}-animation-delay							:	$shimmerDelay + ms;
+			-#{$vendor}-animation-fill-mode					:	backwards;
+		}
+	};
+}
+
+
+@include keyframes( animate-round ){
+	0%{
+		@include simple-transform( $scale, $rotateA, $transXa, $transYa, $skewX, $skewY, $originX, $originY);
+		opacity				:	1;
+		background		:	$color;
+	}15%{
+		opacity				:	1;	
+	}50%{
+		opacity				:	1;
+		background		: $fadeColor;
+	}100%{
+		@include simple-transform( $scale, $rotateB, $transXb, $transYb, $skewX, $skewY, $originX, $originY);
+		opacity				:	1;
+		background		:	$color;
+	}
+}
+
+
+@include keyframes( shimmer ){
+	0%{
+		opacity			:		$shimmerHigh;
+	}100%{
+		opacity			:		$shimmerLow;
+	}
+}
+
+@include keyframes( fade-in ){
+	0%{
+		opacity			:		0;
+		color				:		$color;
+	}100%{
+		opacity			:		1;
+		color				:		$fadeColor;
+	}
+}

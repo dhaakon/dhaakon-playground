@@ -1,0 +1,23 @@
+extends layout
+
+block added-scripts
+	link(href='/stylesheets/codemirror.css' rel='stylesheet')
+	link(href='/stylesheets/dev.css' rel='stylesheet')
+	link(href='/stylesheets/night.css' rel='stylesheet')
+	link(href='/stylesheets/coffeescript.css' rel='stylesheet')
+	//-CodeMirror
+	script(src='/javascripts/codemirror.js')
+	script(src='/javascripts/coffeescript.js')
+	script(src='/javascripts/javascript.js')
+	//-Addons
+	script(src='/javascripts/addon/dialog/dialog.js')
+	script(src='/javascripts/addon/search/searchcursor.js')
+	script(src='/javascripts/addon/wrap/hardwrap.js')
+	script(src='/javascripts/vim.js')
+	script(src='/javascripts/_dev.js')
+
+block content
+	#output
+	form#dev
+		textarea#codem(cols="120") function getCompletions(token, context) {
+
