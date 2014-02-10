@@ -32,6 +32,7 @@
     "backbone": "~1.1.0",
     "grunt-contrib-coffee": "~0.8.2",
     "hamljs": "~0.6.1",
-    "grunt-foreman": "0.0.4"
+    "grunt-foreman": "0.0.4",
+    "gisty": "~0.1.4"
   }
 }
