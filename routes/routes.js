@@ -155,7 +155,6 @@
     f = new Flickr();
     geo = new Geocoder();
     filename = 'public/json/tgs.json';
-    console.log(__dirname);
     obj = {};
     obj.flickr = f;
     pages = 7;

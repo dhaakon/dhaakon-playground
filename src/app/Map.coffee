@@ -93,17 +93,21 @@ class Map
 					.style("fill", "#93C2FF")
 
 	createPoints	:	( @data )->
+		console.log @data
 		switch @renderer
 			when 'svg'
 				@group.selectAll('circle')
-					.data(data)
+					.data(@data)
 					.enter()
 					.append('circle')
 					.attr('r', @markerSize )
 					.attr('fill', 'rgba(150,0,0,0.4)')
 					.attr('transform', (d)=>
+						_d = d.location.coords[0]
 						#coords = @projection([d[@t_lon_source], d[@t_lat_source]])
-						coords = @projection([d[@b_lon_source], d[@b_lat_source]])
+						#coords = @projection([d[@b_lon_source], d[@b_lat_source]])
+						coords = @projection([_d['longitude'], _d['latitude']])
+						console.log _d
 						return 'translate(' + coords + ')'
 					)
 					.on('mouseover', @onMarkerMouseOver)
@@ -155,7 +159,6 @@ class Map
 	zoomed			:	()=>
 		@updateSVG(d3.event.translate, d3.event.scale)
 
-
 	updateSVG		:	( pos, scale)	=>
 		_str	=	'translate(' +	pos.join(',') + ')scale(' + scale + ')'
 		@group.attr('transform', _str)
@@ -174,6 +177,7 @@ class Map
 		@projection =	@projector[@projectionType]()
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
+		console.log @projection
 
 	createPath			:	()=>
 		switch @renderer
@@ -181,6 +185,7 @@ class Map
 				@path	=	d3.geo.path()
 								  .projection(@projection)
 									.context(@context)
+
 				console.log d3.geo.path().projection(@projection).context(@context)(@countries)			
 			when 'svg'
 				@path = d3.geo.path()

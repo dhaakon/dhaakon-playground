@@ -21,7 +21,6 @@ exports.thinkData = ( req, res )->
 	geo =	new Geocoder()
 
 	filename = 'public/json/tgs.json'
-	console.log __dirname
 
 	obj					=	{}
 	obj.flickr	=	f
@@ -32,7 +31,6 @@ exports.thinkData = ( req, res )->
 	photos	= {}
 	citycount = 0
 
-	#photos = JSON.parse data
 	fs.readFile filename,'utf-8', (err, _data)-> res.send eval _data	
 
 	return

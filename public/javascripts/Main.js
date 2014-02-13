@@ -8,20 +8,20 @@
     Settings: {
       jsonPath: '/json/world.json',
       csvPath: '/csv/booking_small.csv',
-      renderer: 'canvas'
+      renderer: 'svg'
     },
     Map: {
       container: '#map-container',
-      height: 768,
-      width: 1224,
-      scale: 500,
+      height: 1224,
+      width: 1624,
+      scale: 280,
       xOffset: 0,
       yOffset: -230,
       scaleMin: 0.75,
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
       projectionKey: 2,
-      markerSize: 0.5,
+      markerSize: 5,
       booker_lat_source: 'booker_lat',
       booker_lon_source: 'booker_lon',
       tour_lat_source: 'tour_lat',
@@ -214,11 +214,14 @@
     Map.prototype.createPoints = function(data) {
       var _this = this;
       this.data = data;
+      console.log(this.data);
       switch (this.renderer) {
         case 'svg':
-          return this.group.selectAll('circle').data(data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,0.4)').attr('transform', function(d) {
-            var coords;
-            coords = _this.projection([d[_this.b_lon_source], d[_this.b_lat_source]]);
+          return this.group.selectAll('circle').data(this.data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,0.4)').attr('transform', function(d) {
+            var coords, _d;
+            _d = d.location.coords[0];
+            coords = _this.projection([_d['longitude'], _d['latitude']]);
+            console.log(_d);
             return 'translate(' + coords + ')';
           }).on('mouseover', this.onMarkerMouseOver);
       }
@@ -290,7 +293,8 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]);
+      this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]);
+      return console.log(this.projection);
     };
 
     Map.prototype.createPath = function() {
@@ -338,19 +342,70 @@
   TGS = (function() {
     TGS.prototype.src = Config.TGS.src;
 
+    TGS.prototype.JSON_PATH = Config.Settings.jsonPath;
+
+    TGS.prototype.mapHeight = Config.Map.height;
+
+    TGS.prototype.mapWidth = Config.Map.width;
+
+    TGS.prototype.map = null;
+
+    TGS.prototype.bookingInformation = null;
+
+    TGS.prototype.mapContainer = Config.Map.container;
+
+    TGS.prototype.svg = null;
+
+    TGS.prototype.container = null;
+
     function TGS() {
-      d3.json(this.src, this.onTGSDataLoaded);
+      this.onMarkerFocused = __bind(this.onMarkerFocused, this);
+      this.onBookingLoaded = __bind(this.onBookingLoaded, this);
+      this.onMapLoaded = __bind(this.onMapLoaded, this);
+      this.addListeners();
+      this.createMap();
     }
 
     TGS.prototype.onTGSDataLoaded = function(data) {
       var _main,
         _this = this;
       console.log(data);
+      console.log(this.map);
       console.log('tgs');
+      this.map.createPoints(data);
+      return;
       _main = d3.select('#main');
       return _main.selectAll('p').data(data).enter().append('p').html(function(d) {
         return d.location.title + '\t\n' + d.location.coords[0].latitude + '\t\t' + d.location.coords[0].longitude;
       });
+    };
+
+    TGS.prototype.createBookingData = function() {
+      return this.booking = new Booking(this.CSV_PATH);
+    };
+
+    TGS.prototype.addListeners = function() {
+      return EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
+    };
+
+    TGS.prototype.onMapLoaded = function() {
+      return d3.json(this.src, _.bind(this.onTGSDataLoaded, this));
+    };
+
+    TGS.prototype.onBookingLoaded = function(event) {
+      this.map.createPoints(this.booking.data);
+      this.bookingInformation = new BookingInformation();
+      return EventManager.addListener(Events.MARKER_FOCUS, this.onMarkerFocused);
+    };
+
+    TGS.prototype.onMarkerFocused = function(event) {
+      this.bookingInformation.changeTourTitle(event.booking_id);
+      this.bookingInformation.changeTourCityTitle(event.tour_address);
+      return this.bookingInformation.changeBookerCityTitle(event.booker_country);
+    };
+
+    TGS.prototype.createMap = function() {
+      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer);
     };
 
     return TGS;
