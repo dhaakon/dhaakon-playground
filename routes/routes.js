@@ -154,15 +154,16 @@
     };
     f = new Flickr();
     geo = new Geocoder();
-    filename = '../json/tgs.json';
+    filename = 'public/json/tgs.json';
+    console.log(__dirname);
     obj = {};
     obj.flickr = f;
     pages = 7;
     i = 1;
     photos = {};
     citycount = 0;
-    fs.readFile(filename, function(_data) {
-      return res.json(_data);
+    fs.readFile(filename, 'utf-8', function(err, _data) {
+      return res.send(eval(_data));
     });
     return;
     cb = function(data) {
