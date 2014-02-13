@@ -234,6 +234,75 @@
     return res.render('tgs');
   };
 
+  exports.getstudents = function(req, res) {
+    var c, cb, csv, filename, fs, geo, i, onEnd, opts, students, _, _path, _stream,
+      _this = this;
+    csv = require('fast-csv');
+    fs = require('fs');
+    _ = require('underscore');
+    _path = 'public/csv/students.csv';
+    _stream = fs.createReadStream(_path);
+    i = 0;
+    opts = {};
+    students = [];
+    filename = 'public/json/students.json';
+    fs.readFile(filename, 'utf-8', function(err, _data) {
+      return res.send(eval(_data));
+    });
+    return;
+    geo = new Geocoder();
+    cb = function(data) {
+      var o, obj, prop, property, _i, _len;
+      if (i === 0) {
+        for (_i = 0, _len = data.length; _i < _len; _i++) {
+          prop = data[_i];
+          opts[prop] = '';
+        }
+        return ++i;
+      } else {
+        obj = {};
+        o = 0;
+        for (property in opts) {
+          obj[property] = data[o];
+          ++o;
+        }
+        students.push(obj);
+        return ++i;
+      }
+    };
+    onEnd = function() {
+      var fn, l, loc, student;
+      l = students.length;
+      fn = function(err, data) {
+        var loc, student;
+        console.log(err, data);
+        if (!err) {
+          if (l >= 0) {
+            student = students[l];
+            loc = student.City + ', ' + student.Country;
+            console.log(loc);
+            opts = {
+              location: {
+                coords: [data[0]]
+              }
+            };
+            _.extend(students[l], opts);
+            geo.getLocationByCityName(loc, fn);
+            return --l;
+          } else {
+            fs.writeFile('public/json/students.json', JSON.stringify(students));
+            return res.json(students);
+          }
+        }
+      };
+      student = students[--l];
+      loc = student.City + ', ' + student.Country;
+      console.log(loc);
+      return geo.getLocationByCityName(loc, fn);
+    };
+    c = csv(_stream).on('data', cb).on('end', onEnd).parse();
+  };
+
   exports.list = function(req, res) {
     return res.send('respond with a resource');
   };

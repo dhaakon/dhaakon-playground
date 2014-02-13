@@ -36,6 +36,9 @@
     "gisty": "~0.1.4",
     "node-flickr": "0.0.1",
     "node-geocoder": "~1.2.0",
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "node-csv": "~0.1.2",
+    "csv": "~0.3.7",
+    "fast-csv": "0.0.3"
   }
 }

@@ -39,6 +39,7 @@ class Server
 		@app.get		'/tgsData',										Router.thinkData
 		@app.get		'/tgs',												Router.tgs
 		@app.get		'/location/:lat/:long',				Router.getlocation
+		@app.get		'/students/',									Router.getstudents
 
 		if 'development' == @app.get 'env'
 			@app.use @express.errorHandler()

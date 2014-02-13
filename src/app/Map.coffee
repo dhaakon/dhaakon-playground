@@ -32,6 +32,9 @@ class Map
 	container				:	null
 	projection			:	null
 
+	students				:	null
+	flickr					:	null
+
 	data						:	null
 	countries				:	null
 	neighbors				:	null
@@ -55,9 +58,12 @@ class Map
 						  .attr('id', 'svg-map')
 						  .attr('width', @width)
 						  .attr('height', @height)
-						  .on('mousedown', @onMouseDownHandler)
+							
 					  
 		@group	=	@svg.append('g')
+									#.on('mousedown', @onMouseDownHandler)
+									.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", @zoomed))
+
 
 	createCanvas	:	()->
 		@canvas	=	d3.select(@container)
@@ -94,16 +100,19 @@ class Map
 					.attr("d", @path)
 					.style("fill", "#93C2FF")
 
-	createPoints	:	( @data )->
+	createPoints	:	( name, data, color )->
+		@[name] = data
+		console.log @[name]
 		switch @renderer
 			when 'svg'
-				@group.selectAll('circle')
-					.data(@data)
+				@group.selectAll('group')
+					.data(@[name])
 					.enter()
 					.append('circle')
-					.attr('r', @markerSize )
-					.attr('fill', 'rgba(150,0,0,1)')
+					.attr('r', @markerSize * 2 )
+					.attr('fill', color)
 					.attr('transform', (d)=>
+						#console.log d
 						_d = d.location.coords[0]
 						#coords = @projection([d[@t_lon_source], d[@t_lat_source]])
 						#coords = @projection([d[@b_lon_source], d[@b_lat_source]])
@@ -111,8 +120,28 @@ class Map
 						return 'translate(' + coords + ')'
 					)
 					.on('mouseover', @onMarkerMouseOver)
+	drawLines				  : (src)->
+		console.log @[src[1]]
+		for path in @[src[0]]
+			coords = @projection([ path.location.coords[0]['longitude'], path.location.coords[0]['latitude']])
+			#console.log coords
+			#return
+			@group.selectAll('group')
+							.data(@[src[1]])
+							.enter()
+							.append('path')
+							.attr('d', (d)=>
+								console.log d
+								_d = d.location.coords[0] 
 
-	
+								m = 'M' + coords.join(' ')
+								l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
+
+								return [m,l].join(' ')
+							)
+							.attr('stroke','rgba(0,0,250,0.1)')
+							.attr('stroke-width', '1')
+							.attr('fill','none')
 	onMarkerMouseOver	:	(d)=>
 		EventManager.emitEvent Events.MARKER_FOCUS, [d]
 
@@ -154,6 +183,8 @@ class Map
 
 	onMouseDownHandler	:		()=>
 		m = d3.event
+		console.log m
+		console.log @group
 		coords = [m['offsetX'], m['offsetY']]
 
 		geo_loc = @projection.invert(coords)
@@ -177,33 +208,21 @@ class Map
 							return 'translate(' + coords.join(',') + ')'
 					)
 
-		line	=		d3.svg.line()
-								.x((d)=>
-								)
-								.y((d)=>
-								)
-								.interpolate('basis')
-		
-		l = @svg.selectAll('svg')
+		l = @group.selectAll('group')
 				.data(@data)
 				.enter()
 				.append('path')
 				.attr('d', (d)=>
-					_d = d.location.coords[0]
+					_d = d.location.coords[0] || d.location
 
 					m = 'M' + coords.join(' ')
 					l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
 
-					console.log [m,l].join(' ')
 					return [m,l].join(' ')
 				)
 				.attr('stroke','rgba(0,0,250,0.2)')
 				.attr('stroke-width', '1')
 				.attr('fill','none')
-
-		console.log l
-
-
 
 	zoomed			:	()=>
 		@updateSVG(d3.event.translate, d3.event.scale)

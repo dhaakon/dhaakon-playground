@@ -28,7 +28,8 @@
       tour_lon_source: 'tour_lon'
     },
     TGS: {
-      src: '/tgsData/'
+      src: '/tgsData/',
+      students_src: '/students/'
     }
   };
 
@@ -142,6 +143,10 @@
 
     Map.prototype.projection = null;
 
+    Map.prototype.students = null;
+
+    Map.prototype.flickr = null;
+
     Map.prototype.data = null;
 
     Map.prototype.countries = null;
@@ -177,8 +182,8 @@
     Map.prototype.addListeners = function() {};
 
     Map.prototype.createSVG = function() {
-      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height).on('mousedown', this.onMouseDownHandler);
-      return this.group = this.svg.append('g');
+      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
+      return this.group = this.svg.append('g').call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed));
     };
 
     Map.prototype.createCanvas = function() {
@@ -212,18 +217,40 @@
       }
     };
 
-    Map.prototype.createPoints = function(data) {
+    Map.prototype.createPoints = function(name, data, color) {
       var _this = this;
-      this.data = data;
+      this[name] = data;
+      console.log(this[name]);
       switch (this.renderer) {
         case 'svg':
-          return this.group.selectAll('circle').data(this.data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,1)').attr('transform', function(d) {
+          return this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', color).attr('transform', function(d) {
             var coords, _d;
             _d = d.location.coords[0];
             coords = _this.projection([_d['longitude'], _d['latitude']]);
             return 'translate(' + coords + ')';
           }).on('mouseover', this.onMarkerMouseOver);
       }
+    };
+
+    Map.prototype.drawLines = function(src) {
+      var coords, path, _i, _len, _ref, _results,
+        _this = this;
+      console.log(this[src[1]]);
+      _ref = this[src[0]];
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        path = _ref[_i];
+        coords = this.projection([path.location.coords[0]['longitude'], path.location.coords[0]['latitude']]);
+        _results.push(this.group.selectAll('group').data(this[src[1]]).enter().append('path').attr('d', function(d) {
+          var l, m, _d;
+          console.log(d);
+          _d = d.location.coords[0];
+          m = 'M' + coords.join(' ');
+          l = 'L' + _this.projection([_d['longitude'], _d['latitude']]).join(' ');
+          return [m, l].join(' ');
+        }).attr('stroke', 'rgba(0,0,250,0.1)').attr('stroke-width', '1').attr('fill', 'none'));
+      }
+      return _results;
     };
 
     Map.prototype.onMarkerMouseOver = function(d) {
@@ -269,9 +296,11 @@
     };
 
     Map.prototype.onMouseDownHandler = function() {
-      var c, cb, coords, geo_loc, l, line, m, str,
+      var c, cb, coords, geo_loc, l, m, str,
         _this = this;
       m = d3.event;
+      console.log(m);
+      console.log(this.group);
       coords = [m['offsetX'], m['offsetY']];
       geo_loc = this.projection.invert(coords);
       str = '/location/' + geo_loc.join('/') + '/';
@@ -287,16 +316,13 @@
       c = this.group.append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
         return 'translate(' + coords.join(',') + ')';
       });
-      line = d3.svg.line().x(function(d) {}).y(function(d) {}).interpolate('basis');
-      l = this.svg.selectAll('svg').data(this.data).enter().append('path').attr('d', function(d) {
+      return l = this.group.selectAll('group').data(this.data).enter().append('path').attr('d', function(d) {
         var _d;
-        _d = d.location.coords[0];
+        _d = d.location.coords[0] || d.location;
         m = 'M' + coords.join(' ');
         l = 'L' + _this.projection([_d['longitude'], _d['latitude']]).join(' ');
-        console.log([m, l].join(' '));
         return [m, l].join(' ');
       }).attr('stroke', 'rgba(0,0,250,0.2)').attr('stroke-width', '1').attr('fill', 'none');
-      return console.log(l);
     };
 
     Map.prototype.zoomed = function() {
@@ -366,7 +392,9 @@
   })();
 
   TGS = (function() {
-    TGS.prototype.src = Config.TGS.src;
+    TGS.prototype.flickrSrc = Config.TGS.src;
+
+    TGS.prototype.studentsSrc = Config.TGS.students_src;
 
     TGS.prototype.JSON_PATH = Config.Settings.jsonPath;
 
@@ -399,8 +427,14 @@
       this.createMap();
     }
 
-    TGS.prototype.onTGSDataLoaded = function(data) {
-      return this.map.createPoints(data);
+    TGS.prototype.onTGSFlickrDataLoaded = function(data) {
+      this.map.createPoints('flickr', data, 'red');
+      return d3.json(this.studentsSrc, _.bind(this.onTGSStudentsDataLoaded, this));
+    };
+
+    TGS.prototype.onTGSStudentsDataLoaded = function(data) {
+      this.map.createPoints('students', data, 'blue');
+      return this.map.drawLines(['students', 'flickr']);
     };
 
     TGS.prototype.createBookingData = function() {
@@ -412,7 +446,7 @@
     };
 
     TGS.prototype.onMapLoaded = function() {
-      return d3.json(this.src, _.bind(this.onTGSDataLoaded, this));
+      return d3.json(this.flickrSrc, _.bind(this.onTGSFlickrDataLoaded, this));
     };
 
     TGS.prototype.onBookingLoaded = function(event) {

@@ -1,8 +1,9 @@
 class TGS
-	src						:		Config.TGS.src
-	JSON_PATH			:	Config.Settings.jsonPath
-	mapHeight			:	Config.Map.height
-	mapWidth			:	Config.Map.width
+	flickrSrc			:		Config.TGS.src
+	studentsSrc		:		Config.TGS.students_src
+	JSON_PATH			:		Config.Settings.jsonPath
+	mapHeight			:		Config.Map.height
+	mapWidth			:		Config.Map.width
 
 	map						:	null
 
@@ -24,8 +25,13 @@ class TGS
 		@addListeners()
 		@createMap()
 	
-	onTGSDataLoaded		:		(data)->
-		@map.createPoints data
+	onTGSFlickrDataLoaded		:		(data)->
+		@map.createPoints 'flickr', data, 'red'
+		d3.json @studentsSrc, _.bind @onTGSStudentsDataLoaded, @
+
+	onTGSStudentsDataLoaded		:		(data)->
+		@map.createPoints 'students', data, 'blue'
+		@map.drawLines ['students','flickr']
 
 	createBookingData	:	()->
 		@booking = new Booking @CSV_PATH
@@ -36,8 +42,8 @@ class TGS
 		
 	onMapLoaded				:	()=>
 		#@createBookingData()
-		d3.json @src, _.bind @onTGSDataLoaded, @
-
+		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
+		
 	onBookingLoaded		:	( event )=>
 		@map.createPoints @booking.data
 		@bookingInformation		=	new BookingInformation()

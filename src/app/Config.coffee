@@ -39,4 +39,5 @@ Config	=
 		tour_lon_source		:	'tour_lon'
 	TGS			:
 		src						:		'/tgsData/'
+		students_src	:		'/students/'
 
