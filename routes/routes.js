@@ -136,7 +136,7 @@
   })();
 
   exports.thinkData = function(req, res) {
-    var cb, citycount, correctNames, data, f, filename, fs, geo, i, obj, pages, photos, _,
+    var cb, citycount, correctNames, f, filename, fs, geo, i, obj, pages, photos, _,
       _this = this;
     fs = require('fs');
     _ = require('underscore');
@@ -161,8 +161,9 @@
     i = 1;
     photos = {};
     citycount = 0;
-    data = require(filename);
-    res.json(data);
+    fs.readFile(filename, function(_data) {
+      return res.json(_data);
+    });
     return;
     cb = function(data) {
       var city, fn, photo, photoArray, photoCount, _photo;

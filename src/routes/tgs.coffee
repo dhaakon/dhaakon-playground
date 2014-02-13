@@ -32,10 +32,7 @@ exports.thinkData = ( req, res )->
 	citycount = 0
 
 	#photos = JSON.parse data
-	data		=	require filename
-	#return
-
-	res.json data
+	fs.readFile filename, (_data)->res.json _data	
 
 	return
 
