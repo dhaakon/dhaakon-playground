@@ -154,7 +154,7 @@
     };
     f = new Flickr();
     geo = new Geocoder();
-    filename = 'public/json/tgs.json';
+    filename = '/public/json/tgs.json';
     obj = {};
     obj.flickr = f;
     pages = 7;
@@ -208,7 +208,7 @@
           } else {
             res.json(photoArray);
             _json = JSON.stringify(photoArray);
-            return fs.writeFile('./' + filename, _json, function(err) {
+            return fs.writeFile('.' + filename, _json, function(err) {
               if (err != null) {
                 return console.log(err);
               } else {

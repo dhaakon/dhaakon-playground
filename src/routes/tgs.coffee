@@ -20,7 +20,7 @@ exports.thinkData = ( req, res )->
 	f		= new Flickr()
 	geo =	new Geocoder()
 
-	filename = 'public/json/tgs.json'
+	filename = '/public/json/tgs.json'
 
 	obj					=	{}
 	obj.flickr	=	f
@@ -79,7 +79,7 @@ exports.thinkData = ( req, res )->
 					res.json photoArray
 					_json = JSON.stringify photoArray
 
-					fs.writeFile './' + filename, _json, (err)-> if err? then console.log err else console.log 'saved'
+					fs.writeFile '.' + filename, _json, (err)-> if err? then console.log err else console.log 'saved'
 
 			geo.getLocation photoArray[--photoCount].location.title, fn
 		else
