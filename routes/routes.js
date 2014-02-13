@@ -154,7 +154,7 @@
     };
     f = new Flickr();
     geo = new Geocoder();
-    filename = '/public/json/tgs.json';
+    filename = '/json/tgs.json';
     obj = {};
     obj.flickr = f;
     pages = 7;
