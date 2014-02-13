@@ -20,7 +20,7 @@ exports.thinkData = ( req, res )->
 	f		= new Flickr()
 	geo =	new Geocoder()
 
-	filename = '/json/tgs.json'
+	filename = '../json/tgs.json'
 
 	obj					=	{}
 	obj.flickr	=	f
