@@ -127,8 +127,12 @@
       return this.geocoder = require('node-geocoder').getGeocoder(this.provider, this.adapter, opts);
     };
 
-    Geocoder.prototype.getLocation = function(city, cb) {
+    Geocoder.prototype.getLocationByCityName = function(city, cb) {
       return this.geocoder.geocode(city, cb);
+    };
+
+    Geocoder.prototype.getLocationByLatLong = function(coords, cb) {
+      return this.geocoder.reverse(coords[0], coords[1], cb);
     };
 
     return Geocoder;
@@ -200,12 +204,12 @@
               photoArray[photoCount].location.coords.push(property);
             }
           } else {
-            geo.getLocation(correctNames[photoArray[photoCount].location.title], fn);
+            geo.getLocationByCityName(correctNames[photoArray[photoCount].location.title], fn);
             return;
           }
           if (photoCount > 0) {
             photoCount--;
-            return geo.getLocation(photoArray[photoCount].location.title, fn);
+            return geo.getLocationByCityName(photoArray[photoCount].location.title, fn);
           } else {
             res.json(photoArray);
             _json = JSON.stringify(photoArray);
@@ -218,7 +222,7 @@
             });
           }
         };
-        return geo.getLocation(photoArray[--photoCount].location.title, fn);
+        return geo.getLocationByCityName(photoArray[--photoCount].location.title, fn);
       } else {
         return f.getPhotos(i, cb);
       }
@@ -232,6 +236,20 @@
 
   exports.list = function(req, res) {
     return res.send('respond with a resource');
+  };
+
+  exports.getlocation = function(req, res) {
+    var cb, coords, geo, l,
+      _this = this;
+    coords = [req.params['long'], req.params['lat']];
+    l = {
+      coords: coords
+    };
+    geo = new Geocoder();
+    cb = function(err, data) {
+      return res.json(data || err);
+    };
+    return geo.getLocationByLatLong(coords, cb);
   };
 
 }).call(this);

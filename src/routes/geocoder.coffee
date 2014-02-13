@@ -14,5 +14,8 @@ class Geocoder
 
 		@geocoder = require('node-geocoder').getGeocoder(@provider, @adapter, opts)
 	
-	getLocation			:		( city, cb )->
+	getLocationByCityName			:		( city, cb )->
 		@geocoder.geocode city, cb
+
+	getLocationByLatLong			:		(	coords, cb)->
+		@geocoder.reverse coords[0], coords[1], cb

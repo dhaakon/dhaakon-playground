@@ -16,7 +16,7 @@
       width: 1624,
       scale: 280,
       xOffset: 0,
-      yOffset: -230,
+      yOffset: 0,
       scaleMin: 0.75,
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
@@ -161,22 +161,23 @@
       this.updateCanvas = __bind(this.updateCanvas, this);
       this.updateSVG = __bind(this.updateSVG, this);
       this.zoomed = __bind(this.zoomed, this);
+      this.onMouseDownHandler = __bind(this.onMouseDownHandler, this);
       this.onMouseWheel = __bind(this.onMouseWheel, this);
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
-      this.addListeners();
       if (this.renderer === 'canvas') {
         this.createCanvas();
       } else {
         this.createSVG();
       }
       this.readJSON();
+      this.addListeners();
     }
 
     Map.prototype.addListeners = function() {};
 
     Map.prototype.createSVG = function() {
-      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
+      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height).on('mousedown', this.onMouseDownHandler);
       return this.group = this.svg.append('g');
     };
 
@@ -214,14 +215,12 @@
     Map.prototype.createPoints = function(data) {
       var _this = this;
       this.data = data;
-      console.log(this.data);
       switch (this.renderer) {
         case 'svg':
           return this.group.selectAll('circle').data(this.data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,0.4)').attr('transform', function(d) {
             var coords, _d;
             _d = d.location.coords[0];
             coords = _this.projection([_d['longitude'], _d['latitude']]);
-            console.log(_d);
             return 'translate(' + coords + ')';
           }).on('mouseover', this.onMarkerMouseOver);
       }
@@ -255,9 +254,7 @@
           this.path(this.neighbors);
           this.context.fill();
           this.path(this.countries);
-          this.context.stroke();
-          console.log(this.path(this.countries));
-          return console.log(this.context);
+          return this.context.stroke();
       }
     };
 
@@ -269,6 +266,28 @@
     Map.prototype.onMouseWheel = function(e) {
       var m;
       return m = d3.event.wheelDeltaY;
+    };
+
+    Map.prototype.onMouseDownHandler = function() {
+      var cb, coords, geo_loc, m, str,
+        _this = this;
+      m = d3.event;
+      coords = [m['offsetX'], m['offsetY']];
+      geo_loc = this.projection.invert(coords);
+      str = '/location/' + geo_loc.join('/') + '/';
+      cb = function(data) {
+        var city, country, loc, state;
+        if (data[0] != null) {
+          country = data[0].country;
+          city = data[0].city;
+          state = data[0].state;
+          return loc = [country, city, state].join(', ');
+        }
+      };
+      return this.group.append('circle').attr('r', this.markerSize - 3).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
+        coords = _this.projection(geo_loc);
+        return 'translate(' + coords.join(',') + ')';
+      });
     };
 
     Map.prototype.zoomed = function() {
@@ -293,15 +312,13 @@
     };
 
     Map.prototype.createProjection = function() {
-      this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]);
-      return console.log(this.projection);
+      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]);
     };
 
     Map.prototype.createPath = function() {
       switch (this.renderer) {
         case 'canvas':
-          this.path = d3.geo.path().projection(this.projection).context(this.context);
-          return console.log(d3.geo.path().projection(this.projection).context(this.context)(this.countries));
+          return this.path = d3.geo.path().projection(this.projection).context(this.context);
         case 'svg':
           return this.path = d3.geo.path().projection(this.projection);
       }
@@ -369,9 +386,6 @@
     TGS.prototype.onTGSDataLoaded = function(data) {
       var _main,
         _this = this;
-      console.log(data);
-      console.log(this.map);
-      console.log('tgs');
       this.map.createPoints(data);
       return;
       _main = d3.select('#main');

@@ -37,7 +37,6 @@ class Map
 	neighbors				:	null
 
 	constructor		:	(@src, @width, @height, @container)->
-		@addListeners()
 
 		if @renderer is 'canvas'
 			@createCanvas()
@@ -45,8 +44,10 @@ class Map
 			@createSVG()
 
 		@readJSON()
+		@addListeners()
 
 	addListeners	:	()->
+
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
@@ -54,6 +55,7 @@ class Map
 						  .attr('id', 'svg-map')
 						  .attr('width', @width)
 						  .attr('height', @height)
+						  .on('mousedown', @onMouseDownHandler)
 					  
 		@group	=	@svg.append('g')
 
@@ -93,7 +95,6 @@ class Map
 					.style("fill", "#93C2FF")
 
 	createPoints	:	( @data )->
-		console.log @data
 		switch @renderer
 			when 'svg'
 				@group.selectAll('circle')
@@ -107,7 +108,6 @@ class Map
 						#coords = @projection([d[@t_lon_source], d[@t_lat_source]])
 						#coords = @projection([d[@b_lon_source], d[@b_lat_source]])
 						coords = @projection([_d['longitude'], _d['latitude']])
-						console.log _d
 						return 'translate(' + coords + ')'
 					)
 					.on('mouseover', @onMarkerMouseOver)
@@ -123,7 +123,7 @@ class Map
 		b = i
 		g = i	+	0
 		a = 0.6
-		
+
 		colorString = 'rgba(' + [r,g,b,a].join(',') + ')'
 
 		return colorString
@@ -146,15 +146,37 @@ class Map
 				@path(@countries)
 				@context.stroke()
 
-				console.log @path(@countries)
-				console.log @context
-
-
 	onMouseMove				:	()->
 		m = d3.mouse @
 		
 	onMouseWheel			:	(e)=>
 		m = d3.event.wheelDeltaY
+
+	onMouseDownHandler	:		()=>
+		m = d3.event
+		coords = [m['offsetX'], m['offsetY']]
+
+		geo_loc = @projection.invert(coords)
+
+		str = '/location/' + geo_loc.join('/') + '/'
+
+		cb = (data) =>
+			if data[0]?
+				country		=	data[0].country
+				city			=	data[0].city
+				state			=	data[0].state
+
+				loc = [country, city, state].join(', ')
+
+		#d3.json str, cb
+
+		@group.append('circle')
+				.attr('r', @markerSize - 3 )
+				.attr('fill', 'rgba(150,100,0,0.8)')
+				.attr('transform', (d)=>
+						coords = @projection(geo_loc)
+						return 'translate(' + coords.join(',') + ')'
+				)
 
 	zoomed			:	()=>
 		@updateSVG(d3.event.translate, d3.event.scale)
@@ -170,6 +192,7 @@ class Map
 		@context.clearRect( 0, 0, @width, @height )
 		@context.translate( pos[0], pos[1] )
 		@context.scale(	scale[0], scale[1] )
+
 		@drawPointsOnCanvas()
 		@context.restore()
 
@@ -177,7 +200,6 @@ class Map
 		@projection =	@projector[@projectionType]()
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
-		console.log @projection
 
 	createPath			:	()=>
 		switch @renderer
@@ -186,7 +208,6 @@ class Map
 								  .projection(@projection)
 									.context(@context)
 
-				console.log d3.geo.path().projection(@projection).context(@context)(@countries)			
 			when 'svg'
 				@path = d3.geo.path()
 									.projection(@projection)

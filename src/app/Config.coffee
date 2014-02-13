@@ -10,7 +10,7 @@ Config	=
 		width					:	1624	
 		scale					:	280
 		xOffset				:	0
-		yOffset				:	-230
+		yOffset				:	0
 
 		scaleMin			:	0.75
 		scaleMax			:	10

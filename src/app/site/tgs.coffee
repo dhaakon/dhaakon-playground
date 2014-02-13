@@ -19,10 +19,6 @@ class TGS
 		
 
 	onTGSDataLoaded		:		(data)->
-		console.log data
-		console.log @map
-		console.log 'tgs'
-
 		@map.createPoints data
 
 		return

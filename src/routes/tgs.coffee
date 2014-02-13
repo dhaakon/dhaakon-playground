@@ -63,21 +63,19 @@ exports.thinkData = ( req, res )->
 					for property in resp
 						photoArray[photoCount].location.coords.push property
 				else
-					#console.log photoArray[photoCount].location.title
-					#console.log correctNames[photoArray[photoCount].location.title]
-					geo.getLocation correctNames[photoArray[photoCount].location.title], fn
+					geo.getLocationByCityName correctNames[photoArray[photoCount].location.title], fn
 					return
 
 				if photoCount > 0
 					photoCount--
-					geo.getLocation photoArray[photoCount].location.title, fn
+					geo.getLocationByCityName photoArray[photoCount].location.title, fn
 				else
 					res.json photoArray
 					_json = JSON.stringify photoArray
 
 					fs.writeFile '.' + filename, _json, (err)-> if err? then console.log err else console.log 'saved'
 
-			geo.getLocation photoArray[--photoCount].location.title, fn
+			geo.getLocationByCityName photoArray[--photoCount].location.title, fn
 		else
 			f.getPhotos( i, cb )
 

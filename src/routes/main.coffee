@@ -5,3 +5,5 @@
 #import maps.coffee
 #import tgs.coffee
 #import user.coffee
+#import getlocation.coffee
+

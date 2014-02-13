@@ -57,6 +57,7 @@
       this.app.get('/loaders', Router.loaders);
       this.app.get('/tgsData', Router.thinkData);
       this.app.get('/tgs', Router.tgs);
+      this.app.get('/location/:lat/:long', Router.getlocation);
       if ('development' === this.app.get('env')) {
         return this.app.use(this.express.errorHandler());
       }
