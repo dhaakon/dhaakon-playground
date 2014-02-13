@@ -13,22 +13,19 @@ class TGS
 	container			:	null
 
 	constructor		:		()->
+		@mapWidth  = _w = $(window).width()
+		@mapHeight = _h = $(window).height() - 100
+
+		$(@mapContainer).css(
+			width		:		_w,
+			height	:		_h
+		)
+
 		@addListeners()
 		@createMap()
 	
-		
-
 	onTGSDataLoaded		:		(data)->
 		@map.createPoints data
-
-		return
-		_main = d3.select('#main')
-		
-		_main.selectAll('p')
-				 .data(data)
-				 .enter()
-				 .append('p')
-				 .html((d)=> return d.location.title + '\t\n' + d.location.coords[0].latitude + '\t\t' + d.location.coords[0].longitude)
 
 	createBookingData	:	()->
 		@booking = new Booking @CSV_PATH

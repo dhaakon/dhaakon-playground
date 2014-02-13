@@ -10,11 +10,13 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+@import "tgs";
+
 body, html{
-	height							:				100%;
+	/*height							:				100%;*/
 }
 body{
-  background					:				#e3edab;
+  background					:				black;
 }
 
 #content{

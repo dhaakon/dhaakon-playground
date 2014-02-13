@@ -102,7 +102,7 @@ class Map
 					.enter()
 					.append('circle')
 					.attr('r', @markerSize )
-					.attr('fill', 'rgba(150,0,0,0.4)')
+					.attr('fill', 'rgba(150,0,0,1)')
 					.attr('transform', (d)=>
 						_d = d.location.coords[0]
 						#coords = @projection([d[@t_lon_source], d[@t_lat_source]])
@@ -126,7 +126,7 @@ class Map
 
 		colorString = 'rgba(' + [r,g,b,a].join(',') + ')'
 
-		return colorString
+		return 'rgba(225,225,255,0.8)' #colorString
 
 	drawCountries	:	()->
 		switch @renderer
@@ -170,13 +170,40 @@ class Map
 
 		#d3.json str, cb
 
-		@group.append('circle')
-				.attr('r', @markerSize - 3 )
-				.attr('fill', 'rgba(150,100,0,0.8)')
-				.attr('transform', (d)=>
-						coords = @projection(geo_loc)
-						return 'translate(' + coords.join(',') + ')'
+		c = @group.append('circle')
+					.attr('r', @markerSize )
+					.attr('fill', 'rgba(150,100,0,0.8)')
+					.attr('transform', (d)=>
+							return 'translate(' + coords.join(',') + ')'
+					)
+
+		line	=		d3.svg.line()
+								.x((d)=>
+								)
+								.y((d)=>
+								)
+								.interpolate('basis')
+		
+		l = @svg.selectAll('svg')
+				.data(@data)
+				.enter()
+				.append('path')
+				.attr('d', (d)=>
+					_d = d.location.coords[0]
+
+					m = 'M' + coords.join(' ')
+					l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
+
+					console.log [m,l].join(' ')
+					return [m,l].join(' ')
 				)
+				.attr('stroke','rgba(0,0,250,0.2)')
+				.attr('stroke-width', '1')
+				.attr('fill','none')
+
+		console.log l
+
+
 
 	zoomed			:	()=>
 		@updateSVG(d3.event.translate, d3.event.scale)

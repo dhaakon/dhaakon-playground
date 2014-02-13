@@ -12,8 +12,8 @@
     },
     Map: {
       container: '#map-container',
-      height: 1224,
-      width: 1624,
+      height: 1200,
+      width: 1600,
       scale: 280,
       xOffset: 0,
       yOffset: 0,
@@ -21,7 +21,7 @@
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
       projectionKey: 2,
-      markerSize: 5,
+      markerSize: 2,
       booker_lat_source: 'booker_lat',
       booker_lon_source: 'booker_lon',
       tour_lat_source: 'tour_lat',
@@ -217,7 +217,7 @@
       this.data = data;
       switch (this.renderer) {
         case 'svg':
-          return this.group.selectAll('circle').data(this.data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,0.4)').attr('transform', function(d) {
+          return this.group.selectAll('circle').data(this.data).enter().append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,0,0,1)').attr('transform', function(d) {
             var coords, _d;
             _d = d.location.coords[0];
             coords = _this.projection([_d['longitude'], _d['latitude']]);
@@ -241,7 +241,7 @@
       g = i + 0;
       a = 0.6;
       colorString = 'rgba(' + [r, g, b, a].join(',') + ')';
-      return colorString;
+      return 'rgba(225,225,255,0.8)';
     };
 
     Map.prototype.drawCountries = function() {
@@ -269,7 +269,7 @@
     };
 
     Map.prototype.onMouseDownHandler = function() {
-      var cb, coords, geo_loc, m, str,
+      var c, cb, coords, geo_loc, l, line, m, str,
         _this = this;
       m = d3.event;
       coords = [m['offsetX'], m['offsetY']];
@@ -284,10 +284,19 @@
           return loc = [country, city, state].join(', ');
         }
       };
-      return this.group.append('circle').attr('r', this.markerSize - 3).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
-        coords = _this.projection(geo_loc);
+      c = this.group.append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
         return 'translate(' + coords.join(',') + ')';
       });
+      line = d3.svg.line().x(function(d) {}).y(function(d) {}).interpolate('basis');
+      l = this.svg.selectAll('svg').data(this.data).enter().append('path').attr('d', function(d) {
+        var _d;
+        _d = d.location.coords[0];
+        m = 'M' + coords.join(' ');
+        l = 'L' + _this.projection([_d['longitude'], _d['latitude']]).join(' ');
+        console.log([m, l].join(' '));
+        return [m, l].join(' ');
+      }).attr('stroke', 'rgba(0,0,250,0.2)').attr('stroke-width', '1').attr('fill', 'none');
+      return console.log(l);
     };
 
     Map.prototype.zoomed = function() {
@@ -379,19 +388,19 @@
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
+      var _h, _w;
+      this.mapWidth = _w = $(window).width();
+      this.mapHeight = _h = $(window).height() - 100;
+      $(this.mapContainer).css({
+        width: _w,
+        height: _h
+      });
       this.addListeners();
       this.createMap();
     }
 
     TGS.prototype.onTGSDataLoaded = function(data) {
-      var _main,
-        _this = this;
-      this.map.createPoints(data);
-      return;
-      _main = d3.select('#main');
-      return _main.selectAll('p').data(data).enter().append('p').html(function(d) {
-        return d.location.title + '\t\n' + d.location.coords[0].latitude + '\t\t' + d.location.coords[0].longitude;
-      });
+      return this.map.createPoints(data);
     };
 
     TGS.prototype.createBookingData = function() {

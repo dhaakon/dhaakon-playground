@@ -1023,17 +1023,33 @@ li {
   box-sizing: border-box;
 }
 
-/* line 13, ../../src/sass/screen.scss */
-body, html {
+/* line 1, ../../src/sass/tgs.scss */
+#main {
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  margin-top: 50px;
+}
+
+/* line 9, ../../src/sass/tgs.scss */
+#map-container {
+  margin: 0 auto;
+  width: 100%;
   height: 100%;
 }
 
-/* line 16, ../../src/sass/screen.scss */
-body {
-  background: #e3edab;
+/* line 15, ../../src/sass/screen.scss */
+body, html {
+  /*height							:				100%;*/
 }
 
-/* line 20, ../../src/sass/screen.scss */
+/* line 18, ../../src/sass/screen.scss */
+body {
+  background: black;
+}
+
+/* line 22, ../../src/sass/screen.scss */
 #content {
   position: absolute;
   height: auto;
@@ -1051,7 +1067,7 @@ body {
   z-index: 100;
 }
 
-/* line 37, ../../src/sass/screen.scss */
+/* line 39, ../../src/sass/screen.scss */
 h1, span {
   font-size: 14px;
   text-transform: capitalize;
@@ -1059,14 +1075,14 @@ h1, span {
   font-family: 'Helvetica';
 }
 
-/* line 44, ../../src/sass/screen.scss */
+/* line 46, ../../src/sass/screen.scss */
 h1 {
   text-decoration: underline;
   font-weight: bold;
   margin-top: 12px;
 }
 
-/* line 50, ../../src/sass/screen.scss */
+/* line 52, ../../src/sass/screen.scss */
 span {
   width: 100%;
   padding-top: 4px;
@@ -1075,13 +1091,13 @@ span {
   font-size: 12px;
 }
 
-/* line 58, ../../src/sass/screen.scss */
+/* line 60, ../../src/sass/screen.scss */
 #marker-canvas {
   position: absolute;
   z-index: 100;
 }
 
-/* line 63, ../../src/sass/screen.scss */
+/* line 65, ../../src/sass/screen.scss */
 #svg-map {
   position: absolute;
   z-index: 1;

@@ -6,8 +6,8 @@ Config	=
 
 	Map			:
 		container			:	'#map-container'
-		height				:	1224	
-		width					:	1624	
+		height				:	1200	
+		width					:	1600	
 		scale					:	280
 		xOffset				:	0
 		yOffset				:	0
@@ -31,7 +31,7 @@ Config	=
 									]
 
 		projectionKey		:	2
-		markerSize			:	5
+		markerSize			:	2
 
 		booker_lat_source	:	'booker_lat'
 		booker_lon_source	:	'booker_lon'
