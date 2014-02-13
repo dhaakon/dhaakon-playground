@@ -30,12 +30,14 @@ class Server
 		@app.use		@express.static @path.join(__dirname, 'public')
 
 	setUpRoutes		:	()->
-		@app.get		'/'		,					routes.index
-		@app.get		'/users',					user.list
-		@app.get		'/demos/:type',				demos.demos
-		@app.get		'/maps/:renderer',			maps.index
-		@app.get		'/codem',			codem.codem
-		@app.get		'/loaders',			loaders.loaders
+		@app.get		'/'		,							Router.index
+		@app.get		'/users',						Router.list
+		@app.get		'/demos/:type',			Router.demos
+		@app.get		'/maps/:renderer',	Router.map
+		@app.get		'/codem',						Router.codem
+		@app.get		'/loaders',					Router.loaders
+		@app.get		'/tgsData',					Router.thinkData
+		@app.get		'/tgs',							Router.tgs
 
 		if 'development' == @app.get 'env'
 			@app.use @express.errorHandler()

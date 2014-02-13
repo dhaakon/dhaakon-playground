@@ -3,22 +3,27 @@ module.exports = (grunt) ->
 		watch :
 			options :
 				livereload  :   false
+
 			css			:
 				files		:	['src/sass/**/*.scss']
 				tasks		:	['compass:dev']
+
 			coffee		:
 				files		:	['src/app/**/*.coffee', 'src/routes/**/*.coffee']
 				tasks		:	[
 									'percolator:main',
-									'coffee:compile',
+									'percolator:routes',
 									'percolator:dev',
 									'copy:codemirror'
 								]
+
+
 		compass  :
 			dev      :
 				options  :
 					config   : './src/config.rb'
 					cssDir   : './public/stylesheets/'
+
 
 		copy  :
 			main	:
@@ -34,6 +39,7 @@ module.exports = (grunt) ->
 				dest		:	'./public/javascripts/'
 				flatten		:	true
 				expand		:	true
+
 			codemirror		:
 				src			:	[
 									'bower_components/codemirror/theme/*.css',
@@ -43,6 +49,7 @@ module.exports = (grunt) ->
 				dest		:	'./public/stylesheets/'
 				flatten		:	true
 				expand		:	true
+
 			codemirror_addons	:
 				cwd			:	'./bower_components/codemirror/'
 				src			:	'addon/**/*.js'
@@ -50,32 +57,33 @@ module.exports = (grunt) ->
 				flatten		:	false
 				expand		:	true
 
+
 		percolator	:
 			main		:
 				source		:	'./src/app/'
 				output		:	'./public/javascripts/Main.js'
 				main	  	:	'Main.coffee'
 				compile		:	true
+
 			server		:
 				source		:	'./src/express/'
 				output		:	'./app.js'
 				main		:	'app.coffee'
 				compile		:	true
+
 			dev			:
 				source		:	'./src/app/_dev'
 				output		:	'./public/javascripts/_dev.js'
 				main		:	'_dev.coffee'
 				compile		:	true
 
-		coffee		:
-			compile		:
-				options		:
-					bare	:	false
-				src		:	'src/routes/*.coffee'
-				dest	:	'routes/'
-				ext		:	'.js'
-				expand	:	true
-				flatten	:	true
+			routes		:
+				source	:	'src/routes/'
+				output	:	'routes/routes.js'
+				main	:	'main.coffee'
+				compile	:	true
+				#opts	:	'--bare'
+
 
 		express		:
 			prod		:
@@ -99,7 +107,7 @@ module.exports = (grunt) ->
 					'compass:dev',
 					'copy:codemirror',
 					'copy:codemirror_addons',
-					'coffee',
+					'percolator:routes',
 					'watch'
 					]
 		build	:	[

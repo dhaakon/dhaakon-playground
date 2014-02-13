@@ -3,6 +3,7 @@
 #import Booking.coffee
 #import Events.coffee
 #import Map.coffee
+#import site/tgs.coffee
 
 class Main
 	JSON_PATH			:	Config.Settings.jsonPath	
@@ -50,4 +51,6 @@ class Main
 	createMap					:	()->
 		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer
 
-$(document).ready( (=> new Main() ) )
+$(document).ready( (=> 
+	new TGS() 
+) )

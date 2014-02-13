@@ -1,4 +1,4 @@
-exports.index	=	(req, res) ->
+exports.map	=	(req, res) ->
 	renderer	=	req.params['renderer']
 
 	options		=

@@ -87,7 +87,6 @@ $offsetSize					:		50;
 		-#{$vendor}-animation-delay							:	300ms;
 		-#{$vendor}-animation-fill-mode					:	normal;
 	}
-
 }
 	    
 #loader{
@@ -177,8 +176,8 @@ $loadingLength		:	length($loading);
 @include keyframes( animate-round ){
 	0%{
 		@include simple-transform( $scale, $rotateA, $transXa, $transYa, $skewX, $skewY, $originX, $originY);
-		opacity				:	1;
 		background		:	$color;
+		opacity				:	1;
 	}15%{
 		opacity				:	1;	
 	}50%{
@@ -186,8 +185,8 @@ $loadingLength		:	length($loading);
 		background		: $fadeColor;
 	}100%{
 		@include simple-transform( $scale, $rotateB, $transXb, $transYb, $skewX, $skewY, $originX, $originY);
-		opacity				:	1;
 		background		:	$color;
+		opacity				:	1;
 	}
 }
 

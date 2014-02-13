@@ -37,4 +37,6 @@ Config	=
 		booker_lon_source	:	'booker_lon'
 		tour_lat_source		:	'tour_lat'
 		tour_lon_source		:	'tour_lon'
+	TGS			:
+		src						:		'/tgsData/'
 

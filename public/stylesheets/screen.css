@@ -109,7 +109,7 @@ li {
   -ms-animation-fill-mode: normal;
 }
 
-/* line 93, ../../src/sass/loader.scss */
+/* line 92, ../../src/sass/loader.scss */
 #loader {
   width: 80px;
   height: 80px;
@@ -119,7 +119,7 @@ li {
   background: none;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(1) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -152,7 +152,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(2) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -185,7 +185,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(3) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -218,7 +218,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(4) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -251,7 +251,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(5) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -284,7 +284,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(6) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -317,7 +317,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(7) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -350,7 +350,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(8) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -383,7 +383,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(9) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -416,7 +416,7 @@ li {
   -ms-animation-fill-mode: both;
 }
 
-/* line 102, ../../src/sass/loader.scss */
+/* line 101, ../../src/sass/loader.scss */
 #loader li:nth-child(10) {
   /*opacity			 : $i/30;*/
   -moz-transform: translate3d(0px, 0px, 1em);
@@ -452,7 +452,7 @@ li {
 /* simple-transform($scale, $rotate, $trans-x, $trans-y, $skew-x, $skew-y, $origin-x, $origin-y) */
 /*sin(180) * $radius + px;*/
 /*cos(180) * $radius + px;*/
-/* line 146, ../../src/sass/loader.scss */
+/* line 145, ../../src/sass/loader.scss */
 #title {
   width: 75px;
   margin: 0 auto;
@@ -464,12 +464,12 @@ li {
   text-transform: uppercase;
 }
 
-/* line 157, ../../src/sass/loader.scss */
+/* line 156, ../../src/sass/loader.scss */
 #title p {
   display: inline;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(1) {
   opacity: 0.45;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -494,7 +494,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(2) {
   opacity: 0.4;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -519,7 +519,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(3) {
   opacity: 0.35;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -544,7 +544,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(4) {
   opacity: 0.3;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -569,7 +569,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(5) {
   opacity: 0.25;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -594,7 +594,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(6) {
   opacity: 0.2;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -619,7 +619,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(7) {
   opacity: 0.15;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -644,7 +644,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(8) {
   opacity: 0.1;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -669,7 +669,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(9) {
   opacity: 0.05;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -694,7 +694,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(10) {
   opacity: 0;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -719,7 +719,7 @@ li {
   -ms-animation-fill-mode: backwards;
 }
 
-/* line 162, ../../src/sass/loader.scss */
+/* line 161, ../../src/sass/loader.scss */
 #title p:nth-child(11) {
   opacity: -0.05;
   -moz-animation: shimmer 800ms ease-in-out forwards;
@@ -745,7 +745,7 @@ li {
 }
 
 @-moz-keyframes animate-round {
-  /* line 178, ../../src/sass/loader.scss */
+  /* line 177, ../../src/sass/loader.scss */
   0% {
     -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -757,22 +757,22 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 
-  /* line 182, ../../src/sass/loader.scss */
+  /* line 181, ../../src/sass/loader.scss */
   15% {
     opacity: 1;
   }
 
-  /* line 184, ../../src/sass/loader.scss */
+  /* line 183, ../../src/sass/loader.scss */
   50% {
     opacity: 1;
     background: #000064;
   }
 
-  /* line 187, ../../src/sass/loader.scss */
+  /* line 186, ../../src/sass/loader.scss */
   100% {
     -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -784,12 +784,12 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 }
 @-webkit-keyframes animate-round {
-  /* line 178, ../../src/sass/loader.scss */
+  /* line 177, ../../src/sass/loader.scss */
   0% {
     -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -801,22 +801,22 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 
-  /* line 182, ../../src/sass/loader.scss */
+  /* line 181, ../../src/sass/loader.scss */
   15% {
     opacity: 1;
   }
 
-  /* line 184, ../../src/sass/loader.scss */
+  /* line 183, ../../src/sass/loader.scss */
   50% {
     opacity: 1;
     background: #000064;
   }
 
-  /* line 187, ../../src/sass/loader.scss */
+  /* line 186, ../../src/sass/loader.scss */
   100% {
     -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -828,12 +828,12 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 }
 @-ms-keyframes animate-round {
-  /* line 178, ../../src/sass/loader.scss */
+  /* line 177, ../../src/sass/loader.scss */
   0% {
     -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -845,22 +845,22 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 
-  /* line 182, ../../src/sass/loader.scss */
+  /* line 181, ../../src/sass/loader.scss */
   15% {
     opacity: 1;
   }
 
-  /* line 184, ../../src/sass/loader.scss */
+  /* line 183, ../../src/sass/loader.scss */
   50% {
     opacity: 1;
     background: #000064;
   }
 
-  /* line 187, ../../src/sass/loader.scss */
+  /* line 186, ../../src/sass/loader.scss */
   100% {
     -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -872,12 +872,12 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 }
 @-o-keyframes animate-round {
-  /* line 178, ../../src/sass/loader.scss */
+  /* line 177, ../../src/sass/loader.scss */
   0% {
     -moz-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(0deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -889,22 +889,22 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 
-  /* line 182, ../../src/sass/loader.scss */
+  /* line 181, ../../src/sass/loader.scss */
   15% {
     opacity: 1;
   }
 
-  /* line 184, ../../src/sass/loader.scss */
+  /* line 183, ../../src/sass/loader.scss */
   50% {
     opacity: 1;
     background: #000064;
   }
 
-  /* line 187, ../../src/sass/loader.scss */
+  /* line 186, ../../src/sass/loader.scss */
   100% {
     -moz-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
     -ms-transform:  scale(1, 1) rotateZ(360deg) translate(0px, 0px) skew(0deg, 0deg);
@@ -916,101 +916,101 @@ li {
     -o-transform-origin: 0px 40px;
     -webkit-transform-origin: 0px 40px;
     transform-origin: 0px 40px;
-    opacity: 1;
     background: #777777;
+    opacity: 1;
   }
 }
 @-moz-keyframes shimmer {
-  /* line 196, ../../src/sass/loader.scss */
+  /* line 195, ../../src/sass/loader.scss */
   0% {
     opacity: 1;
   }
 
-  /* line 198, ../../src/sass/loader.scss */
+  /* line 197, ../../src/sass/loader.scss */
   100% {
     opacity: 0.2;
   }
 }
 @-webkit-keyframes shimmer {
-  /* line 196, ../../src/sass/loader.scss */
+  /* line 195, ../../src/sass/loader.scss */
   0% {
     opacity: 1;
   }
 
-  /* line 198, ../../src/sass/loader.scss */
+  /* line 197, ../../src/sass/loader.scss */
   100% {
     opacity: 0.2;
   }
 }
 @-ms-keyframes shimmer {
-  /* line 196, ../../src/sass/loader.scss */
+  /* line 195, ../../src/sass/loader.scss */
   0% {
     opacity: 1;
   }
 
-  /* line 198, ../../src/sass/loader.scss */
+  /* line 197, ../../src/sass/loader.scss */
   100% {
     opacity: 0.2;
   }
 }
 @-o-keyframes shimmer {
-  /* line 196, ../../src/sass/loader.scss */
+  /* line 195, ../../src/sass/loader.scss */
   0% {
     opacity: 1;
   }
 
-  /* line 198, ../../src/sass/loader.scss */
+  /* line 197, ../../src/sass/loader.scss */
   100% {
     opacity: 0.2;
   }
 }
 @-moz-keyframes fade-in {
-  /* line 204, ../../src/sass/loader.scss */
+  /* line 203, ../../src/sass/loader.scss */
   0% {
     opacity: 0;
     color: #777777;
   }
 
-  /* line 207, ../../src/sass/loader.scss */
+  /* line 206, ../../src/sass/loader.scss */
   100% {
     opacity: 1;
     color: #000064;
   }
 }
 @-webkit-keyframes fade-in {
-  /* line 204, ../../src/sass/loader.scss */
+  /* line 203, ../../src/sass/loader.scss */
   0% {
     opacity: 0;
     color: #777777;
   }
 
-  /* line 207, ../../src/sass/loader.scss */
+  /* line 206, ../../src/sass/loader.scss */
   100% {
     opacity: 1;
     color: #000064;
   }
 }
 @-ms-keyframes fade-in {
-  /* line 204, ../../src/sass/loader.scss */
+  /* line 203, ../../src/sass/loader.scss */
   0% {
     opacity: 0;
     color: #777777;
   }
 
-  /* line 207, ../../src/sass/loader.scss */
+  /* line 206, ../../src/sass/loader.scss */
   100% {
     opacity: 1;
     color: #000064;
   }
 }
 @-o-keyframes fade-in {
-  /* line 204, ../../src/sass/loader.scss */
+  /* line 203, ../../src/sass/loader.scss */
   0% {
     opacity: 0;
     color: #777777;
   }
 
-  /* line 207, ../../src/sass/loader.scss */
+  /* line 206, ../../src/sass/loader.scss */
   100% {
     opacity: 1;
     color: #000064;

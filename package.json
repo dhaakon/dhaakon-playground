@@ -33,6 +33,9 @@
     "grunt-contrib-coffee": "~0.8.2",
     "hamljs": "~0.6.1",
     "grunt-foreman": "0.0.4",
-    "gisty": "~0.1.4"
+    "gisty": "~0.1.4",
+    "node-flickr": "0.0.1",
+    "node-geocoder": "~1.2.0",
+    "underscore": "~1.6.0"
   }
 }

@@ -1,9 +1,4 @@
-routes			=	require		'./routes'
-user				=	require		'./routes/user'
-demos				=	require		'./routes/demos'
-maps				=	require		'./routes/maps'
-codem				=	require		'./routes/codem'
-loaders			=	require		'./routes/loaders'
+Router			=	require		'./routes/routes.js'
 
 class Routes
 	constructor		:	()->
