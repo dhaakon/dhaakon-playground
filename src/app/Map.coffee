@@ -17,11 +17,6 @@ class Map
 	scaleMin				:	Config.Map.scaleMin
 	scaleMax				:	Config.Map.scaleMax
 
-	t_lat_source		:	Config.Map.tour_lat_source
-	t_lon_source		:	Config.Map.tour_lon_source
-	b_lat_source		:	Config.Map.booker_lat_source
-	b_lon_source		:	Config.Map.booker_lon_source
-
 	markerSize			:	Config.Map.markerSize
 	svg							:	null
 	canvas					:	null

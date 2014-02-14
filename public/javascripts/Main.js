@@ -21,11 +21,7 @@
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
       projectionKey: 4,
-      markerSize: 2,
-      booker_lat_source: 'booker_lat',
-      booker_lon_source: 'booker_lon',
-      tour_lat_source: 'tour_lat',
-      tour_lon_source: 'tour_lon'
+      markerSize: 2
     },
     TGS: {
       src: '/tgsData/',
@@ -118,14 +114,6 @@
     Map.prototype.scaleMin = Config.Map.scaleMin;
 
     Map.prototype.scaleMax = Config.Map.scaleMax;
-
-    Map.prototype.t_lat_source = Config.Map.tour_lat_source;
-
-    Map.prototype.t_lon_source = Config.Map.tour_lon_source;
-
-    Map.prototype.b_lat_source = Config.Map.booker_lat_source;
-
-    Map.prototype.b_lon_source = Config.Map.booker_lon_source;
 
     Map.prototype.markerSize = Config.Map.markerSize;
 
@@ -442,7 +430,7 @@
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       var _h, _w;
       this.mapWidth = _w = $(window).width();
-      this.mapHeight = _h = $(window).height() - 100;
+      this.mapHeight = _h = $(window).height();
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
       this.scale = $(this.mapContainer).data().scale;

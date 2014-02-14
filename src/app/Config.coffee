@@ -33,10 +33,6 @@ Config	=
 		projectionKey		:	4
 		markerSize			:	2
 
-		booker_lat_source	:	'booker_lat'
-		booker_lon_source	:	'booker_lon'
-		tour_lat_source		:	'tour_lat'
-		tour_lon_source		:	'tour_lon'
 	TGS			:
 		src						:		'/tgsData/'
 		students_src	:		'/students/'
