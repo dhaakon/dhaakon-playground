@@ -20,8 +20,10 @@ class TGS
 
 	loader				:	null
 	constructor		:		()->
-		@mapWidth  = _w = $(window).width() 
-		@mapHeight = _h = $(window).height()
+		#@mapWidth  = _w = $(window).width()/1.5
+		#@mapHeight = _h = $(window).height()/1.5
+		@mapWidth  = _w = 1200 
+		@mapHeight = _h = 600
 
 		@loader			=		$('#loader-container')
 
@@ -29,7 +31,6 @@ class TGS
 		@scale						= $(@mapContainer).data().scale
 		@projectionKey	  = $(@mapContainer).data().projectionkey
 
-		console.log @projectionKey
 
 		@start		=	Date.now()
 
@@ -42,18 +43,17 @@ class TGS
 		@createMap()
 
 	startRotation		:		()->
-		framerate = 1000/30
+		framerate = 1000/60
 		setInterval((=>@loop()), framerate)
 
 	loop						:		()=>
-		#console.log 'tick'
 		if @renderer is 'canvas' then @map.context.clearRect( 0,0,@mapWidth, @mapHeight)
 		@map.projection = @map.projection.rotate([@origin + @velocity * (Date.now() - @start), -15])
 		@map.drawMap()
 		#return
 		@map.createPoints 'students', @studentData, 'blue'
 		@map.createPoints 'flickr', @flickrData, 'red'
-
+		@map.drawLines ['students','flickr']
 	
 	onTGSFlickrDataLoaded		:		(@flickrData)->
 		@map.createPoints 'flickr', @flickrData, 'red'

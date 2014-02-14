@@ -36,7 +36,7 @@ class Map
 
 	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey)->
 		@projectionType = Config.Map.projections[	@projectionKey ]
-		console.log @projectionType
+
 		if @renderer is 'canvas'
 			@createCanvas()
 		else
@@ -66,7 +66,8 @@ class Map
 							  .append('canvas')
 							  .attr('width', @width)
 							  .attr('height', @height)
-							  .attr('id', 'marker-canvas')#.call(d3.behavior.zoom().scaleExtent([@scaleMin,@scaleMax]).on('zoom', @zoomed))
+							  .attr('id', 'marker-canvas')
+								#.call(d3.behavior.zoom().scaleExtent([@scaleMin,@scaleMax]).on('zoom', @zoomed))
 
 		@context =	@canvas.node().getContext('2d')
 		 
@@ -74,8 +75,8 @@ class Map
 		d3.json		@src, @onDataRead
 
 	drawMap			:	()->
-		@drawBackground()
-		@drawGrid()
+		#@drawBackground()
+		#@drawGrid()
 		@drawCountries()
 
 	drawGrid		:	()->
@@ -110,9 +111,11 @@ class Map
 				@group.append("use")
 						.attr("class", "fill")
 						.attr("xlink:href", "#sphere")
+
 			when 'canvas'
 				@context.fillStyle = 'rgba(100,100,255,0.7)'
 				@context.fillRect( 0, 0, @width, @height)
+
 	createPoint : (d) =>
 		fn = (el, idx, array) =>
 			_d = el.__data__.location.coords[0]
@@ -122,7 +125,6 @@ class Map
 			@context.fillRect(coords[0], coords[1],size, size)
 
 		d[0].forEach(fn)
-
 
 	createPoints	:	( name, data, @color )->
 		@[name] = data
@@ -142,8 +144,6 @@ class Map
 					.on('mouseover', @onMarkerMouseOver)
 			when 'canvas'
 				#return
-				#console.log 'drawing'
-				#console.log @[name]
 				#return
 				@canvas.select('canvas')
 					 .data(@[name])
@@ -152,25 +152,72 @@ class Map
 					 #.exit()
 
 	drawLines				  : (src)->
-		if @renderer is 'canvas' then return
-		console.log 'lines'
+		#if @renderer is 'canvas' then return
+
 		for path in @[src[0]]
 			coords = @projection([ path.location.coords[0]['longitude'], path.location.coords[0]['latitude']])
-			@group.selectAll('group')
-							.data(@[src[1]])
-							.enter()
-							.append('path')
-							.attr('d', (d)=>
-								_d = d.location.coords[0] 
 
-								m = 'M' + coords.join(' ')
-								l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
+			switch @renderer
+				when 'svg'
+					@group.selectAll('group')
+									.data(@[src[1]])
+									.enter()
+									.append('path')
+									.attr('d', (d)=>
+										_d = d.location.coords[0] 
 
-								return [m,l].join(' ')
-							)
-							.attr('stroke','rgba(0,0,250,0.1)')
-							.attr('stroke-width', '1')
-							.attr('fill','none')
+										m = 'M' + coords.join(' ')
+										l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
+
+										return [m,l].join(' ')
+									)
+									.attr('stroke','rgba(0,0,250,0.1)')
+									.attr('stroke-width', '1')
+									.attr('fill','none')
+				when 'canvas'
+					fn = (d)=>
+						_f = (el, index, array) =>
+							aCoords = [
+													el.__data__.location.coords[0].longitude,
+													el.__data__.location.coords[0].latitude
+												]
+							l1 = @projection aCoords
+
+							cb = (d)=>
+								_g = (el, index, array)=>
+									bCoords = [
+															el.__data__.location.coords[0].longitude,
+															el.__data__.location.coords[0].latitude
+														]
+									
+									l2 = @projection bCoords
+				
+									@context.save()
+									@context.beginPath()
+									@context.lineWidth = '0.05'
+									@context.strokeStyle = 'rgba( 255, 0, 0, 0.4 )'
+									@context.moveTo(l1[0], l1[1])
+									@context.lineTo(l2[0], l2[1])
+									@context.stroke()
+									@context.restore()
+
+								d[0].forEach _g
+
+							@canvas.select('canvas')
+										 .data(@[src[1]])
+										 .enter()
+										 .call(cb)
+
+
+						d[0].forEach _f
+
+					@canvas.select('canvas')
+						 .data(@[src[0]])
+						 .enter()
+						 .call(fn)
+
+					
+					null
 
 	onMarkerMouseOver	:	(d)=>
 		EventManager.emitEvent Events.MARKER_FOCUS, [d]
@@ -198,12 +245,17 @@ class Map
 					.style('fill', @fillNeighbors)
 					.style('stroke', 'rgba(100,100,255,1)')
 			when 'canvas'
-				@context.fillStyle = '#d7c7ad'
+				@context.save()
+				@context.fillStyle = 'rgba( 120, 120, 40, 0.6 )'
+				@context.lineWidth = '0.2px'
+				@context.strokeStyle = 'rgba( 255, 255, 255, 0.3 )'
 				@context.beginPath()
+				@context.fill()
 				@path(@countries)
 				@context.fill()
 				@path(@neigbors)
 				@context.stroke()
+				@context.restore()
 
 	onMouseMove				:	()->
 		m = d3.mouse @
@@ -219,44 +271,50 @@ class Map
 
 		geo_loc = @projection.invert(coords)
 
-		str = '/location/' + geo_loc.join('/') + '/'
+		#str = '/location/' + geo_loc.join('/') + '/'
 
-		cb = (data) =>
-			if data[0]?
-				country		=	data[0].country
-				city			=	data[0].city
-				state			=	data[0].state
+		#cb = (data) =>
+			#if data[0]?
+				#country		=	data[0].country
+				#city			=	data[0].city
+				#state			=	data[0].state
 
-				loc = [country, city, state].join(', ')
+				#loc = [country, city, state].join(', ')
+		
+		switch @renderer
+			when 'svg'
+				c = @group.append('circle')
+							.attr('r', @markerSize )
+							.attr('fill', 'rgba(150,100,0,0.8)')
+							.attr('transform', (d)=>
+									return 'translate(' + coords.join(',') + ')'
+							)
 
-		c = @group.append('circle')
-					.attr('r', @markerSize )
-					.attr('fill', 'rgba(150,100,0,0.8)')
-					.attr('transform', (d)=>
-							return 'translate(' + coords.join(',') + ')'
-					)
+				l = @group.selectAll('group')
+						.data(@data)
+						.enter()
+						.append('path')
+						.attr('d', (d)=>
+							_d = d.location.coords[0] || d.location
 
-		l = @group.selectAll('group')
-				.data(@data)
-				.enter()
-				.append('path')
-				.attr('d', (d)=>
-					_d = d.location.coords[0] || d.location
+							m = 'M' + coords.join(' ')
+							l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
 
-					m = 'M' + coords.join(' ')
-					l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
-
-					return [m,l].join(' ')
-				)
-				.attr('stroke','rgba(0,0,250,0.2)')
-				.attr('stroke-width', '1')
-				.attr('fill','none')
+							return [m,l].join(' ')
+						)
+						.attr('stroke','rgba(0,0,250,0.2)')
+						.attr('stroke-width', '1')
+						.attr('fill','none')
 
 	zoomed			:	()=>
-		@updateSVG(d3.event.translate, d3.event.scale)
+		switch @renderer
+			when 'svg'
+				@updateSVG d3.event.translate, d3.event.scale
+			when 'canvas'
+				@updateCanvas d3.event.translate, d3.event.scale
 
 	updateSVG		:	( pos, scale)	=>
-		_str	=	'matrix('+scale+',0,0,'+scale+',' +	pos.join(',') + ')'
+		_str	=	'matrix(' + scale + ',0,0,' + scale + ',' +	pos.join(',') + ')'
 		@group.attr('transform', _str)
 
 	updateCanvas	:	( pos, scale)	=>
@@ -266,16 +324,15 @@ class Map
 		@context.clearRect( 0, 0, @width, @height )
 		@context.translate( pos[0], pos[1] )
 		@context.scale(	scale[0], scale[1] )
-
-		@drawPointsOnCanvas()
+		@drawMap()
 		@context.restore()
 
 	createProjection	:	()=>
 		@projection =	@projector[@projectionType]()
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
-						#.clipAngle(90)
-						.precision(.75)
+						#.clipAngle(120)
+						.precision(.25)
 
 	createPath			:	()=>
 		switch @renderer

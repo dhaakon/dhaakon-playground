@@ -17,7 +17,6 @@ module.exports = (grunt) ->
 									'copy:codemirror'
 								]
 
-
 		compass  :
 			dev      :
 				options  :
@@ -110,14 +109,15 @@ module.exports = (grunt) ->
 					'percolator:routes',
 					'watch'
 					]
+
 		build	:	[
 					'percolator:server'
 					]
+
 		serve	:	[
 					'percolator:server',
 					'foreman'
 					]
-
 
 	grunt.registerTask		'dev',		devOpts.default
 	grunt.registerTask		'serve',	devOpts.serve
