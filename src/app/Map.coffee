@@ -35,7 +35,7 @@ class Map
 	neighbors				:	null
 	hasGrid					:	false
 
-	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey)->
+	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey, @hasGrid)->
 		@projectionType = Config.Map.projections[	@projectionKey ]
 
 		if @renderer is 'canvas'

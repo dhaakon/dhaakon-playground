@@ -143,7 +143,7 @@
 
     Map.prototype.hasGrid = false;
 
-    function Map(src, width, height, container, renderer, scale, projectionKey) {
+    function Map(src, width, height, container, renderer, scale, projectionKey, hasGrid) {
       this.src = src;
       this.width = width;
       this.height = height;
@@ -151,6 +151,7 @@
       this.renderer = renderer;
       this.scale = scale;
       this.projectionKey = projectionKey;
+      this.hasGrid = hasGrid;
       this.onDataRead = __bind(this.onDataRead, this);
       this.update = __bind(this.update, this);
       this.drawPointsOnCanvas = __bind(this.drawPointsOnCanvas, this);
@@ -582,7 +583,10 @@
     };
 
     TGS.prototype.createMap = function() {
-      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale, this.projectionKey);
+      this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale, this.projectionKey, this.hasGrid);
+      if (this.hasGrid) {
+        return this.map.hasGrid = true;
+      }
     };
 
     return TGS;

@@ -96,6 +96,7 @@ class TGS
 		@bookingInformation.changeBookerCityTitle	event.booker_country		
 
 	createMap					:	()->
-		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale, @projectionKey
+		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale, @projectionKey, @hasGrid
+		if @hasGrid then @map.hasGrid = true
 		
 
