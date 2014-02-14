@@ -255,7 +255,9 @@
     Map.prototype.drawLines = function(src) {
       var coords, path, _i, _len, _ref, _results,
         _this = this;
-      return;
+      if (this.renderer === 'canvas') {
+        return;
+      }
       _ref = this[src[0]];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
