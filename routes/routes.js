@@ -166,7 +166,13 @@
     photos = {};
     citycount = 0;
     fs.readFile(filename, 'utf-8', function(err, _data) {
-      return res.send(eval(_data));
+      var _d, _i, _len;
+      _d = eval(_data);
+      for (_i = 0, _len = _d.length; _i < _len; _i++) {
+        obj = _d[_i];
+        delete obj['photos'];
+      }
+      return res.send(_d);
     });
     return;
     cb = function(data) {
@@ -266,7 +272,9 @@
     students = [];
     filename = 'public/json/students.json';
     fs.readFile(filename, 'utf-8', function(err, _data) {
-      return res.send(eval(_data));
+      var _d;
+      _d = eval(_data);
+      return res.send(_d);
     });
     return;
     geo = new Geocoder();

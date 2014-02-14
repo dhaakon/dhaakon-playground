@@ -143,6 +143,8 @@
 
     Map.prototype.hasGrid = false;
 
+    Map.prototype.arc = -100;
+
     function Map(src, width, height, container, renderer, scale, projectionKey, hasGrid) {
       this.src = src;
       this.width = width;
@@ -284,18 +286,24 @@
                 cb = function(d) {
                   var _g;
                   _g = function(el, index, array) {
-                    var bCoords, grad, l2;
+                    var bCoords, dist, grad, l2, x1, y1;
                     bCoords = [el.__data__.location.coords[0].longitude, el.__data__.location.coords[0].latitude];
                     l2 = _this.projection(bCoords);
                     grad = _this.context.createLinearGradient(l1[0], l1[1], l2[0], l2[1]);
-                    grad.addColorStop('0', 'blue');
+                    grad.addColorStop('0', 'yellow');
                     grad.addColorStop('1', 'red');
+                    x1 = l2[0] - l1[0];
+                    x1 = x1 * x1;
+                    y1 = l2[1] - l1[1];
+                    y1 = y1 * y1;
+                    dist = Math.sqrt(x1 + y1);
+                    dist /= 3;
                     _this.context.save();
                     _this.context.beginPath();
                     _this.context.lineWidth = '0.05';
                     _this.context.strokeStyle = grad;
                     _this.context.moveTo(l1[0], l1[1]);
-                    _this.context.lineTo(l2[0], l2[1]);
+                    _this.context.bezierCurveTo(l1[0], l1[1] - dist, l2[0], l2[1] + -dist, l2[0], l2[1]);
                     _this.context.stroke();
                     return _this.context.restore();
                   };
@@ -507,7 +515,7 @@
       this.hasGrid = $(this.mapContainer).data().grid;
       this.velocity = ($(this.mapContainer).data().velocity / 10000) || this.velocity;
       this.mapWidth = _w = $(this.mapContainer).data().width || $(window).width();
-      this.mapHeight = _h = $(this.mapContainer).data().height || $(window).width();
+      this.mapHeight = _h = $(this.mapContainer).data().height || $(window).height();
       console.log(this.velocity);
       this.start = Date.now();
       $(this.mapContainer).css({

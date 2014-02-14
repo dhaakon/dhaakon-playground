@@ -34,6 +34,7 @@ class Map
 	countries				:	null
 	neighbors				:	null
 	hasGrid					:	false
+	arc							:	-100
 
 	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey, @hasGrid)->
 		@projectionType = Config.Map.projections[	@projectionKey ]
@@ -193,15 +194,24 @@ class Map
 									
 									l2 = @projection bCoords
 									grad = @context.createLinearGradient(l1[0],l1[1],l2[0],l2[1])
-									grad.addColorStop '0', 'blue'
+									grad.addColorStop '0', 'yellow'
 									grad.addColorStop '1', 'red'
+
+									x1 = l2[0] - l1[0]
+									x1 = x1 * x1
+
+									y1 = l2[1] - l1[1]
+									y1 = y1 * y1
+
+									dist = Math.sqrt x1 + y1
+									dist /= 3
 
 									@context.save()
 									@context.beginPath()
 									@context.lineWidth = '0.05'
 									@context.strokeStyle = grad
 									@context.moveTo(l1[0], l1[1])
-									@context.lineTo(l2[0], l2[1])
+									@context.bezierCurveTo(l1[0], l1[1] - dist, l2[0], l2[1] + - dist, l2[0], l2[1])
 									@context.stroke()
 									@context.restore()
 
@@ -248,6 +258,7 @@ class Map
 					.attr('d', @path)
 					.style('fill', @fillNeighbors)
 					.style('stroke', 'rgba(100,100,255,1)')
+
 			when 'canvas'
 				@context.save()
 				@context.fillStyle = 'rgba( 120, 120, 40, 1 )'
@@ -275,13 +286,14 @@ class Map
 
 		geo_loc = @projection.invert(coords)
 
-		#str = '/location/' + geo_loc.join('/') + '/'
+		## get location
+		#	str = '/location/' + geo_loc.join('/') + '/'
 
-		#cb = (data) =>
-			#if data[0]?
-				#country		=	data[0].country
-				#city			=	data[0].city
-				#state			=	data[0].state
+		#	cb = (data) =>
+				#if data[0]?
+					#country		=	data[0].country
+					#city			=	data[0].city
+					#state			=	data[0].state
 
 				#loc = [country, city, state].join(', ')
 		

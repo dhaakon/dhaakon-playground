@@ -32,8 +32,8 @@ class TGS
 		@hasLines				  = $(@mapContainer).data().lines
 		@hasGrid				  = $(@mapContainer).data().grid
 		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
-		@mapWidth  = _w = $(@mapContainer).data().width || $(window).width()
-		@mapHeight = _h = $(@mapContainer).data().height || $(window).width()
+		@mapWidth  = _w	  = $(@mapContainer).data().width || $(window).width()
+		@mapHeight = _h  = $(@mapContainer).data().height || $(window).height()
 
 
 		console.log @velocity

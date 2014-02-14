@@ -31,7 +31,14 @@ exports.thinkData = ( req, res )->
 	photos	= {}
 	citycount = 0
 
-	fs.readFile filename,'utf-8', (err, _data)-> res.send eval _data	
+	fs.readFile filename,'utf-8', (err, _data)-> 
+		_d = eval _data
+
+		for obj in _d
+			delete obj['photos']
+
+		res.send _d	
+		#fs.writeFile 'public/json/tgs-no-photos.json'
 
 	return
 
@@ -117,7 +124,11 @@ exports.getstudents		=		( req, res)->
 	students = []
 
 	filename = 'public/json/students.json'
-	fs.readFile filename,'utf-8', (err, _data)-> res.send eval _data	
+	fs.readFile filename,'utf-8',
+		(err, _data)->
+			_d = eval _data
+
+			res.send _d
 
 	return
 
