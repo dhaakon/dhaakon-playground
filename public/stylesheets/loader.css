@@ -10,7 +10,7 @@ li {
 #loader-container {
   width: 130px;
   margin: auto;
-  opacity: 0;
+  opacity: 1;
   border-radius: 5px;
   position: absolute;
   top: 42%;
@@ -18,25 +18,25 @@ li {
   /*border						:		1px solid #d3d3d3;*/
   /*background				:		$bg;*/
   /*box-shadow				:		0px 0px 16px 2px rgba( 150, 150, 200, 0.1);*/
-  -moz-animation: fade-in 500ms ease-in-out forwards;
+  -moz-animation: fade-in 200ms ease-in-out forwards;
   -moz-animation-direction: alternate;
   -moz-animation-iteration-count: 1;
-  -moz-animation-delay: 300ms;
+  -moz-animation-delay: 0;
   -moz-animation-fill-mode: normal;
-  -o-animation: fade-in 500ms ease-in-out forwards;
+  -o-animation: fade-in 200ms ease-in-out forwards;
   -o-animation-direction: alternate;
   -o-animation-iteration-count: 1;
-  -o-animation-delay: 300ms;
+  -o-animation-delay: 0;
   -o-animation-fill-mode: normal;
-  -webkit-animation: fade-in 500ms ease-in-out forwards;
+  -webkit-animation: fade-in 200ms ease-in-out forwards;
   -webkit-animation-direction: alternate;
   -webkit-animation-iteration-count: 1;
-  -webkit-animation-delay: 300ms;
+  -webkit-animation-delay: 0;
   -webkit-animation-fill-mode: normal;
-  -ms-animation: fade-in 500ms ease-in-out forwards;
+  -ms-animation: fade-in 200ms ease-in-out forwards;
   -ms-animation-direction: alternate;
   -ms-animation-iteration-count: 1;
-  -ms-animation-delay: 300ms;
+  -ms-animation-delay: 0;
   -ms-animation-fill-mode: normal;
 }
 

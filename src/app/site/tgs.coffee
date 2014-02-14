@@ -6,6 +6,7 @@ class TGS
 	mapWidth			:		Config.Map.width
 
 	map						:	null
+	renderer			: Config.Settings.renderer
 
 	bookingInformation	:	null
 	mapContainer				:	Config.Map.container
@@ -13,9 +14,14 @@ class TGS
 	svg						:	null
 	container			:	null
 
+	loader				:	null
 	constructor		:		()->
 		@mapWidth  = _w = $(window).width()
 		@mapHeight = _h = $(window).height() - 100
+
+		@loader			=		$('#loader-container')
+
+		@renderer = $(@mapContainer).data().renderer
 
 		$(@mapContainer).css(
 			width		:		_w,
@@ -42,6 +48,7 @@ class TGS
 		
 	onMapLoaded				:	()=>
 		#@createBookingData()
+		@loader.remove()
 		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
 		
 	onBookingLoaded		:	( event )=>
@@ -56,4 +63,4 @@ class TGS
 		@bookingInformation.changeBookerCityTitle	event.booker_country		
 
 	createMap					:	()->
-		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer
+		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer

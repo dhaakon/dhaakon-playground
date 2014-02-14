@@ -4,5 +4,6 @@ block added-scripts
 	script(src='/javascripts/Main.js')
 
 block content
+	include loader
 	div#main 
-		div#map-container
+		div#map-container(data-renderer= renderer)

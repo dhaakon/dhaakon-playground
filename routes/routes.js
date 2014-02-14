@@ -231,7 +231,12 @@
   };
 
   exports.tgs = function(req, res) {
-    return res.render('tgs');
+    var opts;
+    opts = {
+      renderer: req.params['renderer'],
+      amount: 10
+    };
+    return res.render('tgs', opts);
   };
 
   exports.getstudents = function(req, res) {

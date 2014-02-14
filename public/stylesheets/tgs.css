@@ -13,3 +13,23 @@
   width: 100%;
   height: 100%;
 }
+
+/* line 15, ../../src/sass/tgs.scss */
+.stroke {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+/* line 21, ../../src/sass/tgs.scss */
+.fill {
+  fill: #fff;
+}
+
+/* line 25, ../../src/sass/tgs.scss */
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}

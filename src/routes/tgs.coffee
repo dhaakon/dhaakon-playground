@@ -82,7 +82,11 @@ exports.thinkData = ( req, res )->
 	f.getPhotos( i, cb )
 
 exports.tgs		=		( req, res ) ->
-	res.render 'tgs'
+	opts =
+		renderer	:		req.params['renderer']
+		amount		:		10
+
+	res.render 'tgs', opts
 
 exports.getstudents		=		( req, res)->
 	csv = require 'fast-csv'

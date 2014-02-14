@@ -2,13 +2,13 @@ Config	=
 	Settings	:
 		jsonPath			:	'/json/world.json'
 		csvPath				:	'/csv/booking_small.csv'
-		renderer			:	'svg'
+		renderer			:	'canvas'
 
 	Map			:
 		container			:	'#map-container'
 		height				:	1200	
 		width					:	1600	
-		scale					:	280
+		scale					:	180
 		xOffset				:	0
 		yOffset				:	0
 
@@ -30,7 +30,7 @@ Config	=
 									'transverseMercator'		# 11
 									]
 
-		projectionKey		:	2
+		projectionKey		:	4
 		markerSize			:	2
 
 		booker_lat_source	:	'booker_lat'

@@ -8,19 +8,19 @@
     Settings: {
       jsonPath: '/json/world.json',
       csvPath: '/csv/booking_small.csv',
-      renderer: 'svg'
+      renderer: 'canvas'
     },
     Map: {
       container: '#map-container',
       height: 1200,
       width: 1600,
-      scale: 280,
+      scale: 180,
       xOffset: 0,
       yOffset: 0,
       scaleMin: 0.75,
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
-      projectionKey: 2,
+      projectionKey: 4,
       markerSize: 2,
       booker_lat_source: 'booker_lat',
       booker_lon_source: 'booker_lon',
@@ -103,7 +103,7 @@
 
     Map.prototype.color = d3.scale.category10();
 
-    Map.prototype.renderer = Config.Settings.renderer;
+    Map.prototype.renderer = null;
 
     Map.prototype.type = 'countries';
 
@@ -153,11 +153,12 @@
 
     Map.prototype.neighbors = null;
 
-    function Map(src, width, height, container) {
+    function Map(src, width, height, container, renderer) {
       this.src = src;
       this.width = width;
       this.height = height;
       this.container = container;
+      this.renderer = renderer;
       this.onDataRead = __bind(this.onDataRead, this);
       this.update = __bind(this.update, this);
       this.drawPointsOnCanvas = __bind(this.drawPointsOnCanvas, this);
@@ -187,7 +188,7 @@
     };
 
     Map.prototype.createCanvas = function() {
-      this.canvas = d3.select(this.container).append('canvas').attr('width', this.width).attr('height', this.height).attr('id', 'marker-canvas').call(d3.behavior.zoom().scaleExtent([this.scaleMin, this.scaleMax]).on('zoom', this.zoomed));
+      this.canvas = d3.select(this.container).append('canvas').attr('width', this.width).attr('height', this.height).attr('id', 'marker-canvas');
       return this.context = this.canvas.node().getContext('2d');
     };
 
@@ -204,23 +205,25 @@
     Map.prototype.drawGrid = function() {
       switch (this.renderer) {
         case 'svg':
-          return this.group.append("path").datum(d3.geo.graticule()).attr("d", this.path).style("fill", "none").style("stroke", "#ffffff").style("stroke-width", "0.5px");
+          return this.group.append("path").datum(d3.geo.graticule()).attr("d", this.path).style("stroke", "#ffffff").style("stroke-width", "0.5px");
       }
     };
 
     Map.prototype.drawBackground = function() {
       switch (this.renderer) {
         case 'svg':
-          return this.group.append("path").datum({
+          this.group.append("defs").append("path").datum({
             type: "Sphere"
-          }).attr("d", this.path).style("fill", "#93C2FF");
+          }).attr('id', 'sphere').attr("d", this.path).style("fill", "white");
+          this.group.append("use").attr("class", "stroke").attr("xlink:href", "#sphere");
+          return this.group.append("use").attr("class", "fill").attr("xlink:href", "#sphere");
       }
     };
 
     Map.prototype.createPoints = function(name, data, color) {
-      var _this = this;
+      var createPoint,
+        _this = this;
       this[name] = data;
-      console.log(this[name]);
       switch (this.renderer) {
         case 'svg':
           return this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', color).attr('transform', function(d) {
@@ -229,13 +232,27 @@
             coords = _this.projection([_d['longitude'], _d['latitude']]);
             return 'translate(' + coords + ')';
           }).on('mouseover', this.onMarkerMouseOver);
+        case 'canvas':
+          createPoint = function(d) {
+            var fn;
+            fn = function(el, idx, array) {
+              var coords, size, _d;
+              _d = el.__data__.location.coords[0];
+              coords = _this.projection([_d['longitude'], _d['latitude']]);
+              size = _this.markerSize * 2;
+              _this.context.fillStyle = color;
+              return _this.context.fillRect(coords[0], coords[1], size, size);
+            };
+            return d[0].forEach(fn);
+          };
+          return d3.selectAll('canvas').data(this[name]).enter().call(createPoint);
       }
     };
 
     Map.prototype.drawLines = function(src) {
       var coords, path, _i, _len, _ref, _results,
         _this = this;
-      console.log(this[src[1]]);
+      return;
       _ref = this[src[0]];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -243,7 +260,6 @@
         coords = this.projection([path.location.coords[0]['longitude'], path.location.coords[0]['latitude']]);
         _results.push(this.group.selectAll('group').data(this[src[1]]).enter().append('path').attr('d', function(d) {
           var l, m, _d;
-          console.log(d);
           _d = d.location.coords[0];
           m = 'M' + coords.join(' ');
           l = 'L' + _this.projection([_d['longitude'], _d['latitude']]).join(' ');
@@ -278,9 +294,9 @@
         case 'canvas':
           this.context.fillStyle = '#d7c7ad';
           this.context.beginPath();
-          this.path(this.neighbors);
-          this.context.fill();
           this.path(this.countries);
+          this.context.fill();
+          this.path(this.neigbors);
           return this.context.stroke();
       }
     };
@@ -298,9 +314,8 @@
     Map.prototype.onMouseDownHandler = function() {
       var c, cb, coords, geo_loc, l, m, str,
         _this = this;
+      return;
       m = d3.event;
-      console.log(m);
-      console.log(this.group);
       coords = [m['offsetX'], m['offsetY']];
       geo_loc = this.projection.invert(coords);
       str = '/location/' + geo_loc.join('/') + '/';
@@ -331,7 +346,7 @@
 
     Map.prototype.updateSVG = function(pos, scale) {
       var _str;
-      _str = 'translate(' + pos.join(',') + ')scale(' + scale + ')';
+      _str = 'matrix(' + scale + ',0,0,' + scale + ',' + pos.join(',') + ')';
       return this.group.attr('transform', _str);
     };
 
@@ -379,7 +394,11 @@
     };
 
     Map.prototype.onDataRead = function(error, world) {
-      this.countries = topojson.feature(world, world.objects[this.COUNTRIES]).features;
+      if (this.renderer === 'canvas') {
+        this.countries = topojson.feature(world, world.objects[this.COUNTRIES]);
+      } else {
+        this.countries = topojson.feature(world, world.objects[this.COUNTRIES]).features;
+      }
       this.neighbors = topojson.neighbors(world.objects[this.COUNTRIES].geometries);
       this.createProjection();
       this.createPath();
@@ -404,6 +423,8 @@
 
     TGS.prototype.map = null;
 
+    TGS.prototype.renderer = Config.Settings.renderer;
+
     TGS.prototype.bookingInformation = null;
 
     TGS.prototype.mapContainer = Config.Map.container;
@@ -412,6 +433,8 @@
 
     TGS.prototype.container = null;
 
+    TGS.prototype.loader = null;
+
     function TGS() {
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
@@ -419,6 +442,8 @@
       var _h, _w;
       this.mapWidth = _w = $(window).width();
       this.mapHeight = _h = $(window).height() - 100;
+      this.loader = $('#loader-container');
+      this.renderer = $(this.mapContainer).data().renderer;
       $(this.mapContainer).css({
         width: _w,
         height: _h
@@ -446,6 +471,7 @@
     };
 
     TGS.prototype.onMapLoaded = function() {
+      this.loader.remove();
       return d3.json(this.flickrSrc, _.bind(this.onTGSFlickrDataLoaded, this));
     };
 
@@ -462,7 +488,7 @@
     };
 
     TGS.prototype.createMap = function() {
-      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer);
+      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer);
     };
 
     return TGS;
