@@ -37,7 +37,7 @@ class Server
 		@app.get		'/codem',											Router.codem
 		@app.get		'/loaders',										Router.loaders
 		@app.get		'/tgsData',										Router.thinkData
-		@app.get		'/tgs/:renderer',							Router.tgs
+		@app.get		'/tgs/:renderer/:scale',			Router.tgs
 		@app.get		'/location/:lat/:long',				Router.getlocation
 		@app.get		'/students/',									Router.getstudents
 

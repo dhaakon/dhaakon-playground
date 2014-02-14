@@ -22,6 +22,7 @@ class TGS
 		@loader			=		$('#loader-container')
 
 		@renderer = $(@mapContainer).data().renderer
+		@scale	  = $(@mapContainer).data().scale
 
 		$(@mapContainer).css(
 			width		:		_w,
@@ -63,4 +64,4 @@ class TGS
 		@bookingInformation.changeBookerCityTitle	event.booker_country		
 
 	createMap					:	()->
-		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer
+		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale

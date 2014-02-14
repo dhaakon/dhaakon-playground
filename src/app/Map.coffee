@@ -11,7 +11,7 @@ class Map
 	type						:	'countries'
 	projectionType	:	Config.Map.projections[	Config.Map.projectionKey ]
 
-	scale						:	Config.Map.scale
+	scale						:	null
 	xOffset					:	Config.Map.xOffset
 	yOffset					:	Config.Map.yOffset
 	scaleMin				:	Config.Map.scaleMin
@@ -39,7 +39,7 @@ class Map
 	countries				:	null
 	neighbors				:	null
 
-	constructor		:	(@src, @width, @height, @container, @renderer)->
+	constructor		:	(@src, @width, @height, @container, @renderer, @scale)->
 		if @renderer is 'canvas'
 			@createCanvas()
 		else

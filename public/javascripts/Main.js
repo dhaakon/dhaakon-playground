@@ -14,7 +14,7 @@
       container: '#map-container',
       height: 1200,
       width: 1600,
-      scale: 180,
+      scale: 350,
       xOffset: 0,
       yOffset: 0,
       scaleMin: 0.75,
@@ -109,7 +109,7 @@
 
     Map.prototype.projectionType = Config.Map.projections[Config.Map.projectionKey];
 
-    Map.prototype.scale = Config.Map.scale;
+    Map.prototype.scale = null;
 
     Map.prototype.xOffset = Config.Map.xOffset;
 
@@ -153,12 +153,13 @@
 
     Map.prototype.neighbors = null;
 
-    function Map(src, width, height, container, renderer) {
+    function Map(src, width, height, container, renderer, scale) {
       this.src = src;
       this.width = width;
       this.height = height;
       this.container = container;
       this.renderer = renderer;
+      this.scale = scale;
       this.onDataRead = __bind(this.onDataRead, this);
       this.update = __bind(this.update, this);
       this.drawPointsOnCanvas = __bind(this.drawPointsOnCanvas, this);
@@ -444,6 +445,7 @@
       this.mapHeight = _h = $(window).height() - 100;
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
+      this.scale = $(this.mapContainer).data().scale;
       $(this.mapContainer).css({
         width: _w,
         height: _h
@@ -488,7 +490,7 @@
     };
 
     TGS.prototype.createMap = function() {
-      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer);
+      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale);
     };
 
     return TGS;

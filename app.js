@@ -56,7 +56,7 @@
       this.app.get('/codem', Router.codem);
       this.app.get('/loaders', Router.loaders);
       this.app.get('/tgsData', Router.thinkData);
-      this.app.get('/tgs/:renderer', Router.tgs);
+      this.app.get('/tgs/:renderer/:scale', Router.tgs);
       this.app.get('/location/:lat/:long', Router.getlocation);
       this.app.get('/students/', Router.getstudents);
       if ('development' === this.app.get('env')) {

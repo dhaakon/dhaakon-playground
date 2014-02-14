@@ -8,7 +8,7 @@ Config	=
 		container			:	'#map-container'
 		height				:	1200	
 		width					:	1600	
-		scale					:	180
+		scale					:	350
 		xOffset				:	0
 		yOffset				:	0
 

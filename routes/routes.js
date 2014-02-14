@@ -234,6 +234,7 @@
     var opts;
     opts = {
       renderer: req.params['renderer'],
+      scale: req.params['scale'],
       amount: 10
     };
     return res.render('tgs', opts);
