@@ -82,11 +82,25 @@ exports.thinkData = ( req, res )->
 	f.getPhotos( i, cb )
 
 exports.tgs		=		( req, res ) ->
+	urlOption = req.originalUrl.split('?')[1]
+	urlOptions = urlOption.split('&')
+	
+	params = {}
+
+	for opt in urlOptions
+		arr			=		opt.split('=')
+		key			=		arr[0]
+		value		=		arr[1]
+		params[key] = value
+
+	console.log params
+
 	opts =
 		renderer					:		req.params['renderer']
 		scale							:		req.params['scale']
 		projectionKey			:		req.params['projectionKey']
 		amount						:		10
+		params						:		params
 
 	res.render 'tgs', opts
 

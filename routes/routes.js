@@ -231,12 +231,24 @@
   };
 
   exports.tgs = function(req, res) {
-    var opts;
+    var arr, key, opt, opts, params, urlOption, urlOptions, value, _i, _len;
+    urlOption = req.originalUrl.split('?')[1];
+    urlOptions = urlOption.split('&');
+    params = {};
+    for (_i = 0, _len = urlOptions.length; _i < _len; _i++) {
+      opt = urlOptions[_i];
+      arr = opt.split('=');
+      key = arr[0];
+      value = arr[1];
+      params[key] = value;
+    }
+    console.log(params);
     opts = {
       renderer: req.params['renderer'],
       scale: req.params['scale'],
       projectionKey: req.params['projectionKey'],
-      amount: 10
+      amount: 10,
+      params: params
     };
     return res.render('tgs', opts);
   };

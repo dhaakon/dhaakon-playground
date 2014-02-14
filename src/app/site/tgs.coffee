@@ -20,17 +20,21 @@ class TGS
 
 	loader				:	null
 	constructor		:		()->
-		#@mapWidth  = _w = $(window).width()/1.5
-		#@mapHeight = _h = $(window).height()/1.5
-		@mapWidth  = _w = 1200 
-		@mapHeight = _h = 600
+		@mapWidth  = _w = $(window).width()
+		@mapHeight = _h = $(window).height()
+		#@mapWidth  = _w = 1300 
+		#@mapHeight = _h = 600
 
 		@loader			=		$('#loader-container')
 
 		@renderer				  = $(@mapContainer).data().renderer
 		@scale						= $(@mapContainer).data().scale
 		@projectionKey	  = $(@mapContainer).data().projectionkey
+		@hasRotation		  = $(@mapContainer).data().rotate
+		@hasLines				  = $(@mapContainer).data().lines
+		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
 
+		console.log @velocity
 
 		@start		=	Date.now()
 
@@ -53,7 +57,7 @@ class TGS
 		#return
 		@map.createPoints 'students', @studentData, 'blue'
 		@map.createPoints 'flickr', @flickrData, 'red'
-		@map.drawLines ['students','flickr']
+		if @hasLines then @map.drawLines ['students','flickr']
 	
 	onTGSFlickrDataLoaded		:		(@flickrData)->
 		@map.createPoints 'flickr', @flickrData, 'red'
@@ -61,8 +65,9 @@ class TGS
 
 	onTGSStudentsDataLoaded		:		(@studentData)->
 		@map.createPoints 'students', @studentData, 'blue'
-		@map.drawLines ['students','flickr']
-		if @renderer is 'canvas' then @startRotation()
+		if @hasLines then @map.drawLines ['students','flickr']
+
+		if @renderer is 'canvas' and @hasRotation then @startRotation()
 
 
 	createBookingData	:	()->

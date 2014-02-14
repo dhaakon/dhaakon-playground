@@ -75,7 +75,7 @@ class Map
 		d3.json		@src, @onDataRead
 
 	drawMap			:	()->
-		#@drawBackground()
+		@drawBackground()
 		#@drawGrid()
 		@drawCountries()
 
@@ -191,11 +191,14 @@ class Map
 														]
 									
 									l2 = @projection bCoords
-				
+									grad = @context.createLinearGradient(l1[0],l1[1],l2[0],l2[1])
+									grad.addColorStop '0', 'blue'
+									grad.addColorStop '1', 'red'
+
 									@context.save()
 									@context.beginPath()
 									@context.lineWidth = '0.05'
-									@context.strokeStyle = 'rgba( 255, 0, 0, 0.4 )'
+									@context.strokeStyle = grad
 									@context.moveTo(l1[0], l1[1])
 									@context.lineTo(l2[0], l2[1])
 									@context.stroke()
@@ -246,7 +249,7 @@ class Map
 					.style('stroke', 'rgba(100,100,255,1)')
 			when 'canvas'
 				@context.save()
-				@context.fillStyle = 'rgba( 120, 120, 40, 0.6 )'
+				@context.fillStyle = 'rgba( 120, 120, 40, 1 )'
 				@context.lineWidth = '0.2px'
 				@context.strokeStyle = 'rgba( 255, 255, 255, 0.3 )'
 				@context.beginPath()

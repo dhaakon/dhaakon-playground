@@ -189,6 +189,7 @@
     };
 
     Map.prototype.drawMap = function() {
+      this.drawBackground();
       return this.drawCountries();
     };
 
@@ -277,13 +278,16 @@
                 cb = function(d) {
                   var _g;
                   _g = function(el, index, array) {
-                    var bCoords, l2;
+                    var bCoords, grad, l2;
                     bCoords = [el.__data__.location.coords[0].longitude, el.__data__.location.coords[0].latitude];
                     l2 = _this.projection(bCoords);
+                    grad = _this.context.createLinearGradient(l1[0], l1[1], l2[0], l2[1]);
+                    grad.addColorStop('0', 'blue');
+                    grad.addColorStop('1', 'red');
                     _this.context.save();
                     _this.context.beginPath();
                     _this.context.lineWidth = '0.05';
-                    _this.context.strokeStyle = 'rgba( 255, 0, 0, 0.4 )';
+                    _this.context.strokeStyle = grad;
                     _this.context.moveTo(l1[0], l1[1]);
                     _this.context.lineTo(l2[0], l2[1]);
                     _this.context.stroke();
@@ -329,7 +333,7 @@
           return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
         case 'canvas':
           this.context.save();
-          this.context.fillStyle = 'rgba( 120, 120, 40, 0.6 )';
+          this.context.fillStyle = 'rgba( 120, 120, 40, 1 )';
           this.context.lineWidth = '0.2px';
           this.context.strokeStyle = 'rgba( 255, 255, 255, 0.3 )';
           this.context.beginPath();
@@ -488,12 +492,16 @@
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.loop = __bind(this.loop, this);
       var _h, _w;
-      this.mapWidth = _w = 1200;
-      this.mapHeight = _h = 600;
+      this.mapWidth = _w = $(window).width();
+      this.mapHeight = _h = $(window).height();
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
       this.scale = $(this.mapContainer).data().scale;
       this.projectionKey = $(this.mapContainer).data().projectionkey;
+      this.hasRotation = $(this.mapContainer).data().rotate;
+      this.hasLines = $(this.mapContainer).data().lines;
+      this.velocity = ($(this.mapContainer).data().velocity / 10000) || this.velocity;
+      console.log(this.velocity);
       this.start = Date.now();
       $(this.mapContainer).css({
         width: _w,
@@ -520,7 +528,9 @@
       this.map.drawMap();
       this.map.createPoints('students', this.studentData, 'blue');
       this.map.createPoints('flickr', this.flickrData, 'red');
-      return this.map.drawLines(['students', 'flickr']);
+      if (this.hasLines) {
+        return this.map.drawLines(['students', 'flickr']);
+      }
     };
 
     TGS.prototype.onTGSFlickrDataLoaded = function(flickrData) {
@@ -532,8 +542,10 @@
     TGS.prototype.onTGSStudentsDataLoaded = function(studentData) {
       this.studentData = studentData;
       this.map.createPoints('students', this.studentData, 'blue');
-      this.map.drawLines(['students', 'flickr']);
-      if (this.renderer === 'canvas') {
+      if (this.hasLines) {
+        this.map.drawLines(['students', 'flickr']);
+      }
+      if (this.renderer === 'canvas' && this.hasRotation) {
         return this.startRotation();
       }
     };
