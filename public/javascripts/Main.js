@@ -186,6 +186,7 @@
     };
 
     Map.prototype.drawMap = function() {
+      this.drawGrid();
       return this.drawCountries();
     };
 
@@ -193,6 +194,11 @@
       switch (this.renderer) {
         case 'svg':
           return this.group.append("path").datum(d3.geo.graticule()).attr("d", this.path).style("stroke", "#ffffff").style("stroke-width", "0.5px");
+        case 'canvas':
+          this.context.strokeStyle = 'white';
+          this.context.beginPath();
+          this.path(d3.geo.graticule()());
+          return this.context.stroke();
       }
     };
 
@@ -413,6 +419,10 @@
 
     TGS.prototype.speed = 1e-2;
 
+    TGS.prototype.velocity = 0.015;
+
+    TGS.prototype.origin = 0;
+
     TGS.prototype.start = null;
 
     TGS.prototype.map = null;
@@ -435,7 +445,7 @@
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.loop = __bind(this.loop, this);
       var _h, _w;
-      this.mapWidth = _w = 1200;
+      this.mapWidth = _w = 1460;
       this.mapHeight = _h = 800;
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
@@ -454,10 +464,9 @@
     };
 
     TGS.prototype.loop = function() {
-      this.map.projection = this.map.projection.rotate([this.speed * (Date.now() - this.start), -25]);
       this.map.context.clearRect(0, 0, this.mapWidth, this.mapHeight);
-      this.map.drawMap();
-      return this.map.createPoints('students', this.studentData, 'blue');
+      this.map.projection = this.map.projection.rotate([this.origin + this.velocity * (Date.now() - this.start), -15]);
+      return this.map.drawMap();
     };
 
     TGS.prototype.onTGSFlickrDataLoaded = function(flickrData) {

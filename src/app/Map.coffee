@@ -73,7 +73,7 @@ class Map
 
 	drawMap			:	()->
 		#@drawBackground()
-		#@drawGrid()
+		@drawGrid()
 		@drawCountries()
 
 	drawGrid		:	()->
@@ -85,6 +85,12 @@ class Map
 							#.style("fill", "")
 							.style("stroke", "#ffffff")
 							.style("stroke-width", "0.5px")
+			when 'canvas'
+				@context.strokeStyle = 'white'
+				@context.beginPath()
+				@path(d3.geo.graticule()())
+				@context.stroke()
+
 
 	drawBackground	:	()->
 		switch @renderer

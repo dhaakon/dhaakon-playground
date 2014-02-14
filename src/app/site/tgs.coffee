@@ -5,6 +5,8 @@ class TGS
 	mapHeight			:		Config.Map.height
 	mapWidth			:		Config.Map.width
 	speed					:		1e-2
+	velocity			:		0.015
+	origin				:		0
 	start					:		null
 
 	map						:	null
@@ -18,7 +20,7 @@ class TGS
 
 	loader				:	null
 	constructor		:		()->
-		@mapWidth  = _w = 1200
+		@mapWidth  = _w = 1460
 		@mapHeight = _h = 800
 
 		@loader			=		$('#loader-container')
@@ -38,12 +40,13 @@ class TGS
 
 	startRotation		:		()->
 		d3.timer @loop
+
 	loop						:		()=>
-		@map.projection = @map.projection.rotate([@speed * (Date.now() - @start), -25])
 		@map.context.clearRect( 0,0,@mapWidth, @mapHeight)
+		@map.projection = @map.projection.rotate([@origin + @velocity * (Date.now() - @start), -15])
 		@map.drawMap()
 		#return
-		@map.createPoints 'students', @studentData, 'blue'
+		#@map.createPoints 'students', @studentData, 'blue'
 		#@map.createPoints 'flickr', @flickrData, 'red'
 
 	
