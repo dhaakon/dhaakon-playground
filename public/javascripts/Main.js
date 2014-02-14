@@ -194,7 +194,6 @@
     };
 
     Map.prototype.drawMap = function() {
-      this.drawBackground();
       if (this.hasGrid) {
         this.drawGrid();
       }
@@ -347,9 +346,9 @@
           return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
         case 'canvas':
           this.context.save();
-          this.context.fillStyle = 'rgba( 120, 120, 40, 1 )';
+          this.context.fillStyle = 'rgba( 120, 120, 40, 0 )';
           this.context.lineWidth = '0.2px';
-          this.context.strokeStyle = 'rgba( 255, 255, 255, 0.3 )';
+          this.context.strokeStyle = 'rgba( 255, 255, 255, 0.9 )';
           this.context.beginPath();
           this.context.fill();
           this.path(this.countries);
