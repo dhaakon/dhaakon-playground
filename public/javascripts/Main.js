@@ -362,7 +362,7 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).clipAngle(90).precision(.5);
+      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).precision(.75);
     };
 
     Map.prototype.createPath = function() {

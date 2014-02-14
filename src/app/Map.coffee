@@ -270,8 +270,8 @@ class Map
 		@projection =	@projector[@projectionType]()
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
-						.clipAngle(90)
-						.precision(.5);
+						#.clipAngle(90)
+						.precision(.75)
 
 	createPath			:	()=>
 		switch @renderer
