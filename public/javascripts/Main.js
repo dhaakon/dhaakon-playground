@@ -258,6 +258,7 @@
       if (this.renderer === 'canvas') {
         return;
       }
+      console.log('lines');
       _ref = this[src[0]];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

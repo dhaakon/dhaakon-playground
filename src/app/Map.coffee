@@ -153,6 +153,7 @@ class Map
 
 	drawLines				  : (src)->
 		if @renderer is 'canvas' then return
+		console.log 'lines'
 		for path in @[src[0]]
 			coords = @projection([ path.location.coords[0]['longitude'], path.location.coords[0]['latitude']])
 			@group.selectAll('group')
