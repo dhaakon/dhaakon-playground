@@ -141,6 +141,8 @@
 
     Map.prototype.neighbors = null;
 
+    Map.prototype.hasGrid = false;
+
     function Map(src, width, height, container, renderer, scale, projectionKey) {
       this.src = src;
       this.width = width;
@@ -190,6 +192,9 @@
 
     Map.prototype.drawMap = function() {
       this.drawBackground();
+      if (this.hasGrid) {
+        this.drawGrid();
+      }
       return this.drawCountries();
     };
 
@@ -498,6 +503,7 @@
       this.projectionKey = $(this.mapContainer).data().projectionkey;
       this.hasRotation = $(this.mapContainer).data().rotate;
       this.hasLines = $(this.mapContainer).data().lines;
+      this.hasGrid = $(this.mapContainer).data().grid;
       this.velocity = ($(this.mapContainer).data().velocity / 10000) || this.velocity;
       this.mapWidth = _w = $(this.mapContainer).data().width || $(window).width();
       this.mapHeight = _h = $(this.mapContainer).data().height || $(window).width();

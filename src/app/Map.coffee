@@ -33,6 +33,7 @@ class Map
 	data						:	null
 	countries				:	null
 	neighbors				:	null
+	hasGrid					:	false
 
 	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey)->
 		@projectionType = Config.Map.projections[	@projectionKey ]
@@ -76,7 +77,7 @@ class Map
 
 	drawMap			:	()->
 		@drawBackground()
-		#@drawGrid()
+		if @hasGrid then @drawGrid()
 		@drawCountries()
 
 	drawGrid		:	()->

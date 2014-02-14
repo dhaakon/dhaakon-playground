@@ -30,6 +30,7 @@ class TGS
 		@projectionKey	  = $(@mapContainer).data().projectionkey
 		@hasRotation		  = $(@mapContainer).data().rotate
 		@hasLines				  = $(@mapContainer).data().lines
+		@hasGrid				  = $(@mapContainer).data().grid
 		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
 		@mapWidth  = _w = $(@mapContainer).data().width || $(window).width()
 		@mapHeight = _h = $(@mapContainer).data().height || $(window).width()
