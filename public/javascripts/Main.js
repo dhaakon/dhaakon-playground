@@ -190,6 +190,7 @@
     };
 
     Map.prototype.drawMap = function() {
+      this.drawBackground();
       this.drawGrid();
       return this.drawCountries();
     };
@@ -214,6 +215,9 @@
           }).attr('id', 'sphere').attr("d", this.path).style("fill", "white");
           this.group.append("use").attr("class", "stroke").attr("xlink:href", "#sphere");
           return this.group.append("use").attr("class", "fill").attr("xlink:href", "#sphere");
+        case 'canvas':
+          this.context.fillStyle = 'rgba(100,100,255,0.7)';
+          return this.context.fillRect(0, 0, this.width, this.height);
       }
     };
 
@@ -244,7 +248,6 @@
             return 'translate(' + coords + ')';
           }).on('mouseover', this.onMarkerMouseOver);
         case 'canvas':
-          console.log('drawing');
           return this.canvas.select('canvas').data(this[name]).enter().call(this.createPoint);
       }
     };

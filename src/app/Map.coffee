@@ -74,7 +74,7 @@ class Map
 		d3.json		@src, @onDataRead
 
 	drawMap			:	()->
-		#@drawBackground()
+		@drawBackground()
 		@drawGrid()
 		@drawCountries()
 
@@ -110,6 +110,9 @@ class Map
 				@group.append("use")
 						.attr("class", "fill")
 						.attr("xlink:href", "#sphere")
+			when 'canvas'
+				@context.fillStyle = 'rgba(100,100,255,0.7)'
+				@context.fillRect( 0, 0, @width, @height)
 	createPoint : (d) =>
 		fn = (el, idx, array) =>
 			_d = el.__data__.location.coords[0]
@@ -139,7 +142,7 @@ class Map
 					.on('mouseover', @onMarkerMouseOver)
 			when 'canvas'
 				#return
-				console.log 'drawing'
+				#console.log 'drawing'
 				#console.log @[name]
 				#return
 				@canvas.select('canvas')
