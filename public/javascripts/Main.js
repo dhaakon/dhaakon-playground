@@ -449,8 +449,8 @@
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.loop = __bind(this.loop, this);
       var _h, _w;
-      this.mapWidth = _w = 1460;
-      this.mapHeight = _h = 800;
+      this.mapWidth = _w = $(window).width();
+      this.mapHeight = _h = $(window).height();
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
       this.scale = $(this.mapContainer).data().scale;

@@ -20,8 +20,8 @@ class TGS
 
 	loader				:	null
 	constructor		:		()->
-		@mapWidth  = _w = 1460
-		@mapHeight = _h = 800
+		@mapWidth  = _w = $(window).width() 
+		@mapHeight = _h = $(window).height()
 
 		@loader			=		$('#loader-container')
 
