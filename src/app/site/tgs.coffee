@@ -4,6 +4,8 @@ class TGS
 	JSON_PATH			:		Config.Settings.jsonPath
 	mapHeight			:		Config.Map.height
 	mapWidth			:		Config.Map.width
+	speed					:		1e-2
+	start					:		null
 
 	map						:	null
 	renderer			: Config.Settings.renderer
@@ -16,13 +18,15 @@ class TGS
 
 	loader				:	null
 	constructor		:		()->
-		@mapWidth  = _w = $(window).width()
-		@mapHeight = _h = $(window).height() 
+		@mapWidth  = _w = 1200
+		@mapHeight = _h = 800
 
 		@loader			=		$('#loader-container')
 
 		@renderer = $(@mapContainer).data().renderer
 		@scale	  = $(@mapContainer).data().scale
+
+		@start		=	Date.now()
 
 		$(@mapContainer).css(
 			width		:		_w,
@@ -31,14 +35,27 @@ class TGS
 
 		@addListeners()
 		@createMap()
+
+	startRotation		:		()->
+		d3.timer @loop
+	loop						:		()=>
+		@map.projection = @map.projection.rotate([@speed * (Date.now() - @start), -25])
+		@map.context.clearRect( 0,0,@mapWidth, @mapHeight)
+		@map.drawMap()
+		#return
+		@map.createPoints 'students', @studentData, 'blue'
+		#@map.createPoints 'flickr', @flickrData, 'red'
+
 	
-	onTGSFlickrDataLoaded		:		(data)->
-		@map.createPoints 'flickr', data, 'red'
+	onTGSFlickrDataLoaded		:		(@flickrData)->
+		@map.createPoints 'flickr', @flickrData, 'red'
 		d3.json @studentsSrc, _.bind @onTGSStudentsDataLoaded, @
 
-	onTGSStudentsDataLoaded		:		(data)->
-		@map.createPoints 'students', data, 'blue'
+	onTGSStudentsDataLoaded		:		(@studentData)->
+		@map.createPoints 'students', @studentData, 'blue'
 		@map.drawLines ['students','flickr']
+		if @renderer is 'canvas' then @startRotation()
+
 
 	createBookingData	:	()->
 		@booking = new Booking @CSV_PATH
@@ -51,7 +68,7 @@ class TGS
 		#@createBookingData()
 		@loader.remove()
 		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
-		
+				
 	onBookingLoaded		:	( event )=>
 		@map.createPoints @booking.data
 		@bookingInformation		=	new BookingInformation()
@@ -65,3 +82,5 @@ class TGS
 
 	createMap					:	()->
 		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale
+		
+

@@ -72,8 +72,8 @@ class Map
 		d3.json		@src, @onDataRead
 
 	drawMap			:	()->
-		@drawBackground()
-		@drawGrid()
+		#@drawBackground()
+		#@drawGrid()
 		@drawCountries()
 
 	drawGrid		:	()->
@@ -120,6 +120,7 @@ class Map
 					)
 					.on('mouseover', @onMarkerMouseOver)
 			when 'canvas'
+				console.log 'drawing'
 				createPoint = (d) =>
 					#return
 					fn = (el, idx, array) =>
@@ -133,7 +134,9 @@ class Map
 					d[0].forEach(fn)
 					#_d = d.location.coords[0]
 
-				d3.selectAll('canvas')
+				console.log @[name]
+				return
+				@canvas.selectAll('canvas')
 					 .data(@[name])
 					 .enter()
 					 .call(createPoint)
@@ -260,6 +263,8 @@ class Map
 		@projection =	@projector[@projectionType]()
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
+						.clipAngle(90)
+						.precision(.5);
 
 	createPath			:	()=>
 		switch @renderer

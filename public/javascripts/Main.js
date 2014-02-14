@@ -20,7 +20,7 @@
       scaleMin: 0.75,
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
-      projectionKey: 4,
+      projectionKey: 1,
       markerSize: 2
     },
     TGS: {
@@ -186,8 +186,6 @@
     };
 
     Map.prototype.drawMap = function() {
-      this.drawBackground();
-      this.drawGrid();
       return this.drawCountries();
     };
 
@@ -222,6 +220,7 @@
             return 'translate(' + coords + ')';
           }).on('mouseover', this.onMarkerMouseOver);
         case 'canvas':
+          console.log('drawing');
           createPoint = function(d) {
             var fn;
             fn = function(el, idx, array) {
@@ -234,7 +233,9 @@
             };
             return d[0].forEach(fn);
           };
-          return d3.selectAll('canvas').data(this[name]).enter().call(createPoint);
+          console.log(this[name]);
+          return;
+          return this.canvas.selectAll('canvas').data(this[name]).enter().call(createPoint);
       }
     };
 
@@ -351,7 +352,7 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]);
+      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).clipAngle(90).precision(.5);
     };
 
     Map.prototype.createPath = function() {
@@ -410,6 +411,10 @@
 
     TGS.prototype.mapWidth = Config.Map.width;
 
+    TGS.prototype.speed = 1e-2;
+
+    TGS.prototype.start = null;
+
     TGS.prototype.map = null;
 
     TGS.prototype.renderer = Config.Settings.renderer;
@@ -428,12 +433,14 @@
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
+      this.loop = __bind(this.loop, this);
       var _h, _w;
-      this.mapWidth = _w = $(window).width();
-      this.mapHeight = _h = $(window).height();
+      this.mapWidth = _w = 1200;
+      this.mapHeight = _h = 800;
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
       this.scale = $(this.mapContainer).data().scale;
+      this.start = Date.now();
       $(this.mapContainer).css({
         width: _w,
         height: _h
@@ -442,14 +449,30 @@
       this.createMap();
     }
 
-    TGS.prototype.onTGSFlickrDataLoaded = function(data) {
-      this.map.createPoints('flickr', data, 'red');
+    TGS.prototype.startRotation = function() {
+      return d3.timer(this.loop);
+    };
+
+    TGS.prototype.loop = function() {
+      this.map.projection = this.map.projection.rotate([this.speed * (Date.now() - this.start), -25]);
+      this.map.context.clearRect(0, 0, this.mapWidth, this.mapHeight);
+      this.map.drawMap();
+      return this.map.createPoints('students', this.studentData, 'blue');
+    };
+
+    TGS.prototype.onTGSFlickrDataLoaded = function(flickrData) {
+      this.flickrData = flickrData;
+      this.map.createPoints('flickr', this.flickrData, 'red');
       return d3.json(this.studentsSrc, _.bind(this.onTGSStudentsDataLoaded, this));
     };
 
-    TGS.prototype.onTGSStudentsDataLoaded = function(data) {
-      this.map.createPoints('students', data, 'blue');
-      return this.map.drawLines(['students', 'flickr']);
+    TGS.prototype.onTGSStudentsDataLoaded = function(studentData) {
+      this.studentData = studentData;
+      this.map.createPoints('students', this.studentData, 'blue');
+      this.map.drawLines(['students', 'flickr']);
+      if (this.renderer === 'canvas') {
+        return this.startRotation();
+      }
     };
 
     TGS.prototype.createBookingData = function() {
