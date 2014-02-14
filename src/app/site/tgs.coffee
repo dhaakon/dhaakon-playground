@@ -5,7 +5,7 @@ class TGS
 	mapHeight			:		Config.Map.height
 	mapWidth			:		Config.Map.width
 	speed					:		1e-2
-	velocity			:		0.015
+	velocity			:		0.01
 	origin				:		0
 	start					:		null
 
@@ -25,8 +25,11 @@ class TGS
 
 		@loader			=		$('#loader-container')
 
-		@renderer = $(@mapContainer).data().renderer
-		@scale	  = $(@mapContainer).data().scale
+		@renderer				  = $(@mapContainer).data().renderer
+		@scale						= $(@mapContainer).data().scale
+		@projectionKey	  = $(@mapContainer).data().projectionkey
+
+		console.log @projectionKey
 
 		@start		=	Date.now()
 
@@ -39,15 +42,17 @@ class TGS
 		@createMap()
 
 	startRotation		:		()->
-		d3.timer @loop
+		framerate = 1000/30
+		setInterval((=>@loop()), framerate)
 
 	loop						:		()=>
-		@map.context.clearRect( 0,0,@mapWidth, @mapHeight)
+		#console.log 'tick'
+		if @renderer is 'canvas' then @map.context.clearRect( 0,0,@mapWidth, @mapHeight)
 		@map.projection = @map.projection.rotate([@origin + @velocity * (Date.now() - @start), -15])
 		@map.drawMap()
 		#return
-		#@map.createPoints 'students', @studentData, 'blue'
-		#@map.createPoints 'flickr', @flickrData, 'red'
+		@map.createPoints 'students', @studentData, 'blue'
+		@map.createPoints 'flickr', @flickrData, 'red'
 
 	
 	onTGSFlickrDataLoaded		:		(@flickrData)->
@@ -84,6 +89,6 @@ class TGS
 		@bookingInformation.changeBookerCityTitle	event.booker_country		
 
 	createMap					:	()->
-		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale
+		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale, @projectionKey
 		
 

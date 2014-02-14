@@ -235,6 +235,7 @@
     opts = {
       renderer: req.params['renderer'],
       scale: req.params['scale'],
+      projectionKey: req.params['projectionKey'],
       amount: 10
     };
     return res.render('tgs', opts);

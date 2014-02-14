@@ -9,7 +9,7 @@ class Map
 	renderer				:	null
 
 	type						:	'countries'
-	projectionType	:	Config.Map.projections[	Config.Map.projectionKey ]
+	projectionType	: null	
 
 	scale						:	null
 	xOffset					:	Config.Map.xOffset
@@ -34,7 +34,9 @@ class Map
 	countries				:	null
 	neighbors				:	null
 
-	constructor		:	(@src, @width, @height, @container, @renderer, @scale)->
+	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey)->
+		@projectionType = Config.Map.projections[	@projectionKey ]
+		console.log @projectionType
 		if @renderer is 'canvas'
 			@createCanvas()
 		else
@@ -108,8 +110,18 @@ class Map
 				@group.append("use")
 						.attr("class", "fill")
 						.attr("xlink:href", "#sphere")
+	createPoint : (d) =>
+		fn = (el, idx, array) =>
+			_d = el.__data__.location.coords[0]
+			coords = @projection([_d['longitude'], _d['latitude']])
+			size = @markerSize*2
+			@context.fillStyle = @color
+			@context.fillRect(coords[0], coords[1],size, size)
 
-	createPoints	:	( name, data, color )->
+		d[0].forEach(fn)
+
+
+	createPoints	:	( name, data, @color )->
 		@[name] = data
 		switch @renderer
 			when 'svg'
@@ -126,26 +138,15 @@ class Map
 					)
 					.on('mouseover', @onMarkerMouseOver)
 			when 'canvas'
+				#return
 				console.log 'drawing'
-				createPoint = (d) =>
-					#return
-					fn = (el, idx, array) =>
-						_d = el.__data__.location.coords[0]
-						coords = @projection([_d['longitude'], _d['latitude']])
-						size = @markerSize*2
-						@context.fillStyle = color
-						@context.fillRect(coords[0], coords[1],size, size)
-
-
-					d[0].forEach(fn)
-					#_d = d.location.coords[0]
-
-				console.log @[name]
-				return
-				@canvas.selectAll('canvas')
+				#console.log @[name]
+				#return
+				@canvas.select('canvas')
 					 .data(@[name])
 					 .enter()
-					 .call(createPoint)
+					 .call(@createPoint)
+					 #.exit()
 
 	drawLines				  : (src)->
 		return

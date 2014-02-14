@@ -30,7 +30,7 @@ Config	=
 									'transverseMercator'		# 11
 									]
 
-		projectionKey		:	1
+		projectionKey		:	4
 		markerSize			:	2
 
 	TGS			:

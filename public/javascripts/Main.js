@@ -20,7 +20,7 @@
       scaleMin: 0.75,
       scaleMax: 10,
       projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
-      projectionKey: 1,
+      projectionKey: 4,
       markerSize: 2
     },
     TGS: {
@@ -103,7 +103,7 @@
 
     Map.prototype.type = 'countries';
 
-    Map.prototype.projectionType = Config.Map.projections[Config.Map.projectionKey];
+    Map.prototype.projectionType = null;
 
     Map.prototype.scale = null;
 
@@ -141,13 +141,14 @@
 
     Map.prototype.neighbors = null;
 
-    function Map(src, width, height, container, renderer, scale) {
+    function Map(src, width, height, container, renderer, scale, projectionKey) {
       this.src = src;
       this.width = width;
       this.height = height;
       this.container = container;
       this.renderer = renderer;
       this.scale = scale;
+      this.projectionKey = projectionKey;
       this.onDataRead = __bind(this.onDataRead, this);
       this.update = __bind(this.update, this);
       this.drawPointsOnCanvas = __bind(this.drawPointsOnCanvas, this);
@@ -160,6 +161,9 @@
       this.onMouseWheel = __bind(this.onMouseWheel, this);
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
+      this.createPoint = __bind(this.createPoint, this);
+      this.projectionType = Config.Map.projections[this.projectionKey];
+      console.log(this.projectionType);
       if (this.renderer === 'canvas') {
         this.createCanvas();
       } else {
@@ -213,9 +217,23 @@
       }
     };
 
-    Map.prototype.createPoints = function(name, data, color) {
-      var createPoint,
+    Map.prototype.createPoint = function(d) {
+      var fn,
         _this = this;
+      fn = function(el, idx, array) {
+        var coords, size, _d;
+        _d = el.__data__.location.coords[0];
+        coords = _this.projection([_d['longitude'], _d['latitude']]);
+        size = _this.markerSize * 2;
+        _this.context.fillStyle = _this.color;
+        return _this.context.fillRect(coords[0], coords[1], size, size);
+      };
+      return d[0].forEach(fn);
+    };
+
+    Map.prototype.createPoints = function(name, data, color) {
+      var _this = this;
+      this.color = color;
       this[name] = data;
       switch (this.renderer) {
         case 'svg':
@@ -227,21 +245,7 @@
           }).on('mouseover', this.onMarkerMouseOver);
         case 'canvas':
           console.log('drawing');
-          createPoint = function(d) {
-            var fn;
-            fn = function(el, idx, array) {
-              var coords, size, _d;
-              _d = el.__data__.location.coords[0];
-              coords = _this.projection([_d['longitude'], _d['latitude']]);
-              size = _this.markerSize * 2;
-              _this.context.fillStyle = color;
-              return _this.context.fillRect(coords[0], coords[1], size, size);
-            };
-            return d[0].forEach(fn);
-          };
-          console.log(this[name]);
-          return;
-          return this.canvas.selectAll('canvas').data(this[name]).enter().call(createPoint);
+          return this.canvas.select('canvas').data(this[name]).enter().call(this.createPoint);
       }
     };
 
@@ -419,7 +423,7 @@
 
     TGS.prototype.speed = 1e-2;
 
-    TGS.prototype.velocity = 0.015;
+    TGS.prototype.velocity = 0.01;
 
     TGS.prototype.origin = 0;
 
@@ -450,6 +454,8 @@
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
       this.scale = $(this.mapContainer).data().scale;
+      this.projectionKey = $(this.mapContainer).data().projectionkey;
+      console.log(this.projectionKey);
       this.start = Date.now();
       $(this.mapContainer).css({
         width: _w,
@@ -460,13 +466,22 @@
     }
 
     TGS.prototype.startRotation = function() {
-      return d3.timer(this.loop);
+      var framerate,
+        _this = this;
+      framerate = 1000 / 30;
+      return setInterval((function() {
+        return _this.loop();
+      }), framerate);
     };
 
     TGS.prototype.loop = function() {
-      this.map.context.clearRect(0, 0, this.mapWidth, this.mapHeight);
+      if (this.renderer === 'canvas') {
+        this.map.context.clearRect(0, 0, this.mapWidth, this.mapHeight);
+      }
       this.map.projection = this.map.projection.rotate([this.origin + this.velocity * (Date.now() - this.start), -15]);
-      return this.map.drawMap();
+      this.map.drawMap();
+      this.map.createPoints('students', this.studentData, 'blue');
+      return this.map.createPoints('flickr', this.flickrData, 'red');
     };
 
     TGS.prototype.onTGSFlickrDataLoaded = function(flickrData) {
@@ -510,7 +525,7 @@
     };
 
     TGS.prototype.createMap = function() {
-      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale);
+      return this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale, this.projectionKey);
     };
 
     return TGS;

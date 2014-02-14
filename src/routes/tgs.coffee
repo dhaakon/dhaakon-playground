@@ -83,9 +83,10 @@ exports.thinkData = ( req, res )->
 
 exports.tgs		=		( req, res ) ->
 	opts =
-		renderer	:		req.params['renderer']
-		scale			:		req.params['scale']
-		amount		:		10
+		renderer					:		req.params['renderer']
+		scale							:		req.params['scale']
+		projectionKey			:		req.params['projectionKey']
+		amount						:		10
 
 	res.render 'tgs', opts
 
