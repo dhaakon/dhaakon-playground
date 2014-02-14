@@ -492,8 +492,6 @@
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.loop = __bind(this.loop, this);
       var _h, _w;
-      this.mapWidth = _w = $(window).width();
-      this.mapHeight = _h = $(window).height();
       this.loader = $('#loader-container');
       this.renderer = $(this.mapContainer).data().renderer;
       this.scale = $(this.mapContainer).data().scale;
@@ -501,6 +499,8 @@
       this.hasRotation = $(this.mapContainer).data().rotate;
       this.hasLines = $(this.mapContainer).data().lines;
       this.velocity = ($(this.mapContainer).data().velocity / 10000) || this.velocity;
+      this.mapWidth = _w = $(this.mapContainer).data().width || $(window).width();
+      this.mapHeight = _h = $(this.mapContainer).data().height || $(window).width();
       console.log(this.velocity);
       this.start = Date.now();
       $(this.mapContainer).css({

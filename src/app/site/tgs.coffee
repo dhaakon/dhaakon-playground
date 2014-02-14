@@ -20,8 +20,6 @@ class TGS
 
 	loader				:	null
 	constructor		:		()->
-		@mapWidth  = _w = $(window).width()
-		@mapHeight = _h = $(window).height()
 		#@mapWidth  = _w = 1300 
 		#@mapHeight = _h = 600
 
@@ -33,6 +31,9 @@ class TGS
 		@hasRotation		  = $(@mapContainer).data().rotate
 		@hasLines				  = $(@mapContainer).data().lines
 		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
+		@mapWidth  = _w = $(@mapContainer).data().width || $(window).width()
+		@mapHeight = _h = $(@mapContainer).data().height || $(window).width()
+
 
 		console.log @velocity
 
