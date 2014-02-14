@@ -152,7 +152,7 @@ class Map
 					 #.exit()
 
 	drawLines				  : (src)->
-		return
+		if @renderer is 'canvas' then return
 		for path in @[src[0]]
 			coords = @projection([ path.location.coords[0]['longitude'], path.location.coords[0]['latitude']])
 			@group.selectAll('group')
