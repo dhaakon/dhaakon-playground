@@ -302,7 +302,7 @@
                     dist /= 3;
                     _this.context.save();
                     _this.context.beginPath();
-                    _this.context.lineWidth = '0.35';
+                    _this.context.lineWidth = '0.25';
                     _this.context.strokeStyle = grad;
                     _this.context.moveTo(l1[0], l1[1]);
                     _this.context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1]);

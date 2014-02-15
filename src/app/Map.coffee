@@ -214,7 +214,7 @@ class Map
 
 									@context.save()
 									@context.beginPath()
-									@context.lineWidth = '0.35'
+									@context.lineWidth = '0.25'
 									@context.strokeStyle = grad
 									@context.moveTo(l1[0], l1[1])
 									@context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1])
