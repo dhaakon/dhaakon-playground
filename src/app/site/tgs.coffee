@@ -84,7 +84,7 @@ class TGS
 		#EventManager.addListener Events.BOOKING_LOADED, @onBookingLoaded
 		
 	onMapLoaded				:	()=>
-		#@createBookingData()
+		#@createBookingData() 
 		@loader.remove()
 		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
 				
