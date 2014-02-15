@@ -42,6 +42,7 @@
     "fast-csv": "0.0.3",
     "fb": "~0.6.2",
     "passport": "~0.2.0",
-    "passport-facebook": "~1.0.2"
+    "passport-facebook": "~1.0.2",
+    "socket.io": "~0.9.16"
   }
 }

@@ -181,6 +181,10 @@ exports.getstudents		=		( req, res)->
 	
 	
 	return
-	
+
+exports.tgslocations		=		( req, res)->
+	csv = require 'fast-csv'
+	fs  = require 'fs'
+	_		=	require 'underscore'
 
 

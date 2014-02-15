@@ -285,12 +285,15 @@
                 cb = function(d) {
                   var _g;
                   _g = function(el, index, array) {
-                    var bCoords, dist, grad, l2, x1, y1;
+                    var bCoords, colA, colB, dist, grad, l2, op, x1, y1;
                     bCoords = [el.__data__.location.coords[0].longitude, el.__data__.location.coords[0].latitude];
                     l2 = _this.projection(bCoords);
+                    op = 0.3;
+                    colA = [255, 255, 0, op];
+                    colB = [255, 0, 0, op];
                     grad = _this.context.createLinearGradient(l1[0], l1[1], l2[0], l2[1]);
-                    grad.addColorStop('0', 'yellow');
-                    grad.addColorStop('1', 'red');
+                    grad.addColorStop('0', 'rgba(' + colA.join(',') + ')');
+                    grad.addColorStop('1', 'rgba(' + colB.join(',') + ')');
                     x1 = l2[0] - l1[0];
                     x1 = x1 * x1;
                     y1 = l2[1] - l1[1];
@@ -302,7 +305,7 @@
                     _this.context.lineWidth = '0.05';
                     _this.context.strokeStyle = grad;
                     _this.context.moveTo(l1[0], l1[1]);
-                    _this.context.bezierCurveTo(l1[0], l1[1] - dist, l2[0], l2[1] + -dist, l2[0], l2[1]);
+                    _this.context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1]);
                     _this.context.stroke();
                     return _this.context.restore();
                   };

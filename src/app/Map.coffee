@@ -176,6 +176,7 @@ class Map
 									.attr('stroke','rgba(0,0,250,0.1)')
 									.attr('stroke-width', '1')
 									.attr('fill','none')
+
 				when 'canvas'
 					fn = (d)=>
 						_f = (el, index, array) =>
@@ -193,9 +194,14 @@ class Map
 														]
 									
 									l2 = @projection bCoords
+
+									op		=	0.3
+									colA	= [ 255, 255, 0,	op]
+									colB	= [ 255, 0,	 0,	op]
+
 									grad = @context.createLinearGradient(l1[0],l1[1],l2[0],l2[1])
-									grad.addColorStop '0', 'yellow'
-									grad.addColorStop '1', 'red'
+									grad.addColorStop '0', 'rgba(' + colA.join(',') + ')'
+									grad.addColorStop '1', 'rgba(' + colB.join(',') + ')'
 
 									x1 = l2[0] - l1[0]
 									x1 = x1 * x1
@@ -211,7 +217,7 @@ class Map
 									@context.lineWidth = '0.05'
 									@context.strokeStyle = grad
 									@context.moveTo(l1[0], l1[1])
-									@context.bezierCurveTo(l1[0], l1[1] - dist, l2[0], l2[1] + - dist, l2[0], l2[1])
+									@context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1])
 									@context.stroke()
 									@context.restore()
 

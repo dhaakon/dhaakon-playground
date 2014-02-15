@@ -330,6 +330,13 @@
     c = csv(_stream).on('data', cb).on('end', onEnd).parse();
   };
 
+  exports.tgslocations = function(req, res) {
+    var csv, fs, _;
+    csv = require('fast-csv');
+    fs = require('fs');
+    return _ = require('underscore');
+  };
+
   exports.list = function(req, res) {
     return res.send('respond with a resource');
   };
