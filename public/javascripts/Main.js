@@ -288,7 +288,7 @@
                     var bCoords, colA, colB, dist, grad, l2, op, x1, y1;
                     bCoords = [el.__data__.location.coords[0].longitude, el.__data__.location.coords[0].latitude];
                     l2 = _this.projection(bCoords);
-                    op = 0.3;
+                    op = 0.1;
                     colA = [255, 255, 0, op];
                     colB = [255, 0, 0, op];
                     grad = _this.context.createLinearGradient(l1[0], l1[1], l2[0], l2[1]);
@@ -302,7 +302,7 @@
                     dist /= 3;
                     _this.context.save();
                     _this.context.beginPath();
-                    _this.context.lineWidth = '0.05';
+                    _this.context.lineWidth = '0.35';
                     _this.context.strokeStyle = grad;
                     _this.context.moveTo(l1[0], l1[1]);
                     _this.context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1]);
@@ -421,7 +421,7 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).precision(.25);
+      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).rotate([100, -20]).precision(.25);
     };
 
     Map.prototype.createPath = function() {

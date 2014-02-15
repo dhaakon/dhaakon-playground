@@ -195,7 +195,7 @@ class Map
 									
 									l2 = @projection bCoords
 
-									op		=	0.3
+									op		=	0.1
 									colA	= [ 255, 255, 0,	op]
 									colB	= [ 255, 0,	 0,	op]
 
@@ -214,7 +214,7 @@ class Map
 
 									@context.save()
 									@context.beginPath()
-									@context.lineWidth = '0.05'
+									@context.lineWidth = '0.35'
 									@context.strokeStyle = grad
 									@context.moveTo(l1[0], l1[1])
 									@context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1])
@@ -354,6 +354,7 @@ class Map
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
 						#.clipAngle(120)
+						.rotate([100, -20])
 						.precision(.25)
 
 	createPath			:	()=>
