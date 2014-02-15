@@ -31,9 +31,12 @@ class TGS
 		@hasRotation		  = $(@mapContainer).data().rotate
 		@hasLines				  = $(@mapContainer).data().lines
 		@hasGrid				  = $(@mapContainer).data().grid
+		@rotation				  = eval '[' + $(@mapContainer).data().rotation + ']'
 		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
 		@mapWidth  = _w	  = $(@mapContainer).data().width || $(window).width()
 		@mapHeight = _h  = $(@mapContainer).data().height || $(window).height()
+
+
 
 
 		console.log @velocity
@@ -96,7 +99,7 @@ class TGS
 		@bookingInformation.changeBookerCityTitle	event.booker_country		
 
 	createMap					:	()->
-		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale, @projectionKey, @hasGrid
+		@map = new Map @JSON_PATH, @mapWidth, @mapHeight, @mapContainer, @renderer, @scale, @projectionKey, @hasGrid, @rotation
 		if @hasGrid then @map.hasGrid = true
 		
 

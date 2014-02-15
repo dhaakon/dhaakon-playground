@@ -145,7 +145,9 @@
 
     Map.prototype.arc = -100;
 
-    function Map(src, width, height, container, renderer, scale, projectionKey, hasGrid) {
+    Map.prototype.startRotation = [0, -15];
+
+    function Map(src, width, height, container, renderer, scale, projectionKey, hasGrid, startRotation) {
       this.src = src;
       this.width = width;
       this.height = height;
@@ -154,6 +156,7 @@
       this.scale = scale;
       this.projectionKey = projectionKey;
       this.hasGrid = hasGrid;
+      this.startRotation = startRotation;
       this.onDataRead = __bind(this.onDataRead, this);
       this.update = __bind(this.update, this);
       this.drawPointsOnCanvas = __bind(this.drawPointsOnCanvas, this);
@@ -421,7 +424,7 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).rotate([100, -20]).precision(.25);
+      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).rotate(this.startRotation).precision(.25);
     };
 
     Map.prototype.createPath = function() {
@@ -515,6 +518,7 @@
       this.hasRotation = $(this.mapContainer).data().rotate;
       this.hasLines = $(this.mapContainer).data().lines;
       this.hasGrid = $(this.mapContainer).data().grid;
+      this.rotation = eval('[' + $(this.mapContainer).data().rotation + ']');
       this.velocity = ($(this.mapContainer).data().velocity / 10000) || this.velocity;
       this.mapWidth = _w = $(this.mapContainer).data().width || $(window).width();
       this.mapHeight = _h = $(this.mapContainer).data().height || $(window).height();
@@ -593,7 +597,7 @@
     };
 
     TGS.prototype.createMap = function() {
-      this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale, this.projectionKey, this.hasGrid);
+      this.map = new Map(this.JSON_PATH, this.mapWidth, this.mapHeight, this.mapContainer, this.renderer, this.scale, this.projectionKey, this.hasGrid, this.rotation);
       if (this.hasGrid) {
         return this.map.hasGrid = true;
       }

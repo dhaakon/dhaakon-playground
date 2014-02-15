@@ -36,7 +36,9 @@ class Map
 	hasGrid					:	false
 	arc							:	-100
 
-	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey, @hasGrid)->
+	startRotation		:	[ 0, -15 ]
+
+	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey, @hasGrid, @startRotation)->
 		@projectionType = Config.Map.projections[	@projectionKey ]
 
 		if @renderer is 'canvas'
@@ -354,7 +356,7 @@ class Map
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
 						#.clipAngle(120)
-						.rotate([100, -20])
+						.rotate( @startRotation )
 						.precision(.25)
 
 	createPath			:	()=>
