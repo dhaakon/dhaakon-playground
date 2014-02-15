@@ -79,7 +79,7 @@ class Map
 		d3.json		@src, @onDataRead
 
 	drawMap			:	()->
-		#@drawBackground()
+		@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()
 
@@ -269,9 +269,9 @@ class Map
 
 			when 'canvas'
 				@context.save()
-				@context.fillStyle = 'rgba( 120, 120, 40, 0 )'
+				@context.fillStyle = 'rgba( 255, 255, 255, 0.5 )'
 				@context.lineWidth = '0.2px'
-				@context.strokeStyle = 'rgba( 255, 255, 255, 0.9 )'
+				@context.strokeStyle = 'rgba( 0, 0, 0, 0.7 )'
 				@context.beginPath()
 				@context.fill()
 				@path(@countries)

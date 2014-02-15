@@ -34,6 +34,7 @@ module.exports = (grunt) ->
 									'bower_components/codemirror/addon/coffeescript/coffeescript.js'
 									'bower_components/**/javascript.js'
 									'bower_components/**/keymap/*.js'
+									'node_modules/socket.io/lib/socket.io.js'
 								]
 				dest		:	'./public/javascripts/'
 				flatten		:	true

@@ -23,7 +23,11 @@ class TGS
 		#@mapWidth  = _w = 1300 
 		#@mapHeight = _h = 600
 
+		console.log window.location
+		url					=		'http://' + window.location.hostname + '/'
+		console.log url
 		@loader			=		$('#loader-container')
+		@socket			=		new SocketClient(url)
 
 		@renderer				  = $(@mapContainer).data().renderer || 'canvas'
 		@scale						= $(@mapContainer).data().scale || 200
@@ -35,9 +39,6 @@ class TGS
 		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
 		@mapWidth  = _w	  = $(@mapContainer).data().width || $(window).width()
 		@mapHeight = _h  = $(@mapContainer).data().height || $(window).height()
-
-
-
 
 		console.log @velocity
 

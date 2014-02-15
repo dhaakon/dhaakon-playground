@@ -187,4 +187,68 @@ exports.tgslocations		=		( req, res)->
 	fs  = require 'fs'
 	_		=	require 'underscore'
 
+	_path = 'public/csv/tgs_countries.csv'
 
+	_stream = fs.createReadStream _path
+	i = 0
+	opts = {}
+	students = []
+
+	filename = 'public/json/students.json'
+	fs.readFile filename,'utf-8',
+		(err, _data)->
+			_d = eval _data
+
+			res.send _d
+
+	return
+
+	geo = new Geocoder()
+
+	cb = (data) =>
+		if i == 0
+			for prop in data
+				opts[prop] = ''
+			++i
+		else
+			obj = {}
+			o = 0
+			for property of opts
+				obj[property] = data[o]
+				++o
+			students.push obj
+			++i
+
+	onEnd	= () =>
+		l = students.length
+		
+		fn = (err, data)=>
+			console.log err, data
+			if !err
+				if l >= 0
+					student = students[l]
+					loc = student.City + ', ' + student.Country
+					console.log loc
+					opts =
+						location :
+							coords	:		[data[0]]
+					_.extend students[l], opts
+					geo.getLocationByCityName loc, fn
+					--l
+				else
+					fs.writeFile 'public/json/students.json', JSON.stringify students
+					res.json students
+		
+		student = students[--l]
+		loc = student.City + ', ' + student.Country
+		console.log loc
+		geo.getLocationByCityName loc, fn
+		#console.log c
+
+	c = csv(_stream)
+			.on('data', cb )
+			.on('end', onEnd)
+			.parse()
+	
+	
+	return
