@@ -512,9 +512,9 @@
       this.loop = __bind(this.loop, this);
       var _h, _w;
       this.loader = $('#loader-container');
-      this.renderer = $(this.mapContainer).data().renderer;
-      this.scale = $(this.mapContainer).data().scale;
-      this.projectionKey = $(this.mapContainer).data().projectionkey;
+      this.renderer = $(this.mapContainer).data().renderer || 'canvas';
+      this.scale = $(this.mapContainer).data().scale || 200;
+      this.projectionKey = $(this.mapContainer).data().projectionkey || 2;
       this.hasRotation = $(this.mapContainer).data().rotate;
       this.hasLines = $(this.mapContainer).data().lines;
       this.hasGrid = $(this.mapContainer).data().grid;

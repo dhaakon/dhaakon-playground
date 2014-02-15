@@ -25,9 +25,9 @@ class TGS
 
 		@loader			=		$('#loader-container')
 
-		@renderer				  = $(@mapContainer).data().renderer
-		@scale						= $(@mapContainer).data().scale
-		@projectionKey	  = $(@mapContainer).data().projectionkey
+		@renderer				  = $(@mapContainer).data().renderer || 'canvas'
+		@scale						= $(@mapContainer).data().scale || 200
+		@projectionKey	  = $(@mapContainer).data().projectionkey || 2
 		@hasRotation		  = $(@mapContainer).data().rotate
 		@hasLines				  = $(@mapContainer).data().lines
 		@hasGrid				  = $(@mapContainer).data().grid

@@ -6,9 +6,9 @@ block added-scripts
 block content
 	include loader
 	div#main 
-		div#map-container(	data-renderer= renderer, 
-							data-scale= scale, 
-							data-projectionKey= projectionKey,
+		div#map-container(	data-renderer= params.renderer, 
+							data-scale= params.scale, 
+							data-projectionKey= params.projectionKey,
 							data-rotate= params.rotate,
 							data-velocity= params.velocity,
 							data-width= params.width,
