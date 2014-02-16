@@ -1,0 +1,21 @@
+block url_config_javascript
+	script(type='text/javascript').
+		;var _F = function(window){
+
+		Config = window.Config || {};
+		Config.userType				=	!{JSON.stringify(role)};
+
+		Config[Config.userType].Settings.renderer		=	!{JSON.stringify(params.renderer)};
+		Config[Config.userType].Settings.hasGrid		=	!{params.grid};
+		Config[Config.userType].Settings.hasRotation	=	!{params.rotate};
+		Config[Config.userType].Settings.hasLines		=	!{params.lines};
+
+		Config[Config.userType].Map.scale				=	!{params.scale};
+		Config[Config.userType].Map.projectionKey		=	!{params.projectionKey};
+		Config[Config.userType].Map.velocity			=	!{params.velocity};
+		Config[Config.userType].Map.rotation			=	[	!{params.rotation.split(',')[0]} , !{params.rotation.split(',')[1]} ];
+	
+		Config[Config.userType].Map.width				=	!{params.width};
+		Config[Config.userType].Map.height				=	!{params.height};}
+		_F(window)
+

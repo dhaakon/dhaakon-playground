@@ -23,6 +23,7 @@ class Server
 		@app.set		'port'			,	process.env.PORT || 3000
 		@app.set		'views'			,	@path.join(__dirname, 'views')
 		@app.set		'view engine'	,	'jade'
+		@app.set		'view options', pretty : true
 	
 		@app.use		@express.favicon()
 		@app.use		@express.logger 'dev'
@@ -40,7 +41,7 @@ class Server
 		@app.get		'/codem',													Router.codem
 		@app.get		'/loaders',												Router.loaders
 		@app.get		'/tgsData',												Router.thinkData
-		@app.get		'/tgs/',													Router.tgs
+		@app.get		'/tgs/:role',											Router.tgs
 		@app.get		'/location/:lat/:long',						Router.getlocation
 		@app.get		'/students/',											Router.getstudents
 		@app.get		'/tgslocations/',									Router.tgslocations
@@ -50,7 +51,7 @@ class Server
 
 	createServer	:	()->
 		@server = @http.createServer(@app)
-		@socket = new SocketServer(@server)
+		@socket = new SocketServer(@server, @http)
 	
 		@server.listen(	@app.get('port'),
 			()=>

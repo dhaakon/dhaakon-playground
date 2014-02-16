@@ -4,24 +4,56 @@
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     _this = this;
 
-  Config = {
-    Settings: {
-      jsonPath: '/json/world.json',
-      csvPath: '/csv/booking_small.csv',
-      renderer: 'canvas'
+  Config = window.Config = {
+    server: {
+      Settings: {
+        jsonPath: '/json/world.json',
+        csvPath: '/csv/booking_small.csv',
+        renderer: 'canvas',
+        hasGrid: false,
+        hasRotation: false,
+        hasLines: true
+      },
+      Map: {
+        container: '#map-container',
+        height: 1200,
+        width: 1600,
+        scale: 350,
+        xOffset: 0,
+        yOffset: 0,
+        scaleMin: 0.75,
+        scaleMax: 10,
+        projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
+        projectionKey: 4,
+        markerSize: 2,
+        rotation: [0, -15],
+        velocity: 20
+      }
     },
-    Map: {
-      container: '#map-container',
-      height: 1200,
-      width: 1600,
-      scale: 350,
-      xOffset: 0,
-      yOffset: 0,
-      scaleMin: 0.75,
-      scaleMax: 10,
-      projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
-      projectionKey: 4,
-      markerSize: 2
+    user: {
+      Settings: {
+        jsonPath: '/json/world.json',
+        csvPath: '/csv/booking_small.csv',
+        renderer: 'canvas',
+        hasGrid: false,
+        hasRotation: false,
+        hasLines: true
+      },
+      Map: {
+        container: '#map-container',
+        height: 1200,
+        width: 1600,
+        scale: 350,
+        xOffset: 0,
+        yOffset: 0,
+        scaleMin: 0.75,
+        scaleMax: 10,
+        projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
+        projectionKey: 4,
+        markerSize: 2,
+        rotation: [0, -15],
+        velocity: 20
+      }
     },
     TGS: {
       src: '/tgsData/',
@@ -107,15 +139,15 @@
 
     Map.prototype.scale = null;
 
-    Map.prototype.xOffset = Config.Map.xOffset;
+    Map.prototype.xOffset = null;
 
-    Map.prototype.yOffset = Config.Map.yOffset;
+    Map.prototype.yOffset = null;
 
-    Map.prototype.scaleMin = Config.Map.scaleMin;
+    Map.prototype.scaleMin = null;
 
-    Map.prototype.scaleMax = Config.Map.scaleMax;
+    Map.prototype.scaleMax = null;
 
-    Map.prototype.markerSize = Config.Map.markerSize;
+    Map.prototype.markerSize = null;
 
     Map.prototype.svg = null;
 
@@ -170,7 +202,8 @@
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
       this.createPoint = __bind(this.createPoint, this);
-      this.projectionType = Config.Map.projections[this.projectionKey];
+      this.projectionType = Config[Config.userType].Map.projections[this.projectionKey];
+      this.loadFromConfig();
       if (this.renderer === 'canvas') {
         this.createCanvas();
       } else {
@@ -179,6 +212,14 @@
       this.readJSON();
       this.addListeners();
     }
+
+    Map.prototype.loadFromConfig = function() {
+      this.xOffset = Config[Config.userType].Map.xOffset;
+      this.yOffset = Config[Config.userType].Map.yOffset;
+      this.scaleMin = Config[Config.userType].Map.scaleMin;
+      this.scaleMax = Config[Config.userType].Map.scaleMax;
+      return this.markerSize = Config[Config.userType].Map.markerSize;
+    };
 
     Map.prototype.addListeners = function() {};
 
@@ -484,6 +525,7 @@
 
     SocketClient.prototype.createSocketConnection = function() {
       this.socket = io.connect(this.host);
+      this.socket.name = Math.random().toString(36).substr(2, 9);
       return this.addListeners();
     };
 
@@ -505,15 +547,27 @@
 
     TGS.prototype.studentsSrc = Config.TGS.students_src;
 
-    TGS.prototype.JSON_PATH = Config.Settings.jsonPath;
-
-    TGS.prototype.mapHeight = Config.Map.height;
-
-    TGS.prototype.mapWidth = Config.Map.width;
+    TGS.prototype.JSON_PATH = null;
 
     TGS.prototype.speed = 1e-2;
 
-    TGS.prototype.velocity = 0.01;
+    TGS.prototype.mapHeight = null;
+
+    TGS.prototype.mapWidth = null;
+
+    TGS.prototype.velocity = null;
+
+    TGS.prototype.scale = null;
+
+    TGS.prototype.projectionKey = null;
+
+    TGS.prototype.rotation = null;
+
+    TGS.prototype.hasRotation = null;
+
+    TGS.prototype.hasLines = null;
+
+    TGS.prototype.hasGrid = null;
 
     TGS.prototype.origin = 0;
 
@@ -521,11 +575,11 @@
 
     TGS.prototype.map = null;
 
-    TGS.prototype.renderer = Config.Settings.renderer;
-
     TGS.prototype.bookingInformation = null;
 
-    TGS.prototype.mapContainer = Config.Map.container;
+    TGS.prototype.renderer = null;
+
+    TGS.prototype.mapContainer = null;
 
     TGS.prototype.svg = null;
 
@@ -538,31 +592,37 @@
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.loop = __bind(this.loop, this);
-      var url, _h, _w;
-      console.log(window.location);
+      var url;
+      this.loadFromConfig();
       url = 'http://' + window.location.hostname + '/';
-      console.log(url);
+      this.mapHeight = this.mapHeight || $(window).height();
+      this.mapWidth = this.mapWidth || $(window).width();
       this.loader = $('#loader-container');
       this.socket = new SocketClient(url);
-      this.renderer = $(this.mapContainer).data().renderer || 'canvas';
-      this.scale = $(this.mapContainer).data().scale || 200;
-      this.projectionKey = $(this.mapContainer).data().projectionkey || 2;
-      this.hasRotation = $(this.mapContainer).data().rotate;
-      this.hasLines = $(this.mapContainer).data().lines;
-      this.hasGrid = $(this.mapContainer).data().grid;
-      this.rotation = eval('[' + $(this.mapContainer).data().rotation + ']');
-      this.velocity = ($(this.mapContainer).data().velocity / 10000) || this.velocity;
-      this.mapWidth = _w = $(this.mapContainer).data().width || $(window).width();
-      this.mapHeight = _h = $(this.mapContainer).data().height || $(window).height();
-      console.log(this.velocity);
       this.start = Date.now();
       $(this.mapContainer).css({
-        width: _w,
-        height: _h
+        width: this.mapWidth,
+        height: this.mapHeight
       });
       this.addListeners();
       this.createMap();
     }
+
+    TGS.prototype.loadFromConfig = function() {
+      this.mapHeight = Config[Config.userType].Map.height;
+      this.mapWidth = Config[Config.userType].Map.width;
+      this.velocity = Config[Config.userType].Map.velocity / 1000;
+      this.scale = Config[Config.userType].Map.scale;
+      this.projectionKey = Config[Config.userType].Map.projectionKey;
+      this.rotation = Config[Config.userType].Map.rotation;
+      this.renderer = Config[Config.userType].Settings.renderer;
+      this.hasRotation = Config[Config.userType].Settings.hasRotation;
+      this.hasLines = Config[Config.userType].Settings.hasLines;
+      this.hasGrid = Config[Config.userType].Settings.hasGrid;
+      this.renderer = Config[Config.userType].Settings.renderer;
+      this.mapContainer = Config[Config.userType].Map.container;
+      return this.JSON_PATH = Config[Config.userType].Settings.jsonPath;
+    };
 
     TGS.prototype.startRotation = function() {
       var framerate,

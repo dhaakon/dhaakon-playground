@@ -254,6 +254,7 @@
       scale: req.params['scale'],
       projectionKey: req.params['projectionKey'],
       amount: 10,
+      role: req.params['role'],
       params: params
     };
     return res.render('tgs', opts);

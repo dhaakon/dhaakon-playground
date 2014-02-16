@@ -1,56 +1,73 @@
 class TGS
 	flickrSrc			:		Config.TGS.src
 	studentsSrc		:		Config.TGS.students_src
-	JSON_PATH			:		Config.Settings.jsonPath
-	mapHeight			:		Config.Map.height
-	mapWidth			:		Config.Map.width
+	
+	JSON_PATH			:		null
 	speed					:		1e-2
-	velocity			:		0.01
-	origin				:		0
-	start					:		null
 
-	map						:	null
-	renderer			: Config.Settings.renderer
+	mapHeight			:		null	
+	mapWidth			:		null
+	
+	velocity			:		null
+	scale					:		null
+	projectionKey	:		null
+	rotation			:		null
+
+	hasRotation		:		null
+	hasLines			:		null
+	hasGrid				:		null
+
+	origin				:		0
+	
+	start					:		null
+	map						:		null
 
 	bookingInformation	:	null
-	mapContainer				:	Config.Map.container
+	renderer			:	null
+	mapContainer	:	null
 
 	svg						:	null
 	container			:	null
 
 	loader				:	null
 	constructor		:		()->
-		#@mapWidth  = _w = 1300 
-		#@mapHeight = _h = 600
+		@loadFromConfig()
 
-		console.log window.location
 		url					=		'http://' + window.location.hostname + '/'
-		console.log url
-		@loader			=		$('#loader-container')
+
+		@mapHeight	=		@mapHeight or $(window).height()
+		@mapWidth		=		@mapWidth or $(window).width()
+
+		@loader			=		$('#loader-container')		
 		@socket			=		new SocketClient(url)
-
-		@renderer				  = $(@mapContainer).data().renderer || 'canvas'
-		@scale						= $(@mapContainer).data().scale || 200
-		@projectionKey	  = $(@mapContainer).data().projectionkey || 2
-		@hasRotation		  = $(@mapContainer).data().rotate
-		@hasLines				  = $(@mapContainer).data().lines
-		@hasGrid				  = $(@mapContainer).data().grid
-		@rotation				  = eval '[' + $(@mapContainer).data().rotation + ']'
-		@velocity				  = ($(@mapContainer).data().velocity / 10000) || @velocity
-		@mapWidth  = _w	  = $(@mapContainer).data().width || $(window).width()
-		@mapHeight = _h  = $(@mapContainer).data().height || $(window).height()
-
-		console.log @velocity
-
-		@start		=	Date.now()
+		@start			=		Date.now()
 
 		$(@mapContainer).css(
-			width		:		_w,
-			height	:		_h
+			width		:		@mapWidth,
+			height	:		@mapHeight
 		)
 
 		@addListeners()
 		@createMap()
+
+	loadFromConfig	:		()->
+		@mapHeight			=		Config[Config.userType].Map.height
+		@mapWidth				=		Config[Config.userType].Map.width
+		
+		@velocity				=		Config[Config.userType].Map.velocity/1000
+		@scale					=		Config[Config.userType].Map.scale
+		@projectionKey	=		Config[Config.userType].Map.projectionKey
+		@rotation				=		Config[Config.userType].Map.rotation
+
+		@renderer				=		Config[Config.userType].Settings.renderer
+		@hasRotation		=		Config[Config.userType].Settings.hasRotation
+		@hasLines				=		Config[Config.userType].Settings.hasLines
+		@hasGrid				=		Config[Config.userType].Settings.hasGrid
+		@renderer				=		Config[Config.userType].Settings.renderer
+		@mapContainer		=		Config[Config.userType].Map.container
+
+		@JSON_PATH			=		Config[Config.userType].Settings.jsonPath
+
 
 	startRotation		:		()->
 		framerate = 1000/60

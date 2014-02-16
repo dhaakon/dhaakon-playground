@@ -107,6 +107,7 @@ exports.tgs		=		( req, res ) ->
 		scale							:		req.params['scale']
 		projectionKey			:		req.params['projectionKey']
 		amount						:		10
+		role							:		req.params['role']
 		params						:		params
 
 	res.render 'tgs', opts

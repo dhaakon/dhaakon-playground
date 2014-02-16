@@ -12,12 +12,12 @@ class Map
 	projectionType	: null	
 
 	scale						:	null
-	xOffset					:	Config.Map.xOffset
-	yOffset					:	Config.Map.yOffset
-	scaleMin				:	Config.Map.scaleMin
-	scaleMax				:	Config.Map.scaleMax
+	xOffset					: null
+	yOffset					:	null
+	scaleMin				:	null
+	scaleMax				:	null
 
-	markerSize			:	Config.Map.markerSize
+	markerSize			:	null
 	svg							:	null
 	canvas					:	null
 	group						:	null
@@ -39,7 +39,8 @@ class Map
 	startRotation		:	[ 0, -15 ]
 
 	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey, @hasGrid, @startRotation)->
-		@projectionType = Config.Map.projections[	@projectionKey ]
+		@projectionType = Config[Config.userType].Map.projections[	@projectionKey ]
+		@loadFromConfig()
 
 		if @renderer is 'canvas'
 			@createCanvas()
@@ -48,9 +49,14 @@ class Map
 
 		@readJSON()
 		@addListeners()
+	loadFromConfig	:		() ->
+		@xOffset					=	Config[Config.userType].Map.xOffset
+		@yOffset					=	Config[Config.userType].Map.yOffset
+		@scaleMin					=	Config[Config.userType].Map.scaleMin
+		@scaleMax					=	Config[Config.userType].Map.scaleMax
+		@markerSize				=	Config[Config.userType].Map.markerSize
 
 	addListeners	:	()->
-
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
