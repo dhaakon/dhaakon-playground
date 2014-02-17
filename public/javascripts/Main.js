@@ -660,11 +660,11 @@
             ]
           }
         };
+        console.log(opts);
         return _this.socket.emit('gps', opts);
       };
       EventManager.addListener(Events.MAP_CLICKED, cb);
-      console.info('Received location event');
-      return console.log(data);
+      return console.info('Received location event');
     };
 
     SocketClient.prototype.onReceiveHandler = function(data) {
@@ -684,8 +684,8 @@
           _locs = JSON.parse(obj.locations[loc]);
           objects.push(_locs);
         }
+        return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
       }
-      return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
     };
 
     return SocketClient;

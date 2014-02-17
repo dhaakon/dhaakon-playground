@@ -88,7 +88,8 @@
     };
 
     SocketServer.prototype.onConnectionHandler = function(socket) {
-      return this.createRoutes();
+      this.createRoutes();
+      return socket.emit('location');
     };
 
     SocketServer.prototype.onGPSHandler = function(event) {

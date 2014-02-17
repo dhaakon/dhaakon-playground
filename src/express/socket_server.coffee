@@ -10,7 +10,6 @@ class SocketServer
 
 	createRoutes			:		()->
 		@app.io.route('serverStarted', (req)=>
-
 			@redis.client.get 'keys', (err, resp)=>
 				obj = JSON.stringify resp
 				console.log 'keys got'
@@ -38,6 +37,8 @@ class SocketServer
 
 	onConnectionHandler			:		(socket)=>
 		@createRoutes()
+
+		socket.emit 'location'
 
 	onGPSHandler			:		(event)->
 		console.log event

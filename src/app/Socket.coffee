@@ -42,7 +42,6 @@ class SocketClient
 
 	onLocationHandler				:		( data )=>
 		cb = (data) =>
-
 			opts=
 				location		:	
 					title :		data.location
@@ -50,13 +49,12 @@ class SocketClient
 						latitude		:	data.longitude
 						longitude		:	data.latitude
 					]
+			console.log opts
 
 			@socket.emit 'gps', opts
-		
 		EventManager.addListener Events.MAP_CLICKED, cb
 
 		console.info 'Received location event'
-		console.log data
 
 	onReceiveHandler				:		( data )=>
 		EventManager.emitEvent Events.SERVER_UPDATED, [data]
@@ -71,9 +69,9 @@ class SocketClient
 			for loc of obj.locations
 				_locs = JSON.parse obj.locations[loc]
 				objects.push _locs
+			EventManager.emitEvent Events.SERVER_STARTED, [objects]
 		
 		#console.log data
-		EventManager.emitEvent Events.SERVER_STARTED, [objects]
 
 
 
