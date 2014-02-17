@@ -124,10 +124,10 @@ class Map
 		#console.log event.location
 		for loc in event
 			if loc?
-				console.log loc
+				#console.log loc
 				#console.log event.location[loc]
 				@flickr.push loc
-
+		console.log event
 		@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()

@@ -61,6 +61,14 @@
 
     SocketServer.prototype.createRoutes = function() {
       var _this = this;
+      this.app.io.route('serverStarted', function(req) {
+        return _this.redis.client.get('keys', function(err, resp) {
+          var obj;
+          obj = JSON.stringify(resp);
+          console.log('keys got');
+          return _this.socket.io.sockets.emit('locationsLoaded', obj);
+        });
+      });
       return this.app.io.route('gps', function(req) {
         var uid;
         _this.socket.io.sockets.emit('receiveResponse', req.data);
@@ -80,17 +88,7 @@
     };
 
     SocketServer.prototype.onConnectionHandler = function(socket) {
-      var _this = this;
-      this.createRoutes();
-      socket.emit('location', {
-        lat: 200,
-        long: 100
-      });
-      return this.redis.client.get('keys', function(err, resp) {
-        var obj;
-        obj = JSON.stringify(resp);
-        return socket.emit('locationsLoaded', obj);
-      });
+      return this.createRoutes();
     };
 
     SocketServer.prototype.onGPSHandler = function(event) {

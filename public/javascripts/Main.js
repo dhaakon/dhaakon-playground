@@ -283,10 +283,10 @@
       for (_i = 0, _len = event.length; _i < _len; _i++) {
         loc = event[_i];
         if (loc != null) {
-          console.log(loc);
           this.flickr.push(loc);
         }
       }
+      console.log(event);
       this.drawBackground();
       if (this.hasGrid) {
         this.drawGrid();
@@ -612,9 +612,6 @@
       };
       console.log(location.origin);
       url = location.origin;
-      opts = {
-        'transports': ['xhr-polling']
-      };
       this.socket = io.connect(url, opts);
       return this.addListeners();
     };
@@ -627,6 +624,7 @@
         case 'server':
           this.socket.on('receiveResponse', this.onReceiveHandler);
           this.socket.on('locationsLoaded', this.onLocationsLoaded);
+          this.socket.emit('serverStarted');
       }
       this.socket.on('connection', this.onConnectionHandler);
       this.socket.on('connect', this.connect);
@@ -686,8 +684,8 @@
           _locs = JSON.parse(obj.locations[loc]);
           objects.push(_locs);
         }
-        return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
       }
+      return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
     };
 
     return SocketClient;

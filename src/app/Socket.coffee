@@ -11,7 +11,7 @@ class SocketClient
 		url = location.origin
 		#url += @host.substring(0, @host.length-1)
 		#url += ':' + opts.port
-		opts	=		'transports': ['xhr-polling']
+		#opts	=		'transports': ['xhr-polling']
 		@socket = io.connect(url, opts)
 		@addListeners()
 
@@ -24,6 +24,7 @@ class SocketClient
 			when 'server'
 				@socket.on 'receiveResponse', @onReceiveHandler
 				@socket.on 'locationsLoaded', @onLocationsLoaded
+				@socket.emit 'serverStarted'
 
 		@socket.on 'connection', @onConnectionHandler
 		@socket.on 'connect', @connect
@@ -70,7 +71,9 @@ class SocketClient
 			for loc of obj.locations
 				_locs = JSON.parse obj.locations[loc]
 				objects.push _locs
-			EventManager.emitEvent Events.SERVER_STARTED, [objects]
+		
+		#console.log data
+		EventManager.emitEvent Events.SERVER_STARTED, [objects]
 
 
 
