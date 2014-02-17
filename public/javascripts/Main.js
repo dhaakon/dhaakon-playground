@@ -679,11 +679,13 @@
       var loc, obj, objects, _locs;
       obj = JSON.parse(JSON.parse(data));
       objects = [];
-      for (loc in obj.locations) {
-        _locs = JSON.parse(obj.locations[loc]);
-        objects.push(_locs);
+      if (obj != null) {
+        for (loc in obj.locations) {
+          _locs = JSON.parse(obj.locations[loc]);
+          objects.push(_locs);
+        }
+        return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
       }
-      return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
     };
 
     return SocketClient;

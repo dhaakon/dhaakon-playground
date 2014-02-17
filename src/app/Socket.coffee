@@ -66,10 +66,11 @@ class SocketClient
 	onLocationsLoaded				:		(data)=>
 		obj = JSON.parse JSON.parse data
 		objects = []
-		for loc of obj.locations
-			_locs = JSON.parse obj.locations[loc]
-			objects.push _locs
-		EventManager.emitEvent Events.SERVER_STARTED, [objects]
+		if obj?
+			for loc of obj.locations
+				_locs = JSON.parse obj.locations[loc]
+				objects.push _locs
+			EventManager.emitEvent Events.SERVER_STARTED, [objects]
 
 
 
