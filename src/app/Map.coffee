@@ -132,7 +132,7 @@ class Map
 		if @hasGrid then @drawGrid()
 		@drawCountries()
 
-		console.log @lines
+		if !@lines? then return
 		@drawLines(@lines)
 
 		@createPoints 'flickr', @flickr, 'red'
