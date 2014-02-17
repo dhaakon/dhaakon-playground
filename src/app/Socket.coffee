@@ -19,7 +19,7 @@ class SocketClient
 		switch @type
 			when 'user'
 				@socket.on 'location', @onLocationHandler
-				@socket.on 'receiveResponse',  @onReceiveHandler
+				#@socket.on 'receiveResponse',  @onReceiveHandler
 
 			when 'server'
 				@socket.on 'receiveResponse', @onReceiveHandler
@@ -39,19 +39,25 @@ class SocketClient
 		console.log error
 
 	onLocationHandler				:		( data )=>
-		i=0
-		cb = (event) =>
-			console.log 'touch'
-			@socket.emit 'gps', {a:++i}
+		cb = (data) =>
 
-		$(window).on 'click', cb
-		$(window).on 'touchstart', cb
+			opts=
+				location		:	
+					title :		data.location
+					coords	: [
+						latitude		:	data.longitude
+						longitude		:	data.latitude
+					]
+
+			@socket.emit 'gps', opts
+		
+		EventManager.addListener Events.MAP_CLICKED, cb
 
 		console.info 'Received location event'
 		console.log data
 
 	onReceiveHandler				:		( data )=>
-		console.log data
+		EventManager.emitEvent Events.SERVER_UPDATED, [data]
 
 	onConnectionHandler			:		( socket )=>
 		console.log socket

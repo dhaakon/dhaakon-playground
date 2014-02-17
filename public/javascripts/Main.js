@@ -119,7 +119,9 @@
   Events = {
     MAP_LOADED: 'onMapLoaded',
     BOOKING_LOADED: 'onBookingLoaded',
-    MARKER_FOCUS: 'onMarkerFocus'
+    MARKER_FOCUS: 'onMarkerFocus',
+    MAP_CLICKED: 'onMapClicked',
+    SERVER_UPDATED: 'onServerUpdated'
   };
 
   Map = (function() {
@@ -198,10 +200,12 @@
       this.updateSVG = __bind(this.updateSVG, this);
       this.zoomed = __bind(this.zoomed, this);
       this.onMouseDownHandler = __bind(this.onMouseDownHandler, this);
+      this.onLocationReceived = __bind(this.onLocationReceived, this);
       this.onMouseWheel = __bind(this.onMouseWheel, this);
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
       this.createPoint = __bind(this.createPoint, this);
+      this.onServerUpdated = __bind(this.onServerUpdated, this);
       this.projectionType = Config[Config.userType].Map.projections[this.projectionKey];
       this.loadFromConfig();
       if (this.renderer === 'canvas') {
@@ -221,15 +225,17 @@
       return this.markerSize = Config[Config.userType].Map.markerSize;
     };
 
-    Map.prototype.addListeners = function() {};
+    Map.prototype.addListeners = function() {
+      return EventManager.addListener(Events.SERVER_UPDATED, this.onServerUpdated);
+    };
 
     Map.prototype.createSVG = function() {
       this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
-      return this.group = this.svg.append('g').call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed));
+      return this.group = this.svg.append('g').on('mousedown', this.onMouseDownHandler).call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed));
     };
 
     Map.prototype.createCanvas = function() {
-      this.canvas = d3.select(this.container).append('canvas').attr('width', this.width).attr('height', this.height).attr('id', 'marker-canvas');
+      this.canvas = d3.select(this.container).append('canvas').attr('width', this.width).attr('height', this.height).attr('id', 'marker-canvas').on('click', this.onMouseDownHandler);
       return this.context = this.canvas.node().getContext('2d');
     };
 
@@ -257,6 +263,16 @@
       }
     };
 
+    Map.prototype.onServerUpdated = function(event) {
+      this.flickr.push(event);
+      this.drawBackground();
+      if (this.hasGrid) {
+        this.drawGrid();
+      }
+      this.drawCountries();
+      return this.drawLines(this.lines);
+    };
+
     Map.prototype.drawBackground = function() {
       switch (this.renderer) {
         case 'svg':
@@ -266,7 +282,7 @@
           this.group.append("use").attr("class", "stroke").attr("xlink:href", "#sphere");
           return this.group.append("use").attr("class", "fill").attr("xlink:href", "#sphere");
         case 'canvas':
-          this.context.fillStyle = 'rgba(100,100,255,0.7)';
+          this.context.fillStyle = 'rgba(140,100,255,1)';
           return this.context.fillRect(0, 0, this.width, this.height);
       }
     };
@@ -302,17 +318,18 @@
       }
     };
 
-    Map.prototype.drawLines = function(src) {
+    Map.prototype.drawLines = function(lines) {
       var coords, fn, path, _i, _len, _ref, _results,
         _this = this;
-      _ref = this[src[0]];
+      this.lines = lines;
+      _ref = this[this.lines[0]];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         path = _ref[_i];
         coords = this.projection([path.location.coords[0]['longitude'], path.location.coords[0]['latitude']]);
         switch (this.renderer) {
           case 'svg':
-            _results.push(this.group.selectAll('group').data(this[src[1]]).enter().append('path').attr('d', function(d) {
+            _results.push(this.group.selectAll('group').data(this[this.lines[1]]).enter().append('path').attr('d', function(d) {
               var l, m, _d;
               _d = d.location.coords[0];
               m = 'M' + coords.join(' ');
@@ -356,11 +373,11 @@
                   };
                   return d[0].forEach(_g);
                 };
-                return _this.canvas.select('canvas').data(_this[src[1]]).enter().call(cb);
+                return _this.canvas.select('canvas').data(_this[_this.lines[1]]).enter().call(cb);
               };
               return d[0].forEach(_f);
             };
-            this.canvas.select('canvas').data(this[src[0]]).enter().call(fn);
+            this.canvas.select('canvas').data(this[this.lines[0]]).enter().call(fn);
             _results.push(null);
             break;
           default:
@@ -417,13 +434,33 @@
       return m = d3.event.wheelDeltaY;
     };
 
+    Map.prototype.onLocationReceived = function(err, data) {
+      var city, country, loc, obj, state;
+      console.log(data[0] != null);
+      if (data[0] != null) {
+        country = data[0].country;
+        city = data[0].city;
+        state = data[0].state;
+        loc = [country, city, state].join(', ');
+        console.log(loc);
+        obj = {
+          location: loc,
+          latitude: data[0].longitude,
+          longitude: data[0].latitude
+        };
+        return EventManager.emitEvent(Events.MAP_CLICKED, [obj]);
+      }
+    };
+
     Map.prototype.onMouseDownHandler = function() {
-      var c, coords, geo_loc, l, m,
+      var c, coords, geo_loc, l, m, str,
         _this = this;
-      return;
+      console.log('mousedown');
       m = d3.event;
       coords = [m['offsetX'], m['offsetY']];
       geo_loc = this.projection.invert(coords);
+      str = '/location/' + geo_loc.join('/') + '/';
+      d3.json(str, this.onLocationReceived);
       switch (this.renderer) {
         case 'svg':
           c = this.group.append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
@@ -544,7 +581,6 @@
       switch (this.type) {
         case 'user':
           this.socket.on('location', this.onLocationHandler);
-          this.socket.on('receiveResponse', this.onReceiveHandler);
           break;
         case 'server':
           this.socket.on('receiveResponse', this.onReceiveHandler);
@@ -568,23 +604,30 @@
     };
 
     SocketClient.prototype.onLocationHandler = function(data) {
-      var cb, i,
+      var cb,
         _this = this;
-      i = 0;
-      cb = function(event) {
-        console.log('touch');
-        return _this.socket.emit('gps', {
-          a: ++i
-        });
+      cb = function(data) {
+        var opts;
+        opts = {
+          location: {
+            title: data.location,
+            coords: [
+              {
+                latitude: data.longitude,
+                longitude: data.latitude
+              }
+            ]
+          }
+        };
+        return _this.socket.emit('gps', opts);
       };
-      $(window).on('click', cb);
-      $(window).on('touchstart', cb);
+      EventManager.addListener(Events.MAP_CLICKED, cb);
       console.info('Received location event');
       return console.log(data);
     };
 
     SocketClient.prototype.onReceiveHandler = function(data) {
-      return console.log(data);
+      return EventManager.emitEvent(Events.SERVER_UPDATED, [data]);
     };
 
     SocketClient.prototype.onConnectionHandler = function(socket) {

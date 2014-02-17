@@ -1,5 +1,4 @@
 class Map
-
 	NEIGHBORS				:	'neighbors'
 	COUNTRIES				:	'countries'
 
@@ -49,6 +48,7 @@ class Map
 
 		@readJSON()
 		@addListeners()
+
 	loadFromConfig	:		() ->
 		@xOffset					=	Config[Config.userType].Map.xOffset
 		@yOffset					=	Config[Config.userType].Map.yOffset
@@ -57,6 +57,7 @@ class Map
 		@markerSize				=	Config[Config.userType].Map.markerSize
 
 	addListeners	:	()->
+		EventManager.addListener Events.SERVER_UPDATED, @onServerUpdated
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
@@ -67,7 +68,7 @@ class Map
 							
 					  
 		@group	=	@svg.append('g')
-									#.on('mousedown', @onMouseDownHandler)
+									.on('mousedown', @onMouseDownHandler)
 									.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", @zoomed))
 
 
@@ -77,6 +78,7 @@ class Map
 							  .attr('width', @width)
 							  .attr('height', @height)
 							  .attr('id', 'marker-canvas')
+								.on('click', @onMouseDownHandler)
 								#.call(d3.behavior.zoom().scaleExtent([@scaleMin,@scaleMax]).on('zoom', @zoomed))
 
 		@context =	@canvas.node().getContext('2d')
@@ -104,6 +106,15 @@ class Map
 				@path(d3.geo.graticule()())
 				@context.stroke()
 
+	onServerUpdated		: (event)=>
+		#console.log @flickr[0], event
+		@flickr.push event
+
+		@drawBackground()
+		if @hasGrid then @drawGrid()
+		@drawCountries()
+		@drawLines(@lines)
+
 
 	drawBackground	:	()->
 		switch @renderer
@@ -123,7 +134,7 @@ class Map
 						.attr("xlink:href", "#sphere")
 
 			when 'canvas'
-				@context.fillStyle = 'rgba(100,100,255,0.7)'
+				@context.fillStyle = 'rgba(140,100,255,1)'
 				@context.fillRect( 0, 0, @width, @height)
 
 	createPoint : (d) =>
@@ -161,16 +172,16 @@ class Map
 					 .call(@createPoint)
 					 #.exit()
 
-	drawLines				  : (src)->
+	drawLines				  : (@lines)->
 		#if @renderer is 'canvas' then return
 
-		for path in @[src[0]]
+		for path in @[@lines[0]]
 			coords = @projection([ path.location.coords[0]['longitude'], path.location.coords[0]['latitude']])
 
 			switch @renderer
 				when 'svg'
 					@group.selectAll('group')
-									.data(@[src[1]])
+									.data(@[@lines[1]])
 									.enter()
 									.append('path')
 									.attr('d', (d)=>
@@ -232,7 +243,7 @@ class Map
 								d[0].forEach _g
 
 							@canvas.select('canvas')
-										 .data(@[src[1]])
+										 .data(@[@lines[1]])
 										 .enter()
 										 .call(cb)
 
@@ -240,7 +251,7 @@ class Map
 						d[0].forEach _f
 
 					@canvas.select('canvas')
-						 .data(@[src[0]])
+						 .data(@[@lines[0]])
 						 .enter()
 						 .call(fn)
 
@@ -292,8 +303,26 @@ class Map
 	onMouseWheel			:	(e)=>
 		m = d3.event.wheelDeltaY
 
+	onLocationReceived	: (err, data)=>
+		console.log data[0]?
+		if data[0]?
+			country		=	data[0].country
+			city			=	data[0].city
+			state			=	data[0].state
+
+			loc = [country, city, state].join(', ')
+
+			console.log loc
+			obj=
+				location	:	loc
+				latitude	:	data[0].longitude
+				longitude	:	data[0].latitude
+
+			EventManager.emitEvent Events.MAP_CLICKED, [obj]
+ 
 	onMouseDownHandler	:		()=>
-		return #for now
+		#return #for now
+		console.log 'mousedown'
 
 		m = d3.event
 		coords = [m['offsetX'], m['offsetY']]
@@ -301,16 +330,10 @@ class Map
 		geo_loc = @projection.invert(coords)
 
 		## get location
-		#	str = '/location/' + geo_loc.join('/') + '/'
+		str = '/location/' + geo_loc.join('/') + '/'
 
-		#	cb = (data) =>
-				#if data[0]?
-					#country		=	data[0].country
-					#city			=	data[0].city
-					#state			=	data[0].state
-
-				#loc = [country, city, state].join(', ')
-		
+		d3.json str, @onLocationReceived
+	
 		switch @renderer
 			when 'svg'
 				c = @group.append('circle')

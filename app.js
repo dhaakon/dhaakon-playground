@@ -105,14 +105,9 @@
     };
 
     Server.prototype.createServer = function() {
-      var _this = this;
       this.app.http().io();
       this.setUpRoutes();
       this.socket = new SocketServer(this.app);
-      this.app.io.route('gps', function(req) {
-        console.log(req.data);
-        return req.io.emit('receiveResponse', req.data);
-      });
       return this.app.listen(this.app.get('port'));
     };
 
