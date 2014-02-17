@@ -53,9 +53,9 @@ class TGS
 	changeTitle		:		(event)=>
 		console.log event
 		console.log @title
-		@title.css('opacity', 0)
+		@title.animate( {'opacity': 1}, 'fast', ()=> @title.delay(1100).animate {opacity: 0}, 'slow')
 		@title.html	'<p>' + event.location.title + '</p>'
-		@title.css('opacity', 1)
+		#@title.css('opacity', 1)
 
 	loadFromConfig	:		()->
 		@mapHeight			=		Config[Config.userType].Map.height

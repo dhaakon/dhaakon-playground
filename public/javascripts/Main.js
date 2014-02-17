@@ -121,7 +121,8 @@
     BOOKING_LOADED: 'onBookingLoaded',
     MARKER_FOCUS: 'onMarkerFocus',
     MAP_CLICKED: 'onMapClicked',
-    SERVER_UPDATED: 'onServerUpdated'
+    SERVER_UPDATED: 'onServerUpdated',
+    SERVER_STARTED: 'onServerStarted'
   };
 
   Map = (function() {
@@ -205,6 +206,7 @@
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
       this.createPoint = __bind(this.createPoint, this);
+      this.onServerStarted = __bind(this.onServerStarted, this);
       this.onServerUpdated = __bind(this.onServerUpdated, this);
       this.projectionType = Config[Config.userType].Map.projections[this.projectionKey];
       this.loadFromConfig();
@@ -226,7 +228,8 @@
     };
 
     Map.prototype.addListeners = function() {
-      return EventManager.addListener(Events.SERVER_UPDATED, this.onServerUpdated);
+      EventManager.addListener(Events.SERVER_UPDATED, this.onServerUpdated);
+      return EventManager.addListener(Events.SERVER_STARTED, this.onServerStarted);
     };
 
     Map.prototype.createSVG = function() {
@@ -265,6 +268,23 @@
 
     Map.prototype.onServerUpdated = function(event) {
       this.flickr.push(event);
+      this.drawBackground();
+      if (this.hasGrid) {
+        this.drawGrid();
+      }
+      this.drawCountries();
+      this.drawLines(this.lines);
+      this.createPoints('flickr', this.flickr, 'red');
+      return this.createPoints('students', this.students, 'blue');
+    };
+
+    Map.prototype.onServerStarted = function(event) {
+      var loc, _i, _len;
+      for (_i = 0, _len = event.length; _i < _len; _i++) {
+        loc = event[_i];
+        console.log(loc);
+        this.flickr.push(loc);
+      }
       this.drawBackground();
       if (this.hasGrid) {
         this.drawGrid();
@@ -573,6 +593,7 @@
     function SocketClient(host, type) {
       this.host = host;
       this.type = type;
+      this.onLocationsLoaded = __bind(this.onLocationsLoaded, this);
       this.onConnectionHandler = __bind(this.onConnectionHandler, this);
       this.onReceiveHandler = __bind(this.onReceiveHandler, this);
       this.onLocationHandler = __bind(this.onLocationHandler, this);
@@ -600,6 +621,7 @@
           break;
         case 'server':
           this.socket.on('receiveResponse', this.onReceiveHandler);
+          this.socket.on('locationsLoaded', this.onLocationsLoaded);
       }
       this.socket.on('connection', this.onConnectionHandler);
       this.socket.on('connect', this.connect);
@@ -648,6 +670,17 @@
 
     SocketClient.prototype.onConnectionHandler = function(socket) {
       return console.log(socket);
+    };
+
+    SocketClient.prototype.onLocationsLoaded = function(data) {
+      var loc, obj, objects, _locs;
+      obj = JSON.parse(JSON.parse(data));
+      objects = [];
+      for (loc in obj.locations) {
+        _locs = JSON.parse(obj.locations[loc]);
+        objects.push(_locs);
+      }
+      return EventManager.emitEvent(Events.SERVER_STARTED, [objects]);
     };
 
     return SocketClient;
@@ -723,11 +756,17 @@
     }
 
     TGS.prototype.changeTitle = function(event) {
+      var _this = this;
       console.log(event);
       console.log(this.title);
-      this.title.css('opacity', 0);
-      this.title.html('<p>' + event.location.title + '</p>');
-      return this.title.css('opacity', 1);
+      this.title.animate({
+        'opacity': 1
+      }, 'fast', function() {
+        return _this.title.delay(1100).animate({
+          opacity: 0
+        }, 'slow');
+      });
+      return this.title.html('<p>' + event.location.title + '</p>');
     };
 
     TGS.prototype.loadFromConfig = function() {

@@ -6,3 +6,4 @@ Events	=
 	MARKER_FOCUS		:	'onMarkerFocus'
 	MAP_CLICKED			:	'onMapClicked'
 	SERVER_UPDATED	:	'onServerUpdated'
+	SERVER_STARTED	:	'onServerStarted'

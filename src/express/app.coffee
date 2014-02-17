@@ -1,4 +1,5 @@
 #import dependencies.coffee
+#import redis.coffee
 #import routes.coffee
 #import socket_server.coffee
 
@@ -10,9 +11,11 @@ class Server
 	server		:	null
 
 	routes		:	null
+	redis			:	null
 
 	constructor		:	()->
 		@app	=	@express()
+		@redis = new Redis()
 
 		@setUpExpress()
 		@createServer()
@@ -53,7 +56,7 @@ class Server
 		
 		@setUpRoutes()
 		
-		@socket = new SocketServer(@app)
+		@socket = new SocketServer(@app, @redis)
 
 		@app.listen( @app.get 'port' )
 

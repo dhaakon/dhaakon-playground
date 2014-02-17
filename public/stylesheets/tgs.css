@@ -14,19 +14,24 @@
   height: 100%;
 }
 
-/* line 15, ../../src/sass/tgs.scss */
+/* line 14, ../../src/sass/tgs.scss */
+#marker-canvas {
+  /*-webkit-transform		:		scale3d(2,2,2);*/
+}
+
+/* line 17, ../../src/sass/tgs.scss */
 .stroke {
   fill: none;
   stroke: #000;
   stroke-width: 3px;
 }
 
-/* line 21, ../../src/sass/tgs.scss */
+/* line 23, ../../src/sass/tgs.scss */
 .fill {
   fill: #fff;
 }
 
-/* line 25, ../../src/sass/tgs.scss */
+/* line 27, ../../src/sass/tgs.scss */
 .graticule {
   fill: none;
   stroke: #777;
@@ -34,7 +39,7 @@
   stroke-opacity: .5;
 }
 
-/* line 32, ../../src/sass/tgs.scss */
+/* line 34, ../../src/sass/tgs.scss */
 #location-title {
   position: absolute;
   width: 100%;
@@ -42,10 +47,10 @@
   text-align: center;
   z-index: 1000;
   opacity: 0;
-  -webkit-transition: all 400ms ease-in;
-  -webkit-transition-delay: 0ms;
+  /*-webkit-transition	:		all 400ms ease-in;*/
+  /*-webkit-transition-delay : 1000ms;*/
 }
-/* line 41, ../../src/sass/tgs.scss */
+/* line 43, ../../src/sass/tgs.scss */
 #location-title p {
   color: white;
   font-size: 40px;

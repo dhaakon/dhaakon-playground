@@ -58,6 +58,7 @@ class Map
 
 	addListeners	:	()->
 		EventManager.addListener Events.SERVER_UPDATED, @onServerUpdated
+		EventManager.addListener Events.SERVER_STARTED, @onServerStarted
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
@@ -117,6 +118,23 @@ class Map
 
 		@createPoints 'flickr', @flickr, 'red'
 		@createPoints 'students', @students, 'blue'
+
+	onServerStarted		: (event)=>
+		#console.log @flickr[0], event
+		#console.log event.location
+		for loc in event
+			console.log loc
+			#console.log event.location[loc]
+			@flickr.push loc
+
+		@drawBackground()
+		if @hasGrid then @drawGrid()
+		@drawCountries()
+		@drawLines(@lines)
+
+		@createPoints 'flickr', @flickr, 'red'
+		@createPoints 'students', @students, 'blue'
+
 
 	drawBackground	:	()->
 		switch @renderer
