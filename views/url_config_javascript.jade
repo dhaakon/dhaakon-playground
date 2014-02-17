@@ -1,21 +1,57 @@
 block url_config_javascript
-	script(type='text/javascript').
-		;var _F = function(window){
+	- if (params != null)
+		script(type='text/javascript')
+			|	;var _F = function(window){
+			|	Config = window.Config || {};
+			|	Config.userType				=	!{JSON.stringify(role)};
+			|	Config.port = !{port}
 
-		Config = window.Config || {};
-		Config.userType				=	!{JSON.stringify(role)};
+			|	Config[Config.userType].Settings.renderer		=	('!{params.renderer || null}' !== 'undefined') 
+			|													?	!{JSON.stringify(params.renderer)} 
+			|													:	Config[Config.userType].Settings.renderer;
 
-		Config[Config.userType].Settings.renderer		=	!{JSON.stringify(params.renderer)};
-		Config[Config.userType].Settings.hasGrid		=	!{params.grid};
-		Config[Config.userType].Settings.hasRotation	=	!{params.rotate};
-		Config[Config.userType].Settings.hasLines		=	!{params.lines};
+			|	Config[Config.userType].Settings.hasGrid		=	(!{params.grid} !== undefined) 
+			|													?	!{params.grid} 
+			|													:	Config[Config.userType].Settings.hasGrid;
+		
+			|	Config[Config.userType].Settings.hasRotation	=	(!{params.rotate} !== undefined) 
+			|													?	!{params.rotate} 
+			|													:	Config[Config.userType].Settings.hasRotation;
 
-		Config[Config.userType].Map.scale				=	!{params.scale};
-		Config[Config.userType].Map.projectionKey		=	!{params.projectionKey};
-		Config[Config.userType].Map.velocity			=	!{params.velocity};
-		Config[Config.userType].Map.rotation			=	[	!{params.rotation.split(',')[0]} , !{params.rotation.split(',')[1]} ];
-	
-		Config[Config.userType].Map.width				=	!{params.width};
-		Config[Config.userType].Map.height				=	!{params.height};}
-		_F(window)
+			|	Config[Config.userType].Settings.hasLines		=	(!{params.lines} !== undefined) 
+			|													?	!{params.lines} 
+			|													:	Config[Config.userType].Settings.hasLines;
+
+			|	Config[Config.userType].Map.scale				=	(!{params.scale} !== undefined) 
+			|													?	!{params.scale} 
+			|													:	Config[Config.userType].Map.scale;
+			
+			|	Config[Config.userType].Map.projectionKey		=	(!{params.projectionKey} !== undefined) 
+			|													?	!{params.projectionKey} 
+			|													:	Config[Config.userType].Map.projectionKey;
+			
+			|	Config[Config.userType].Map.velocity			=	(!{params.velocity} !== undefined) 
+			|													?	!{params.velocity} 
+			|													:	Config[Config.userType].Map.velocity;
+			
+			|	Config[Config.userType].Map.rotation			=	[	!{params.rotation.split(',')[0]} , !{params.rotation.split(',')[1]} ];
+			
+			|	Config[Config.userType].Map.width				=	(!{params.width} !== undefined) 
+			|													?	!{params.width} 
+			|													:	Config[Config.userType].Map.width;
+			
+			|	Config[Config.userType].Map.height				=	(!{params.height} !== undefined) 
+			|													?	!{params.height} 
+			|													:	Config[Config.userType].Map.height;
+
+			|	};_F(window);
+	- else
+		script(type='text/javascript').
+			;var _F = function(window){
+
+			Config = window.Config || {};
+			Config.userType				=	!{JSON.stringify(role)};
+			};_F(window);
+
+
 

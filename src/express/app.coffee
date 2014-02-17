@@ -3,8 +3,7 @@
 #import socket_server.coffee
 
 class Server
-	express		:	require		'express'
-	http			:	require		'http'
+	express		:	require		'express.io'
 	path			:	require		'path'
 
 	app				:	null
@@ -16,7 +15,6 @@ class Server
 		@app	=	@express()
 
 		@setUpExpress()
-		@setUpRoutes()
 		@createServer()
 
 	setUpExpress	:	()->
@@ -31,7 +29,7 @@ class Server
 		@app.use		@express.urlencoded()
 		@app.use		@express.methodOverride()
 		@app.use		@app.router
-		@app.use		@express.static @path.join(__dirname, 'public')
+		@app.use		@express.static @path.join(__dirname + '/', 'public')
 
 	setUpRoutes		:	()->
 		@app.get		'/',															Router.index
@@ -50,12 +48,14 @@ class Server
 			@app.use @express.errorHandler()
 
 	createServer	:	()->
-		@server = @http.createServer(@app)
-		@socket = new SocketServer(@server, @http)
-	
-		@server.listen(	@app.get('port'),
-			()=>
-				console.log 'Express server listening on port' + @app.get 'port'
-		)
+		#@server = @http.createServer(@app)
+		@app.http().io()
+		
+		@setUpRoutes()
+		
+		@socket = new SocketServer(@app)
+
+		@app.listen( @app.get 'port' )
+
 
 server = server or new Server()

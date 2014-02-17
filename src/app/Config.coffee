@@ -45,7 +45,7 @@ Config	=	window.Config =
 			renderer			:	'canvas'
 			hasGrid				:	false
 			hasRotation		:	false
-			hasLines			:	true
+			hasLines			: false	
 
 		Map			:
 			container			:	'#map-container'

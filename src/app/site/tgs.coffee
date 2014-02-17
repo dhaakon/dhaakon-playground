@@ -39,7 +39,7 @@ class TGS
 		@mapWidth		=		@mapWidth or $(window).width()
 
 		@loader			=		$('#loader-container')		
-		@socket			=		new SocketClient(url)
+		@socket			=		new SocketClient(url, Config.userType)
 		@start			=		Date.now()
 
 		$(@mapContainer).css(

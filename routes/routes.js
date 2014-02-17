@@ -238,24 +238,34 @@
 
   exports.tgs = function(req, res) {
     var arr, key, opt, opts, params, urlOption, urlOptions, value, _i, _len;
-    urlOption = req.originalUrl.split('?')[1];
-    urlOptions = urlOption.split('&');
-    params = {};
-    for (_i = 0, _len = urlOptions.length; _i < _len; _i++) {
-      opt = urlOptions[_i];
-      arr = opt.split('=');
-      key = arr[0];
-      value = arr[1];
-      params[key] = value;
+    params = {
+      renderer: 'undefined',
+      grid: 'undefined',
+      rotate: 'undefined',
+      lines: 'undefined',
+      scale: 'undefined',
+      projectionKey: 'undefined',
+      velocity: 'undefined',
+      rotation: '0,0',
+      height: 'undefined',
+      width: 'undefined'
+    };
+    if (req.originalUrl.split('?').length > 1) {
+      urlOption = req.originalUrl.split('?')[1];
+      urlOptions = urlOption.split('&');
+      for (_i = 0, _len = urlOptions.length; _i < _len; _i++) {
+        opt = urlOptions[_i];
+        arr = opt.split('=');
+        key = arr[0];
+        value = arr[1];
+        params[key] = value;
+      }
     }
-    console.log(params);
     opts = {
-      renderer: req.params['renderer'],
-      scale: req.params['scale'],
-      projectionKey: req.params['projectionKey'],
       amount: 10,
       role: req.params['role'],
-      params: params
+      params: params,
+      port: req.app.settings.port
     };
     return res.render('tgs', opts);
   };

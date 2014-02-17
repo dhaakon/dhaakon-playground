@@ -19,30 +19,35 @@
   r = new Routes();
 
   SocketServer = (function() {
-    SocketServer.prototype.io = require('socket.io');
-
-    function SocketServer(server, http) {
-      this.server = server;
-      this.http = http;
+    function SocketServer(app) {
+      this.app = app;
       this.onConnectionHandler = __bind(this.onConnectionHandler, this);
+      this.socket = this.app;
       this.createSocket();
     }
 
     SocketServer.prototype.createSocket = function() {
-      this.socket = this.io.listen(this.server);
-      return this.addConnection();
+      this.socket.io.sockets.on('connection', this.onConnectionHandler);
+      return this.socket.io.sockets.on('gps', this.onGPSHandler);
     };
 
-    SocketServer.prototype.addConnection = function() {
-      return this.socket.sockets.on('connection', this.onConnectionHandler);
+    SocketServer.prototype.createRoutes = function() {
+      var _this = this;
+      return this.app.io.route('gps', function(req) {
+        return _this.socket.io.sockets.emit('receiveResponse', req.data);
+      });
     };
 
     SocketServer.prototype.onConnectionHandler = function(socket) {
-      console.log(socket);
+      this.createRoutes();
       return socket.emit('location', {
-        lat: 0,
-        long: 200
+        lat: 200,
+        long: 100
       });
+    };
+
+    SocketServer.prototype.onGPSHandler = function(event) {
+      return console.log(event);
     };
 
     return SocketServer;
@@ -50,9 +55,7 @@
   })();
 
   Server = (function() {
-    Server.prototype.express = require('express');
-
-    Server.prototype.http = require('http');
+    Server.prototype.express = require('express.io');
 
     Server.prototype.path = require('path');
 
@@ -65,7 +68,6 @@
     function Server() {
       this.app = this.express();
       this.setUpExpress();
-      this.setUpRoutes();
       this.createServer();
     }
 
@@ -82,7 +84,7 @@
       this.app.use(this.express.urlencoded());
       this.app.use(this.express.methodOverride());
       this.app.use(this.app.router);
-      return this.app.use(this.express["static"](this.path.join(__dirname, 'public')));
+      return this.app.use(this.express["static"](this.path.join(__dirname + '/', 'public')));
     };
 
     Server.prototype.setUpRoutes = function() {
@@ -104,11 +106,14 @@
 
     Server.prototype.createServer = function() {
       var _this = this;
-      this.server = this.http.createServer(this.app);
-      this.socket = new SocketServer(this.server, this.http);
-      return this.server.listen(this.app.get('port'), function() {
-        return console.log('Express server listening on port' + _this.app.get('port'));
+      this.app.http().io();
+      this.setUpRoutes();
+      this.socket = new SocketServer(this.app);
+      this.app.io.route('gps', function(req) {
+        console.log(req.data);
+        return req.io.emit('receiveResponse', req.data);
       });
+      return this.app.listen(this.app.get('port'));
     };
 
     return Server;

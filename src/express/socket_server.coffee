@@ -1,19 +1,24 @@
 class SocketServer
-	io		: require		'socket.io'
 
-	constructor				:		(@server, @http)->
-		#console.log @http.get 'url'
+	constructor				:		(@app)->
+		@socket = @app
 		@createSocket()
 
 	createSocket			:		()->
-		@socket = @io.listen @server
-		@addConnection()
+		@socket.io.sockets.on 'connection', @onConnectionHandler
+		@socket.io.sockets.on 'gps', @onGPSHandler
 
-	addConnection			:		()->
-		@socket.sockets.on 'connection', @onConnectionHandler
+	createRoutes			:		()->
+		@app.io.route('gps', (req)=>
+			@socket.io.sockets.emit 'receiveResponse', req.data
+		)
 
 	onConnectionHandler			:		(socket)=>
-		#console.log @socket.sockets.sockets
-		console.log socket
-		socket.emit 'location', {lat: 0, long:200}
-		
+		@createRoutes()
+		socket.emit 'location', {lat:200, long:100}
+		#socket.on 'gps', @onGPSHandler
+
+	onGPSHandler			:		(event)->
+		console.log event
+		#@socket.emit 'receiveResponse', event
+

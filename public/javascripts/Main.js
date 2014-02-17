@@ -37,7 +37,7 @@
         renderer: 'canvas',
         hasGrid: false,
         hasRotation: false,
-        hasLines: true
+        hasLines: false
       },
       Map: {
         container: '#map-container',
@@ -517,25 +517,78 @@
   SocketClient = (function() {
     SocketClient.prototype.socket = null;
 
-    function SocketClient(host) {
+    function SocketClient(host, type) {
       this.host = host;
+      this.type = type;
+      this.onConnectionHandler = __bind(this.onConnectionHandler, this);
+      this.onReceiveHandler = __bind(this.onReceiveHandler, this);
       this.onLocationHandler = __bind(this.onLocationHandler, this);
       this.createSocketConnection();
     }
 
     SocketClient.prototype.createSocketConnection = function() {
-      this.socket = io.connect(this.host);
-      this.socket.name = Math.random().toString(36).substr(2, 9);
+      var opts, url;
+      opts = {
+        port: Config.port
+      };
+      console.log(location.origin);
+      url = location.origin;
+      opts = {
+        'transports': ['xhr-polling']
+      };
+      this.socket = io.connect(url, opts);
       return this.addListeners();
     };
 
     SocketClient.prototype.addListeners = function() {
-      this.socket.on('location', this.onLocationHandler);
-      return console.log(this.socket);
+      switch (this.type) {
+        case 'user':
+          this.socket.on('location', this.onLocationHandler);
+          this.socket.on('receiveResponse', this.onReceiveHandler);
+          break;
+        case 'server':
+          this.socket.on('receiveResponse', this.onReceiveHandler);
+      }
+      this.socket.on('connection', this.onConnectionHandler);
+      this.socket.on('connect', this.connect);
+      this.socket.on('data', this.data);
+      return this.socket.on('error', this.error);
+    };
+
+    SocketClient.prototype.connect = function(data) {
+      return console.info('Successfully established a working connection');
+    };
+
+    SocketClient.prototype.data = function(data) {
+      return console.log(data);
+    };
+
+    SocketClient.prototype.error = function(error) {
+      return console.log(error);
     };
 
     SocketClient.prototype.onLocationHandler = function(data) {
+      var cb, i,
+        _this = this;
+      i = 0;
+      cb = function(event) {
+        console.log('touch');
+        return _this.socket.emit('gps', {
+          a: ++i
+        });
+      };
+      $(window).on('click', cb);
+      $(window).on('touchstart', cb);
+      console.info('Received location event');
       return console.log(data);
+    };
+
+    SocketClient.prototype.onReceiveHandler = function(data) {
+      return console.log(data);
+    };
+
+    SocketClient.prototype.onConnectionHandler = function(socket) {
+      return console.log(socket);
     };
 
     return SocketClient;
@@ -598,7 +651,7 @@
       this.mapHeight = this.mapHeight || $(window).height();
       this.mapWidth = this.mapWidth || $(window).width();
       this.loader = $('#loader-container');
-      this.socket = new SocketClient(url);
+      this.socket = new SocketClient(url, Config.userType);
       this.start = Date.now();
       $(this.mapContainer).css({
         width: this.mapWidth,

@@ -89,26 +89,37 @@ exports.thinkData = ( req, res )->
 	f.getPhotos( i, cb )
 
 exports.tgs		=		( req, res ) ->
-	urlOption = req.originalUrl.split('?')[1]
-	urlOptions = urlOption.split('&')
-	
-	params = {}
+	#console.log !req.originalUrl.split('?')
+	#console.log req
+	params =
+		renderer	:		'undefined'
+		grid			:		'undefined'
+		rotate		:		'undefined'
+		lines			:		'undefined'
+		scale			:		'undefined'
+		projectionKey		:		'undefined'
+		velocity	:		'undefined'
+		rotation	:		'0,0'
+		height		:		'undefined'
+		width			:		'undefined'
 
-	for opt in urlOptions
-		arr			=		opt.split('=')
-		key			=		arr[0]
-		value		=		arr[1]
-		params[key] = value
+	if req.originalUrl.split('?').length > 1
+		urlOption = req.originalUrl.split('?')[1]
+		urlOptions = urlOption.split('&')	
 
-	console.log params
+		for opt in urlOptions
+			arr			=		opt.split('=')
+			key			=		arr[0]
+			value		=		arr[1]
+			params[key] = value
 
 	opts =
-		renderer					:		req.params['renderer']
-		scale							:		req.params['scale']
-		projectionKey			:		req.params['projectionKey']
 		amount						:		10
 		role							:		req.params['role']
 		params						:		params
+		port							:		req.app.settings.port
+
+	#console.log opts.params
 
 	res.render 'tgs', opts
 
