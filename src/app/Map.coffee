@@ -26,8 +26,8 @@ class Map
 	container				:	null
 	projection			:	null
 
-	students				:	null
-	flickr					:	null
+	flickr				:	[]
+	students			:	[]
 
 	data						:	null
 	countries				:	null
@@ -116,27 +116,24 @@ class Map
 		@drawCountries()
 		@drawLines(@lines)
 
-		@createPoints 'flickr', @flickr, 'red'
-		@createPoints 'students', @students, 'blue'
+		@createPoints 'flickr', [], 'red'
+		@createPoints 'students', [], 'blue'
 
 	onServerStarted		: (event)=>
-		#console.log @flickr[0], event
-		#console.log event.location
-		for loc in event
-			if loc?
-				#console.log loc
-				#console.log event.location[loc]
-				@flickr.push loc
-		console.log event
+		event = event || []
+		console.log @flickr.concat event
+		@flickr = @flickr.concat event
+
+
 		@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()
 
 		if !@lines? then return
-		@drawLines(@lines)
+		@drawLines(event)
 
-		@createPoints 'flickr', @flickr, 'red'
-		@createPoints 'students', @students, 'blue'
+		@createPoints 'flickr', [], 'red'
+		@createPoints 'students', [], 'blue'
 
 
 	drawBackground	:	()->
@@ -178,7 +175,8 @@ class Map
 		d[0].forEach(fn)
 
 	createPoints	:	( name, data, @color )->
-		@[name] = data
+		@[name] = @[name].concat data
+
 		switch @renderer
 			when 'svg'
 				@group.selectAll('group')
@@ -194,17 +192,12 @@ class Map
 					)
 					.on('mouseover', @onMarkerMouseOver)
 			when 'canvas'
-				#return
-				#return
 				@canvas.select('canvas')
 					 .data(@[name])
 					 .enter()
 					 .call(@createPoint)
-					 #.exit()
 
 	drawLines				  : (@lines)->
-		#if @renderer is 'canvas' then return
-
 		for path in @[@lines[0]]
 			coords = @projection([ path.location.coords[0]['longitude'], path.location.coords[0]['latitude']])
 
@@ -358,8 +351,6 @@ class Map
  
 	onMouseDownHandler	:		()=>
 		#return #for now
-		console.log 'mousedown'
-
 		m = d3.event
 		coords = [m['offsetX'], m['offsetY']]
 

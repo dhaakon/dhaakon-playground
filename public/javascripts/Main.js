@@ -122,7 +122,8 @@
     MARKER_FOCUS: 'onMarkerFocus',
     MAP_CLICKED: 'onMapClicked',
     SERVER_UPDATED: 'onServerUpdated',
-    SERVER_STARTED: 'onServerStarted'
+    SERVER_STARTED: 'onServerStarted',
+    SOCKET_CONNECTED: 'onSocketConnected'
   };
 
   Map = (function() {
@@ -166,9 +167,9 @@
 
     Map.prototype.projection = null;
 
-    Map.prototype.students = null;
+    Map.prototype.flickr = [];
 
-    Map.prototype.flickr = null;
+    Map.prototype.students = [];
 
     Map.prototype.data = null;
 
@@ -274,19 +275,14 @@
       }
       this.drawCountries();
       this.drawLines(this.lines);
-      this.createPoints('flickr', this.flickr, 'red');
-      return this.createPoints('students', this.students, 'blue');
+      this.createPoints('flickr', [], 'red');
+      return this.createPoints('students', [], 'blue');
     };
 
     Map.prototype.onServerStarted = function(event) {
-      var loc, _i, _len;
-      for (_i = 0, _len = event.length; _i < _len; _i++) {
-        loc = event[_i];
-        if (loc != null) {
-          this.flickr.push(loc);
-        }
-      }
-      console.log(event);
+      event = event || [];
+      console.log(this.flickr.concat(event));
+      this.flickr = this.flickr.concat(event);
       this.drawBackground();
       if (this.hasGrid) {
         this.drawGrid();
@@ -295,9 +291,9 @@
       if (this.lines == null) {
         return;
       }
-      this.drawLines(this.lines);
-      this.createPoints('flickr', this.flickr, 'red');
-      return this.createPoints('students', this.students, 'blue');
+      this.drawLines(event);
+      this.createPoints('flickr', [], 'red');
+      return this.createPoints('students', [], 'blue');
     };
 
     Map.prototype.drawBackground = function() {
@@ -335,7 +331,7 @@
     Map.prototype.createPoints = function(name, data, color) {
       var _this = this;
       this.color = color;
-      this[name] = data;
+      this[name] = this[name].concat(data);
       switch (this.renderer) {
         case 'svg':
           return this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', color).attr('transform', function(d) {
@@ -496,7 +492,6 @@
     Map.prototype.onMouseDownHandler = function() {
       var c, coords, geo_loc, l, m, str,
         _this = this;
-      console.log('mousedown');
       m = d3.event;
       coords = [m['offsetX'], m['offsetY']];
       geo_loc = this.projection.invert(coords);
@@ -633,7 +628,8 @@
     };
 
     SocketClient.prototype.connect = function(data) {
-      return console.info('Successfully established a working connection');
+      console.info('Successfully established a working connection');
+      return EventManager.emitEvent(Events.SOCKET_CONNECTED);
     };
 
     SocketClient.prototype.data = function(data) {
@@ -741,6 +737,7 @@
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
+      this.onSocketConnected = __bind(this.onSocketConnected, this);
       this.loop = __bind(this.loop, this);
       this.changeTitle = __bind(this.changeTitle, this);
       var url;
@@ -751,12 +748,12 @@
       this.loader = $('#loader-container');
       this.start = Date.now();
       this.title = $('#location-title');
+      this.redisData = [];
       $(this.mapContainer).css({
         width: this.mapWidth,
         height: this.mapHeight
       });
       this.addListeners();
-      this.createMap();
       this.socket = new SocketClient(url, Config.userType);
     }
 
@@ -805,8 +802,6 @@
       }
       this.map.projection = this.map.projection.rotate([this.origin + this.velocity * (Date.now() - this.start), -15]);
       this.map.drawMap();
-      this.map.createPoints('students', this.studentData, 'blue');
-      this.map.createPoints('flickr', this.flickrData, 'red');
       if (this.hasLines) {
         return this.map.drawLines(['students', 'flickr']);
       }
@@ -833,9 +828,14 @@
       return this.booking = new Booking(this.CSV_PATH);
     };
 
+    TGS.prototype.onSocketConnected = function() {
+      return this.createMap();
+    };
+
     TGS.prototype.addListeners = function() {
       EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
-      return EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
+      EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
+      return EventManager.addListener(Events.SOCKET_CONNECTED, this.onSocketConnected);
     };
 
     TGS.prototype.onMapLoaded = function() {

@@ -33,6 +33,7 @@ class SocketClient
 
 	connect									:		(data)->
 		console.info('Successfully established a working connection');
+		EventManager.emitEvent Events.SOCKET_CONNECTED
 
 	data										:		(data)->
 		console.log data

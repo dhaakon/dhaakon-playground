@@ -30,6 +30,7 @@ class TGS
 	container			:	null
 
 	loader				:	null
+
 	constructor		:		()->
 		@loadFromConfig()
 
@@ -41,6 +42,7 @@ class TGS
 		@loader			=		$('#loader-container')		
 		@start			=		Date.now()
 		@title			=		$('#location-title')
+		@redisData	=		[]
 
 		$(@mapContainer).css(
 			width		:		@mapWidth,
@@ -48,8 +50,8 @@ class TGS
 		)
 
 		@addListeners()
-		@createMap()
 		@socket			=		new SocketClient(url, Config.userType)
+
 	changeTitle		:		(event)=>
 		console.log event
 		console.log @title
@@ -85,8 +87,8 @@ class TGS
 		@map.projection = @map.projection.rotate([@origin + @velocity * (Date.now() - @start), -15])
 		@map.drawMap()
 		#return
-		@map.createPoints 'students', @studentData, 'blue'
-		@map.createPoints 'flickr', @flickrData, 'red'
+		#@map.createPoints 'students', @studentData, 'blue'
+		#@map.createPoints 'flickr', @flickrData, 'red'
 		if @hasLines then @map.drawLines ['students','flickr']
 	
 	onTGSFlickrDataLoaded		:		(@flickrData)->
@@ -102,11 +104,14 @@ class TGS
 
 	createBookingData	:	()->
 		@booking = new Booking @CSV_PATH
-	
+	onSocketConnected	: ()=>
+		@createMap()
+
 	addListeners			:	()->
 
 		EventManager.addListener Events.MAP_LOADED,			@onMapLoaded
 		EventManager.addListener Events.SERVER_UPDATED,			@changeTitle
+		EventManager.addListener Events.SOCKET_CONNECTED,		@onSocketConnected
 		#EventManager.addListener Events.BOOKING_LOADED, @onBookingLoaded
 		
 	onMapLoaded				:	()=>
