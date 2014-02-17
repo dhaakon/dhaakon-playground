@@ -37,7 +37,7 @@ class SocketServer
 
 	onConnectionHandler			:		(socket)=>
 		@createRoutes()
-
+   
 		socket.emit 'location'
 
 	onGPSHandler			:		(event)->
