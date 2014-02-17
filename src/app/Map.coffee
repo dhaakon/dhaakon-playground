@@ -131,6 +131,8 @@ class Map
 		@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()
+
+		console.log @lines
 		@drawLines(@lines)
 
 		@createPoints 'flickr', @flickr, 'red'

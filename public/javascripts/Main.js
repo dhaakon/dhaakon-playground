@@ -292,6 +292,7 @@
         this.drawGrid();
       }
       this.drawCountries();
+      console.log(this.lines);
       this.drawLines(this.lines);
       this.createPoints('flickr', this.flickr, 'red');
       return this.createPoints('students', this.students, 'blue');
