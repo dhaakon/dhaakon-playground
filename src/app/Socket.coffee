@@ -25,7 +25,7 @@ class SocketClient
 				@socket.on 'receiveResponse', @onReceiveHandler
 				@socket.on 'locationsLoaded', @onLocationsLoaded
 				@socket.emit 'serverStarted'
-
+ 
 		@socket.on 'connection', @onConnectionHandler
 		@socket.on 'connect', @connect
 		@socket.on 'data', @data
