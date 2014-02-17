@@ -115,6 +115,8 @@ class Map
 		@drawCountries()
 		@drawLines(@lines)
 
+		@createPoints 'flickr', @flickr, 'red'
+		@createPoints 'students', @students, 'blue'
 
 	drawBackground	:	()->
 		switch @renderer
@@ -134,7 +136,14 @@ class Map
 						.attr("xlink:href", "#sphere")
 
 			when 'canvas'
-				@context.fillStyle = 'rgba(140,100,255,1)'
+				rgba = [		0,
+										40,
+										5,
+										1
+								]
+				str = 'rgba(' + rgba.join(',') + ')'
+				console.log str
+				@context.fillStyle = str
 				@context.fillRect( 0, 0, @width, @height)
 
 	createPoint : (d) =>
@@ -214,7 +223,7 @@ class Map
 									
 									l2 = @projection bCoords
 
-									op		=	0.1
+									op		=	0.15
 									colA	= [ 255, 255, 0,	op]
 									colB	= [ 255, 0,	 0,	op]
 
@@ -233,7 +242,7 @@ class Map
 
 									@context.save()
 									@context.beginPath()
-									@context.lineWidth = '0.25'
+									@context.lineWidth = '0.85'
 									@context.strokeStyle = grad
 									@context.moveTo(l1[0], l1[1])
 									@context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1])
@@ -307,10 +316,16 @@ class Map
 		console.log data[0]?
 		if data[0]?
 			country		=	data[0].country
-			city			=	data[0].city
+			if country is 'United States'
+				if data[0].city?
+					city =	data[0].city
+					city += ', '
 			state			=	data[0].state
 
-			loc = [country, city, state].join(', ')
+			loc = ''
+			loc += country + ', '
+			if city? then loc += city
+			loc += state
 
 			console.log loc
 			obj=

@@ -206,7 +206,7 @@ exports.tgslocations		=		( req, res)->
 	opts = {}
 	students = []
 
-	filename = 'public/json/students.json'
+	filename = 'public/json/tgs_countries.json'
 	fs.readFile filename,'utf-8',
 		(err, _data)->
 			_d = eval _data
@@ -239,7 +239,7 @@ exports.tgslocations		=		( req, res)->
 			if !err
 				if l >= 0
 					student = students[l]
-					loc = student.City + ', ' + student.Country
+					loc = student.city + ', ' + student.country
 					console.log loc
 					opts =
 						location :
@@ -248,11 +248,11 @@ exports.tgslocations		=		( req, res)->
 					geo.getLocationByCityName loc, fn
 					--l
 				else
-					fs.writeFile 'public/json/students.json', JSON.stringify students
+					#fs.writeFile 'public/json/students.json', JSON.stringify students
 					res.json students
 		
 		student = students[--l]
-		loc = student.City + ', ' + student.Country
+		loc = student.city + ', ' + student.country
 		console.log loc
 		geo.getLocationByCityName loc, fn
 		#console.log c

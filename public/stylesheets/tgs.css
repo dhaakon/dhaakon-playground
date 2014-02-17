@@ -33,3 +33,23 @@
   stroke-width: .5px;
   stroke-opacity: .5;
 }
+
+/* line 32, ../../src/sass/tgs.scss */
+#location-title {
+  position: absolute;
+  width: 100%;
+  bottom: 20px;
+  text-align: center;
+  z-index: 1000;
+  opacity: 0;
+  -webkit-transition: all 400ms ease-in;
+  -webkit-transition-delay: 0ms;
+}
+/* line 41, ../../src/sass/tgs.scss */
+#location-title p {
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: Helvetica;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+}

@@ -81,6 +81,6 @@ Config	=	window.Config =
 
 
 	TGS			:
-		src						:		'/tgsData/'
+		src						:		'/tgslocations/'
 		students_src	:		'/students/'
 

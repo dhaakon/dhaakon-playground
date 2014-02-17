@@ -56,7 +56,7 @@
       }
     },
     TGS: {
-      src: '/tgsData/',
+      src: '/tgslocations/',
       students_src: '/students/'
     }
   };
@@ -270,10 +270,13 @@
         this.drawGrid();
       }
       this.drawCountries();
-      return this.drawLines(this.lines);
+      this.drawLines(this.lines);
+      this.createPoints('flickr', this.flickr, 'red');
+      return this.createPoints('students', this.students, 'blue');
     };
 
     Map.prototype.drawBackground = function() {
+      var rgba, str;
       switch (this.renderer) {
         case 'svg':
           this.group.append("defs").append("path").datum({
@@ -282,7 +285,10 @@
           this.group.append("use").attr("class", "stroke").attr("xlink:href", "#sphere");
           return this.group.append("use").attr("class", "fill").attr("xlink:href", "#sphere");
         case 'canvas':
-          this.context.fillStyle = 'rgba(140,100,255,1)';
+          rgba = [0, 40, 5, 1];
+          str = 'rgba(' + rgba.join(',') + ')';
+          console.log(str);
+          this.context.fillStyle = str;
           return this.context.fillRect(0, 0, this.width, this.height);
       }
     };
@@ -350,7 +356,7 @@
                     var bCoords, colA, colB, dist, grad, l2, op, x1, y1;
                     bCoords = [el.__data__.location.coords[0].longitude, el.__data__.location.coords[0].latitude];
                     l2 = _this.projection(bCoords);
-                    op = 0.1;
+                    op = 0.15;
                     colA = [255, 255, 0, op];
                     colB = [255, 0, 0, op];
                     grad = _this.context.createLinearGradient(l1[0], l1[1], l2[0], l2[1]);
@@ -364,7 +370,7 @@
                     dist /= 3;
                     _this.context.save();
                     _this.context.beginPath();
-                    _this.context.lineWidth = '0.25';
+                    _this.context.lineWidth = '0.85';
                     _this.context.strokeStyle = grad;
                     _this.context.moveTo(l1[0], l1[1]);
                     _this.context.bezierCurveTo(l1[0] + dist, l1[1] - dist, l2[0] - dist, l2[1] - dist, l2[0], l2[1]);
@@ -439,9 +445,19 @@
       console.log(data[0] != null);
       if (data[0] != null) {
         country = data[0].country;
-        city = data[0].city;
+        if (country === 'United States') {
+          if (data[0].city != null) {
+            city = data[0].city;
+            city += ', ';
+          }
+        }
         state = data[0].state;
-        loc = [country, city, state].join(', ');
+        loc = '';
+        loc += country + ', ';
+        if (city != null) {
+          loc += city;
+        }
+        loc += state;
         console.log(loc);
         obj = {
           location: loc,
@@ -688,6 +704,7 @@
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.loop = __bind(this.loop, this);
+      this.changeTitle = __bind(this.changeTitle, this);
       var url;
       this.loadFromConfig();
       url = 'http://' + window.location.hostname + '/';
@@ -696,6 +713,7 @@
       this.loader = $('#loader-container');
       this.socket = new SocketClient(url, Config.userType);
       this.start = Date.now();
+      this.title = $('#location-title');
       $(this.mapContainer).css({
         width: this.mapWidth,
         height: this.mapHeight
@@ -703,6 +721,14 @@
       this.addListeners();
       this.createMap();
     }
+
+    TGS.prototype.changeTitle = function(event) {
+      console.log(event);
+      console.log(this.title);
+      this.title.css('opacity', 0);
+      this.title.html('<p>' + event.location.title + '</p>');
+      return this.title.css('opacity', 1);
+    };
 
     TGS.prototype.loadFromConfig = function() {
       this.mapHeight = Config[Config.userType].Map.height;
@@ -764,7 +790,8 @@
     };
 
     TGS.prototype.addListeners = function() {
-      return EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
+      EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
+      return EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
     };
 
     TGS.prototype.onMapLoaded = function() {

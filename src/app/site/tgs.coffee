@@ -41,6 +41,7 @@ class TGS
 		@loader			=		$('#loader-container')		
 		@socket			=		new SocketClient(url, Config.userType)
 		@start			=		Date.now()
+		@title			=		$('#location-title')
 
 		$(@mapContainer).css(
 			width		:		@mapWidth,
@@ -49,6 +50,12 @@ class TGS
 
 		@addListeners()
 		@createMap()
+	changeTitle		:		(event)=>
+		console.log event
+		console.log @title
+		@title.css('opacity', 0)
+		@title.html	'<p>' + event.location.title + '</p>'
+		@title.css('opacity', 1)
 
 	loadFromConfig	:		()->
 		@mapHeight			=		Config[Config.userType].Map.height
@@ -97,7 +104,9 @@ class TGS
 		@booking = new Booking @CSV_PATH
 	
 	addListeners			:	()->
+
 		EventManager.addListener Events.MAP_LOADED,			@onMapLoaded
+		EventManager.addListener Events.SERVER_UPDATED,			@changeTitle
 		#EventManager.addListener Events.BOOKING_LOADED, @onBookingLoaded
 		
 	onMapLoaded				:	()=>

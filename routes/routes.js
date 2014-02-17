@@ -352,7 +352,7 @@
     i = 0;
     opts = {};
     students = [];
-    filename = 'public/json/students.json';
+    filename = 'public/json/tgs_countries.json';
     fs.readFile(filename, 'utf-8', function(err, _data) {
       var _d;
       _d = eval(_data);
@@ -388,7 +388,7 @@
         if (!err) {
           if (l >= 0) {
             student = students[l];
-            loc = student.City + ', ' + student.Country;
+            loc = student.city + ', ' + student.country;
             console.log(loc);
             opts = {
               location: {
@@ -399,13 +399,12 @@
             geo.getLocationByCityName(loc, fn);
             return --l;
           } else {
-            fs.writeFile('public/json/students.json', JSON.stringify(students));
             return res.json(students);
           }
         }
       };
       student = students[--l];
-      loc = student.City + ', ' + student.Country;
+      loc = student.city + ', ' + student.country;
       console.log(loc);
       return geo.getLocationByCityName(loc, fn);
     };
