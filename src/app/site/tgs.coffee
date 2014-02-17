@@ -39,7 +39,6 @@ class TGS
 		@mapWidth		=		@mapWidth or $(window).width()
 
 		@loader			=		$('#loader-container')		
-		@socket			=		new SocketClient(url, Config.userType)
 		@start			=		Date.now()
 		@title			=		$('#location-title')
 
@@ -50,6 +49,7 @@ class TGS
 
 		@addListeners()
 		@createMap()
+		@socket			=		new SocketClient(url, Config.userType)
 	changeTitle		:		(event)=>
 		console.log event
 		console.log @title

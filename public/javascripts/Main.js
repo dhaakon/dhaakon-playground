@@ -749,7 +749,6 @@
       this.mapHeight = this.mapHeight || $(window).height();
       this.mapWidth = this.mapWidth || $(window).width();
       this.loader = $('#loader-container');
-      this.socket = new SocketClient(url, Config.userType);
       this.start = Date.now();
       this.title = $('#location-title');
       $(this.mapContainer).css({
@@ -758,6 +757,7 @@
       });
       this.addListeners();
       this.createMap();
+      this.socket = new SocketClient(url, Config.userType);
     }
 
     TGS.prototype.changeTitle = function(event) {
