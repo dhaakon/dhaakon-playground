@@ -282,8 +282,10 @@
       var loc, _i, _len;
       for (_i = 0, _len = event.length; _i < _len; _i++) {
         loc = event[_i];
-        console.log(loc);
-        this.flickr.push(loc);
+        if (loc != null) {
+          console.log(loc);
+          this.flickr.push(loc);
+        }
       }
       this.drawBackground();
       if (this.hasGrid) {
