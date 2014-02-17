@@ -12,7 +12,7 @@ class SocketClient
 		#url += @host.substring(0, @host.length-1)
 		#url += ':' + opts.port
 		#opts	=		'transports': ['xhr-polling']
-		@socket = io.connect(url, opts)
+		@socket = io.connect()
 		@addListeners()
 
 	addListeners						:		()->

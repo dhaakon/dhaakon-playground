@@ -612,7 +612,7 @@
       };
       console.log(location.origin);
       url = location.origin;
-      this.socket = io.connect(url, opts);
+      this.socket = io.connect();
       return this.addListeners();
     };
 
