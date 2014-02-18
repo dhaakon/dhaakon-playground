@@ -25,7 +25,10 @@
       this.client = this.redis.createClient(this.redisURL.port, this.redisURL.hostname, {
         o_ready_check: true
       });
-      return this.client.auth(this.redisURL.auth.split(":")[1]);
+      this.client.auth(this.redisURL.auth.split(":")[1]);
+      return this.client.on('error', function(err) {
+        return console.log('Error' + err);
+      });
     };
 
     return Redis;

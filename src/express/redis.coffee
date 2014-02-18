@@ -17,3 +17,4 @@ class Redis
 
 		@client = @redis.createClient @redisURL.port, @redisURL.hostname, o_ready_check: true
 		@client.auth(@redisURL.auth.split(":")[1])
+		@client.on 'error', (err)-> console.log 'Error' + err
