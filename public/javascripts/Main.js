@@ -5,19 +5,31 @@
     _this = this;
 
   Config = window.Config = {
-    server: {
+    Graphics: {
+      Colors: {
+        location: 'red',
+        grade: {
+          9: 'blue',
+          10: 'green',
+          11: 'orange',
+          12: 'brown'
+        },
+        faculty: 'yellow'
+      }
+    },
+    display: {
       Settings: {
         jsonPath: '/json/world.json',
         csvPath: '/csv/booking_small.csv',
         renderer: 'canvas',
         hasGrid: false,
         hasRotation: false,
-        hasLines: true
+        hasLines: false
       },
       Map: {
         container: '#map-container',
-        height: 1200,
-        width: 1600,
+        height: null,
+        width: null,
         scale: 350,
         xOffset: 0,
         yOffset: 0,
@@ -41,8 +53,8 @@
       },
       Map: {
         container: '#map-container',
-        height: 1200,
-        width: 1600,
+        height: null,
+        width: null,
         scale: 350,
         xOffset: 0,
         yOffset: 0,
@@ -57,7 +69,8 @@
     },
     TGS: {
       src: '/tgslocations/',
-      students_src: '/students/'
+      students_src: '/students/',
+      faculty_src: '/faculty/'
     }
   };
 
@@ -167,9 +180,19 @@
 
     Map.prototype.projection = null;
 
+    Map.prototype.pointColors = [Config.Graphics.Colors.location, Config.Graphics.Colors.grade['9'], Config.Graphics.Colors.grade['10'], Config.Graphics.Colors.grade['11'], Config.Graphics.Colors.grade['12'], Config.Graphics.Colors.faculty];
+
     Map.prototype.flickr = [];
 
     Map.prototype.students = [];
+
+    Map.prototype.location = [];
+
+    Map.prototype.faculty = [];
+
+    Map.prototype.redis = [];
+
+    Map.prototype.bgColor = 'rgba(' + [230, 240, 220, 0.65].join(',') + ')';
 
     Map.prototype.data = null;
 
@@ -177,7 +200,7 @@
 
     Map.prototype.neighbors = null;
 
-    Map.prototype.hasGrid = false;
+    Map.prototype.hasGrid = true;
 
     Map.prototype.arc = -100;
 
@@ -206,6 +229,7 @@
       this.onMouseWheel = __bind(this.onMouseWheel, this);
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
+      this.trans = __bind(this.trans, this);
       this.createPoint = __bind(this.createPoint, this);
       this.onServerStarted = __bind(this.onServerStarted, this);
       this.onServerUpdated = __bind(this.onServerUpdated, this);
@@ -235,7 +259,7 @@
 
     Map.prototype.createSVG = function() {
       this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
-      return this.group = this.svg.append('g').on('mousedown', this.onMouseDownHandler).call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed));
+      return this.group = this.svg.append('g').on('mousedown', this.onMouseDownHandler);
     };
 
     Map.prototype.createCanvas = function() {
@@ -256,6 +280,7 @@
     };
 
     Map.prototype.drawGrid = function() {
+      return;
       switch (this.renderer) {
         case 'svg':
           return this.group.append("path").datum(d3.geo.graticule()).attr("d", this.path).style("stroke", "#ffffff").style("stroke-width", "0.5px");
@@ -268,32 +293,29 @@
     };
 
     Map.prototype.onServerUpdated = function(event) {
-      this.flickr.push(event);
-      this.drawBackground();
+      this.redis.push(event);
       if (this.hasGrid) {
         this.drawGrid();
       }
       this.drawCountries();
-      this.drawLines(this.lines);
-      this.createPoints('flickr', [], 'red');
-      return this.createPoints('students', [], 'blue');
+      if (this.hasLines) {
+        this.drawLines(this.lines);
+      }
+      this.createPoints('location', [], 'red');
+      this.createPoints('students', [], 'blue');
+      return this.createPoints('redis', [], 'black');
     };
 
     Map.prototype.onServerStarted = function(event) {
       event = event || [];
-      console.log(this.flickr.concat(event));
-      this.flickr = this.flickr.concat(event);
-      this.drawBackground();
+      this.redis = this.redis.concat(event);
       if (this.hasGrid) {
         this.drawGrid();
       }
       this.drawCountries();
-      if (this.lines == null) {
-        return;
-      }
-      this.drawLines(event);
-      this.createPoints('flickr', [], 'red');
-      return this.createPoints('students', [], 'blue');
+      this.createPoints('location', [], 'red');
+      this.createPoints('students', [], 'blue');
+      return this.createPoints('redis', [], 'black');
     };
 
     Map.prototype.drawBackground = function() {
@@ -302,13 +324,12 @@
         case 'svg':
           this.group.append("defs").append("path").datum({
             type: "Sphere"
-          }).attr('id', 'sphere').attr("d", this.path).style("fill", "white");
+          }).attr('id', 'sphere').attr("d", this.path).style("fill", this.bgColor);
           this.group.append("use").attr("class", "stroke").attr("xlink:href", "#sphere");
           return this.group.append("use").attr("class", "fill").attr("xlink:href", "#sphere");
         case 'canvas':
           rgba = [0, 40, 5, 1];
           str = 'rgba(' + rgba.join(',') + ')';
-          console.log(str);
           this.context.fillStyle = str;
           return this.context.fillRect(0, 0, this.width, this.height);
       }
@@ -318,30 +339,91 @@
       var fn,
         _this = this;
       fn = function(el, idx, array) {
-        var coords, size, _d;
+        var coords, size, _d, _i;
         _d = el.__data__.location.coords[0];
+        _i = el.__data__['Grade'] - 8 || 0;
         coords = _this.projection([_d['longitude'], _d['latitude']]);
-        size = _this.markerSize * 2;
-        _this.context.fillStyle = _this.color;
+        size = 4 * (_i + 1);
+        _this.context.fillStyle = _this.pointColors[_i];
         return _this.context.fillRect(coords[0], coords[1], size, size);
       };
       return d[0].forEach(fn);
     };
 
     Map.prototype.createPoints = function(name, data, color) {
-      var _this = this;
+      var l,
+        _this = this;
       this.color = color;
       this[name] = this[name].concat(data);
+      l = 0;
       switch (this.renderer) {
         case 'svg':
-          return this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', color).attr('transform', function(d) {
+          return this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', function(d) {
+            var a, b, _i, _o;
+            b = 0;
+            a = _this.pointColors.length - 1;
+            if (name === 'location') {
+              _o = b;
+            } else {
+              _o = a;
+            }
+            _i = d['Grade'] - 8 || _o;
+            return _this.pointColors[_i];
+          }).attr('class', function(d) {
+            if (d['Grade']) {
+              return 'grade-' + d['Grade'];
+            } else {
+              return name;
+            }
+          }).attr('cx', function(d) {
             var coords, _d;
             _d = d.location.coords[0];
             coords = _this.projection([_d['longitude'], _d['latitude']]);
-            return 'translate(' + coords + ')';
-          }).on('mouseover', this.onMarkerMouseOver);
+            return coords[0];
+          }).attr('cy', function(d) {
+            var coords, _d;
+            _d = d.location.coords[0];
+            coords = _this.projection([_d['longitude'], _d['latitude']]);
+            return coords[1];
+          }).on('mouseover', this.onMarkerMouseOver).style('opacity', 0).transition().delay(function(d) {
+            var a, b, _gr, _o;
+            l += l * 4;
+            a = 3;
+            b = 4;
+            if (name === 'location') {
+              _o = b;
+            } else {
+              _o = a;
+            }
+            _gr = d['Grade'] - 5 || _o;
+            _gr *= 100;
+            _gr += l * 10;
+            return _gr;
+          }).style('opacity', 1).attr('r', function(d) {
+            var a, b, _o, _sca;
+            d.isPulsed = true;
+            a = 3;
+            b = 4;
+            if (name === 'location') {
+              _o = b;
+            } else {
+              _o = a;
+            }
+            _sca = d['Grade'] - 7 || _o;
+            d.scale = _sca * 2;
+            return d.scale;
+          });
         case 'canvas':
           return this.canvas.select('canvas').data(this[name]).enter().call(this.createPoint);
+      }
+    };
+
+    Map.prototype.trans = function(obj) {
+      d3.select(obj).transition().attr('r', obj.isPulsed ? 0 : obj.scale).each('end', this.trans);
+      if (obj.isPulsed === true) {
+        return obj.isPulsed = false;
+      } else {
+        return obj.isPulsed = true;
       }
     };
 
@@ -377,7 +459,7 @@
                     var bCoords, colA, colB, dist, grad, l2, op, x1, y1;
                     bCoords = [el.__data__.location.coords[0].longitude, el.__data__.location.coords[0].latitude];
                     l2 = _this.projection(bCoords);
-                    op = 0.15;
+                    op = 0.05;
                     colA = [255, 255, 0, op];
                     colB = [255, 0, 0, op];
                     grad = _this.context.createLinearGradient(l1[0], l1[1], l2[0], l2[1]);
@@ -463,7 +545,6 @@
 
     Map.prototype.onLocationReceived = function(err, data) {
       var city, country, loc, obj, state;
-      console.log(data[0] != null);
       if (data[0] != null) {
         country = data[0].country;
         if (country === 'United States') {
@@ -479,7 +560,6 @@
           loc += city;
         }
         loc += state;
-        console.log(loc);
         obj = {
           location: loc,
           latitude: data[0].longitude,
@@ -490,25 +570,19 @@
     };
 
     Map.prototype.onMouseDownHandler = function() {
-      var c, coords, geo_loc, l, m, str,
+      var c, coords, geo_loc, str, _m,
         _this = this;
-      m = d3.event;
-      coords = [m['offsetX'], m['offsetY']];
+      _m = d3.event;
+      coords = [_m['offsetX'], _m['offsetY']];
+      console.log(coords);
       geo_loc = this.projection.invert(coords);
       str = '/location/' + geo_loc.join('/') + '/';
       d3.json(str, this.onLocationReceived);
       switch (this.renderer) {
         case 'svg':
-          c = this.group.append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
+          return c = this.group.append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
             return 'translate(' + coords.join(',') + ')';
           });
-          return l = this.group.selectAll('group').data(this.data).enter().append('path').attr('d', function(d) {
-            var _d;
-            _d = d.location.coords[0] || d.location;
-            m = 'M' + coords.join(' ');
-            l = 'L' + _this.projection([_d['longitude'], _d['latitude']]).join(' ');
-            return [m, l].join(' ');
-          }).attr('stroke', 'rgba(0,0,250,0.2)').attr('stroke-width', '1').attr('fill', 'none');
       }
     };
 
@@ -616,7 +690,7 @@
         case 'user':
           this.socket.on('location', this.onLocationHandler);
           break;
-        case 'server':
+        case 'display':
           this.socket.on('receiveResponse', this.onReceiveHandler);
           this.socket.on('locationsLoaded', this.onLocationsLoaded);
           this.socket.emit('serverStarted');
@@ -656,7 +730,6 @@
             ]
           }
         };
-        console.log(opts);
         return _this.socket.emit('gps', opts);
       };
       EventManager.addListener(Events.MAP_CLICKED, cb);
@@ -692,6 +765,8 @@
     TGS.prototype.flickrSrc = Config.TGS.src;
 
     TGS.prototype.studentsSrc = Config.TGS.students_src;
+
+    TGS.prototype.facultySRC = Config.TGS.faculty_src;
 
     TGS.prototype.JSON_PATH = null;
 
@@ -733,6 +808,8 @@
 
     TGS.prototype.loader = null;
 
+    TGS.prototype.classes = ['grade-9', 'grade-10', 'grade-11', 'grade-12', 'faculty', 'location'];
+
     function TGS() {
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
@@ -759,8 +836,6 @@
 
     TGS.prototype.changeTitle = function(event) {
       var _this = this;
-      console.log(event);
-      console.log(this.title);
       this.title.animate({
         'opacity': 1
       }, 'fast', function() {
@@ -803,21 +878,26 @@
       this.map.projection = this.map.projection.rotate([this.origin + this.velocity * (Date.now() - this.start), -15]);
       this.map.drawMap();
       if (this.hasLines) {
-        return this.map.drawLines(['students', 'flickr']);
+        return this.map.drawLines(['students', 'location']);
       }
     };
 
     TGS.prototype.onTGSFlickrDataLoaded = function(flickrData) {
       this.flickrData = flickrData;
-      this.map.createPoints('flickr', this.flickrData, 'red');
+      this.map.createPoints('location', this.flickrData, 'red');
       return d3.json(this.studentsSrc, _.bind(this.onTGSStudentsDataLoaded, this));
+    };
+
+    TGS.prototype.onTGSFacultyLoaded = function(facultyData) {
+      this.facultyData = facultyData;
+      return this.map.createPoints('faculty', this.facultyData, 'red');
     };
 
     TGS.prototype.onTGSStudentsDataLoaded = function(studentData) {
       this.studentData = studentData;
       this.map.createPoints('students', this.studentData, 'blue');
       if (this.hasLines) {
-        this.map.drawLines(['students', 'flickr']);
+        this.map.drawLines(['students', 'location']);
       }
       if (this.renderer === 'canvas' && this.hasRotation) {
         return this.startRotation();
@@ -829,7 +909,37 @@
     };
 
     TGS.prototype.onSocketConnected = function() {
-      return this.createMap();
+      this.createMap();
+      return this.addPanelHover();
+    };
+
+    TGS.prototype.addPanelHover = function() {
+      var fn, panel,
+        _this = this;
+      panel = $('.marker-type li');
+      fn = function(event) {
+        var l, s, _v;
+        s = event.currentTarget.id;
+        l = $('.' + s);
+        _v = function(el, idx, arr) {
+          var u, _m, _u;
+          _m = function(d) {
+            $('.' + s).off('mouseout');
+            return _.each(_this.classes, function(el, idx, arr) {
+              return $('.' + el).css('opacity', 1);
+            });
+          };
+          if (el === s) {
+            $('.' + s).on('mouseout', _m);
+            _u = 1;
+          } else {
+            u = 0;
+          }
+          return $('.' + el).css('opacity', _u);
+        };
+        return _.each(_this.classes, _v);
+      };
+      return panel.on('mouseover', fn);
     };
 
     TGS.prototype.addListeners = function() {
@@ -840,7 +950,8 @@
 
     TGS.prototype.onMapLoaded = function() {
       this.loader.remove();
-      return d3.json(this.flickrSrc, _.bind(this.onTGSFlickrDataLoaded, this));
+      d3.json(this.flickrSrc, _.bind(this.onTGSFlickrDataLoaded, this));
+      return d3.json(this.facultySRC, _.bind(this.onTGSFacultyLoaded, this));
     };
 
     TGS.prototype.onBookingLoaded = function(event) {

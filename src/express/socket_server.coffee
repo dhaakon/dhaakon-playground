@@ -6,7 +6,6 @@ class SocketServer
 
 	createSocket			:		()->
 		@socket.io.sockets.on 'connection', @onConnectionHandler
-		@socket.io.sockets.on 'gps', @onGPSHandler
 
 	createRoutes			:		()->
 		@app.io.route('serverStarted', (req)=>
@@ -32,7 +31,6 @@ class SocketServer
 
 				@redis.client.set 'keys', JSON.stringify(keys)
 			)
-			#@redis.client.get 'keys', (err,c)=>console.log c
 
 
 	onConnectionHandler			:		(socket)=>

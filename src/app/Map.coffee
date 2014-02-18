@@ -26,13 +26,27 @@ class Map
 	container				:	null
 	projection			:	null
 
+	pointColors		: [
+										Config.Graphics.Colors.location,	
+										Config.Graphics.Colors.grade['9'],	
+										Config.Graphics.Colors.grade['10'],
+										Config.Graphics.Colors.grade['11'],
+										Config.Graphics.Colors.grade['12'],
+										Config.Graphics.Colors.faculty			
+									]
+
 	flickr				:	[]
 	students			:	[]
+	location			:	[]
+	faculty				:	[]
+	redis					:	[]
+
+	bgColor				:	'rgba(' + [ 230, 240, 220, 0.65].join(',') + ')'
 
 	data						:	null
 	countries				:	null
 	neighbors				:	null
-	hasGrid					:	false
+	hasGrid					:	true
 	arc							:	-100
 
 	startRotation		:	[ 0, -15 ]
@@ -70,7 +84,7 @@ class Map
 					  
 		@group	=	@svg.append('g')
 									.on('mousedown', @onMouseDownHandler)
-									.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", @zoomed))
+									#.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", @zoomed))
 
 
 	createCanvas	:	()->
@@ -93,6 +107,7 @@ class Map
 		@drawCountries()
 
 	drawGrid		:	()->
+		return
 		switch @renderer
 			when 'svg'
 				@group.append("path")
@@ -108,32 +123,34 @@ class Map
 				@context.stroke()
 
 	onServerUpdated		: (event)=>
-		#console.log @flickr[0], event
-		@flickr.push event
+		#console.log event
+		#return
 
-		@drawBackground()
+		@redis.push event
+
+		#@drawBackground()
 		if @hasGrid then @drawGrid()
-		@drawCountries()
-		@drawLines(@lines)
 
-		@createPoints 'flickr', [], 'red'
+		@drawCountries()
+		if @hasLines then @drawLines(@lines)
+
+		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
+		@createPoints 'redis', [], 'black'
 
 	onServerStarted		: (event)=>
 		event = event || []
-		console.log @flickr.concat event
-		@flickr = @flickr.concat event
+		@redis = @redis.concat event
 
-
-		@drawBackground()
+		#@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()
+		
+		#if @hasLines is true then @drawLines(event)
 
-		if !@lines? then return
-		@drawLines(event)
-
-		@createPoints 'flickr', [], 'red'
+		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
+		@createPoints 'redis', [], 'black'
 
 
 	drawBackground	:	()->
@@ -143,7 +160,7 @@ class Map
 					.datum({type: "Sphere"})
 					.attr('id','sphere')
 					.attr("d", @path)
-					.style("fill", "white")
+					.style("fill", @bgColor)
 
 				@group.append("use")
 						.attr("class", "stroke")
@@ -160,16 +177,17 @@ class Map
 										1
 								]
 				str = 'rgba(' + rgba.join(',') + ')'
-				console.log str
 				@context.fillStyle = str
 				@context.fillRect( 0, 0, @width, @height)
-
+	
+	
 	createPoint : (d) =>
 		fn = (el, idx, array) =>
 			_d = el.__data__.location.coords[0]
+			_i = el.__data__['Grade'] - 8 || 0
 			coords = @projection([_d['longitude'], _d['latitude']])
-			size = @markerSize*2
-			@context.fillStyle = @color
+			size = 4*(_i + 1)
+			@context.fillStyle = @pointColors[_i]
 			@context.fillRect(coords[0], coords[1],size, size)
 
 		d[0].forEach(fn)
@@ -177,6 +195,8 @@ class Map
 	createPoints	:	( name, data, @color )->
 		@[name] = @[name].concat data
 
+		#if name is 'students' then console.log  data
+		l = 0
 		switch @renderer
 			when 'svg'
 				@group.selectAll('group')
@@ -184,18 +204,63 @@ class Map
 					.enter()
 					.append('circle')
 					.attr('r', @markerSize * 2 )
-					.attr('fill', color)
-					.attr('transform', (d)=>
+					.attr('fill', (d)=>
+						b = 0
+						a = @pointColors.length - 1
+						if name is 'location' then _o = b else _o = a
+						_i = d['Grade'] - 8 || _o
+						return @pointColors[_i]
+					)
+					.attr('class', (d)=> if d['Grade'] then return 'grade-' + d['Grade'] else return name)
+					.attr('cx',(d)=>
 						_d = d.location.coords[0]
 						coords = @projection([_d['longitude'], _d['latitude']])
-						return 'translate(' + coords + ')'
+						return coords[0]
+					)
+					.attr('cy',(d)=>
+						_d = d.location.coords[0]
+						coords = @projection([_d['longitude'], _d['latitude']])
+						return coords[1]
 					)
 					.on('mouseover', @onMarkerMouseOver)
+					.style('opacity', 0)
+					.transition()
+					.delay( (d) ->
+						l += (l * 4)
+						a = 3
+						b = 4
+						if name is 'location' then _o = b else _o = a
+						_gr = d['Grade'] - 5 || _o
+						_gr *= 100
+						_gr += (l * 10)
+
+						return _gr
+					)
+					.style('opacity', 1)
+					.attr('r', (d)->
+						d.isPulsed = true
+						a = 3
+						b = 4
+						if name is 'location' then _o = b else _o = a
+						_sca = d['Grade'] - 7 || _o
+						d.scale = _sca * 2
+						return d.scale
+					)
+					#.each('end', @trans)
+
 			when 'canvas'
 				@canvas.select('canvas')
 					 .data(@[name])
 					 .enter()
 					 .call(@createPoint)
+
+	trans							:	(obj)=>
+		d3.select(obj)
+			.transition()
+			.attr('r', if obj.isPulsed then 0 else obj.scale)
+			.each('end', @trans)
+
+		if obj.isPulsed is true then obj.isPulsed = false else obj.isPulsed = true
 
 	drawLines				  : (@lines)->
 		for path in @[@lines[0]]
@@ -237,7 +302,7 @@ class Map
 									
 									l2 = @projection bCoords
 
-									op		=	0.15
+									op		=	0.05
 									colA	= [ 255, 255, 0,	op]
 									colB	= [ 255, 0,	 0,	op]
 
@@ -327,7 +392,6 @@ class Map
 		m = d3.event.wheelDeltaY
 
 	onLocationReceived	: (err, data)=>
-		console.log data[0]?
 		if data[0]?
 			country		=	data[0].country
 			if country is 'United States'
@@ -341,7 +405,6 @@ class Map
 			if city? then loc += city
 			loc += state
 
-			console.log loc
 			obj=
 				location	:	loc
 				latitude	:	data[0].longitude
@@ -351,8 +414,9 @@ class Map
  
 	onMouseDownHandler	:		()=>
 		#return #for now
-		m = d3.event
-		coords = [m['offsetX'], m['offsetY']]
+		_m = d3.event
+		coords = [_m['offsetX'], _m['offsetY']]
+		console.log coords
 
 		geo_loc = @projection.invert(coords)
 
@@ -360,6 +424,7 @@ class Map
 		str = '/location/' + geo_loc.join('/') + '/'
 
 		d3.json str, @onLocationReceived
+		#debugger
 	
 		switch @renderer
 			when 'svg'
@@ -370,21 +435,22 @@ class Map
 									return 'translate(' + coords.join(',') + ')'
 							)
 
-				l = @group.selectAll('group')
-						.data(@data)
-						.enter()
-						.append('path')
-						.attr('d', (d)=>
-							_d = d.location.coords[0] || d.location
+				#l = @group.selectAll('group')
+						#.data(@data)
+						#.enter()
+						#.append('path')
+						#.attr('d', (d)=>
+							##debugger
+							#_d = d.location.coords[0] || d.location
 
-							m = 'M' + coords.join(' ')
-							l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
+							#m = 'M' + coords.join(' ')
+							#l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
 
-							return [m,l].join(' ')
-						)
-						.attr('stroke','rgba(0,0,250,0.2)')
-						.attr('stroke-width', '1')
-						.attr('fill','none')
+							#return [m,l].join(' ')
+						#)
+						#.attr('stroke','rgba(0,0,250,0.2)')
+						#.attr('stroke-width', '1')
+						#.attr('fill','none')
 
 	zoomed			:	()=>
 		switch @renderer

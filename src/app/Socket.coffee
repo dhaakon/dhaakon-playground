@@ -21,7 +21,7 @@ class SocketClient
 				@socket.on 'location', @onLocationHandler
 				#@socket.on 'receiveResponse',  @onReceiveHandler
 
-			when 'server'
+			when 'display'
 				@socket.on 'receiveResponse', @onReceiveHandler
 				@socket.on 'locationsLoaded', @onLocationsLoaded
 				@socket.emit 'serverStarted'
@@ -50,8 +50,6 @@ class SocketClient
 						latitude		:	data.longitude
 						longitude		:	data.latitude
 					]
-			console.log opts
-
 			@socket.emit 'gps', opts
 		EventManager.addListener Events.MAP_CLICKED, cb
 

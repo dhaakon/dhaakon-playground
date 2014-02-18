@@ -1,8 +1,10 @@
 class TGS
 	flickrSrc			:		Config.TGS.src
 	studentsSrc		:		Config.TGS.students_src
+	facultySRC		:		Config.TGS.faculty_src
 	
 	JSON_PATH			:		null
+
 	speed					:		1e-2
 
 	mapHeight			:		null	
@@ -30,6 +32,7 @@ class TGS
 	container			:	null
 
 	loader				:	null
+	classes				: ['grade-9', 'grade-10', 'grade-11','grade-12', 'faculty','location']
 
 	constructor		:		()->
 		@loadFromConfig()
@@ -53,11 +56,8 @@ class TGS
 		@socket			=		new SocketClient(url, Config.userType)
 
 	changeTitle		:		(event)=>
-		console.log event
-		console.log @title
 		@title.animate( {'opacity': 1}, 'fast', ()=> @title.delay(1100).animate {opacity: 0}, 'slow')
 		@title.html	'<p>' + event.location.title + '</p>'
-		#@title.css('opacity', 1)
 
 	loadFromConfig	:		()->
 		@mapHeight			=		Config[Config.userType].Map.height
@@ -77,7 +77,6 @@ class TGS
 
 		@JSON_PATH			=		Config[Config.userType].Settings.jsonPath
 
-
 	startRotation		:		()->
 		framerate = 1000/60
 		setInterval((=>@loop()), framerate)
@@ -87,25 +86,54 @@ class TGS
 		@map.projection = @map.projection.rotate([@origin + @velocity * (Date.now() - @start), -15])
 		@map.drawMap()
 		#return
-		#@map.createPoints 'students', @studentData, 'blue'
-		#@map.createPoints 'flickr', @flickrData, 'red'
-		if @hasLines then @map.drawLines ['students','flickr']
+		#@map.createPoints 'students',	@studentData,	'blue'
+		#@map.createPoints 'flickr',		@flickrData,	'red'
+		if @hasLines then @map.drawLines [	'students',	'location'	]
 	
 	onTGSFlickrDataLoaded		:		(@flickrData)->
-		@map.createPoints 'flickr', @flickrData, 'red'
+		@map.createPoints 'location', @flickrData, 'red'
 		d3.json @studentsSrc, _.bind @onTGSStudentsDataLoaded, @
+
+	onTGSFacultyLoaded		:		(@facultyData)->
+		@map.createPoints 'faculty', @facultyData, 'red'
 
 	onTGSStudentsDataLoaded		:		(@studentData)->
 		@map.createPoints 'students', @studentData, 'blue'
-		if @hasLines then @map.drawLines ['students','flickr']
 
+		if @hasLines then @map.drawLines ['students','location']
 		if @renderer is 'canvas' and @hasRotation then @startRotation()
-
 
 	createBookingData	:	()->
 		@booking = new Booking @CSV_PATH
+
 	onSocketConnected	: ()=>
 		@createMap()
+		@addPanelHover()
+
+	addPanelHover			:		()->
+		panel = $('.marker-type li')
+
+		fn = (event)=>
+			s = event.currentTarget.id
+			l = $('.' + s)
+
+			_v = (el, idx, arr) =>
+
+				_m = (d)=>
+					$('.' + s).off 'mouseout'
+					_.each @classes, (el, idx, arr)-> $('.' + el).css('opacity', 1)
+
+				if el is s
+					$('.' + s).on 'mouseout', _m
+					_u = 1
+				else
+					u =0
+
+				$('.' + el).css('opacity', _u)
+			_.each @classes, _v
+
+
+		panel.on 'mouseover', fn
 
 	addListeners			:	()->
 
@@ -118,6 +146,7 @@ class TGS
 		#@createBookingData() 
 		@loader.remove()
 		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
+		d3.json @facultySRC, _.bind @onTGSFacultyLoaded, @
 				
 	onBookingLoaded		:	( event )=>
 		@map.createPoints @booking.data

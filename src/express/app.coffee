@@ -45,6 +45,7 @@ class Server
 		@app.get		'/tgs/:role',											Router.tgs
 		@app.get		'/location/:lat/:long',						Router.getlocation
 		@app.get		'/students/',											Router.getstudents
+		@app.get		'/faculty/',											Router.getfaculty
 		@app.get		'/tgslocations/',									Router.tgslocations
 
 		if 'development' == @app.get 'env'

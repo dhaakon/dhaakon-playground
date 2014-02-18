@@ -1065,6 +1065,46 @@ li {
 }
 
 /* line 34, ../../src/sass/tgs.scss */
+.location {
+  opacity: 0.5;
+  -webkit-animation-name: pulse;
+  -webkit-animation-duration: 1s;
+}
+
+@-webkit-keyframes pulse {
+  /* line 41, ../../src/sass/tgs.scss */
+  0% {
+    /*-webkit-transform: scale3d(1,1,1);*/
+    transform: scale(1);
+  }
+
+  /* line 45, ../../src/sass/tgs.scss */
+  100% {
+    /*-webkit-transform: scale3d(4,4,4);*/
+    transform: scale(3);
+  }
+}
+/* line 55, ../../src/sass/tgs.scss */
+.grade-12 {
+  opacity: 1;
+}
+
+/* line 55, ../../src/sass/tgs.scss */
+.grade-11 {
+  opacity: 1;
+}
+
+/* line 55, ../../src/sass/tgs.scss */
+.grade-10 {
+  opacity: 1;
+}
+
+/* line 55, ../../src/sass/tgs.scss */
+.grade-9 {
+  opacity: 1;
+}
+
+/* line 61, ../../src/sass/tgs.scss */
 #location-title {
   position: absolute;
   width: 100%;
@@ -1075,13 +1115,68 @@ li {
   /*-webkit-transition	:		all 400ms ease-in;*/
   /*-webkit-transition-delay : 1000ms;*/
 }
-/* line 43, ../../src/sass/tgs.scss */
+/* line 70, ../../src/sass/tgs.scss */
 #location-title p {
   color: white;
   font-size: 40px;
   font-weight: bold;
   font-family: Helvetica;
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* line 81, ../../src/sass/tgs.scss */
+.marker-type {
+  position: relative;
+}
+/* line 84, ../../src/sass/tgs.scss */
+.marker-type .icon {
+  width: 26px;
+  height: 26px;
+  display: block;
+  /*float:left;*/
+  border-radius: 13px;
+  position: absolute;
+  left: 8px;
+  top: 6px;
+}
+/* line 95, ../../src/sass/tgs.scss */
+.marker-type li {
+  display: block;
+  background: white;
+  position: relative;
+  /*width:70%;*/
+  margin: 10px;
+  float: right;
+  /*padding:5px;*/
+  width: 110px;
+  height: 40px;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+}
+/* line 108, ../../src/sass/tgs.scss */
+.marker-type h2 {
+  padding-right: 15px;
+  text-align: center;
+  position: relative;
+  float: right;
+  display: inline-block;
+  font-family: Helvetica;
+  line-height: 38px;
+  font-size: 12px;
+  /*text-transform : uppercase;*/
+}
+
+/* line 121, ../../src/sass/tgs.scss */
+#panel {
+  /*width				:		300px;*/
+  /*height			:		200px;*/
+  display: block;
+  background: white;
+  position: absolute;
+  z-index: 3000;
+  bottom: 50px;
+  right: 50px;
+  padding: 20px;
 }
 
 /* line 15, ../../src/sass/screen.scss */

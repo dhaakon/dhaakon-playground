@@ -150,6 +150,7 @@
       this.app.get('/tgs/:role', Router.tgs);
       this.app.get('/location/:lat/:long', Router.getlocation);
       this.app.get('/students/', Router.getstudents);
+      this.app.get('/faculty/', Router.getfaculty);
       this.app.get('/tgslocations/', Router.tgslocations);
       if ('development' === this.app.get('env')) {
         return this.app.use(this.express.errorHandler());

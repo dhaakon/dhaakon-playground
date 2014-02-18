@@ -1,17 +1,27 @@
 Config	=	window.Config =
-	server :
+	Graphics:
+		Colors:
+			location : 'red'
+			grade:
+				9		:	'blue'
+				10	:	'green'
+				11	:	'orange'
+				12	:	'brown'
+			faculty : 'yellow'
+
+	display :
 		Settings	:
 			jsonPath			:	'/json/world.json'
 			csvPath				:	'/csv/booking_small.csv'
 			renderer			:	'canvas'
 			hasGrid				:	false
 			hasRotation		:	false
-			hasLines			:	true
+			hasLines			:	false
 
 		Map			:
 			container			:	'#map-container'
-			height				:	1200	
-			width					:	1600	
+			height				:	null	
+			width					:	null	
 			scale					:	350
 			xOffset				:	0
 			yOffset				:	0
@@ -49,8 +59,8 @@ Config	=	window.Config =
 
 		Map			:
 			container			:	'#map-container'
-			height				:	1200	
-			width					:	1600	
+			height				:	null
+			width					:	null	
 			scale					:	350
 			xOffset				:	0
 			yOffset				:	0
@@ -83,4 +93,5 @@ Config	=	window.Config =
 	TGS			:
 		src						:		'/tgslocations/'
 		students_src	:		'/students/'
+		faculty_src		:		'/faculty/'
 
