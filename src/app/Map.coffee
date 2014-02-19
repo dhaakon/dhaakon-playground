@@ -208,10 +208,10 @@ class Map
 						b = 0
 						a = @pointColors.length - 1
 						if name is 'location' then _o = b else _o = a
-						_i = d['Grade'] - 8 || _o
+						if d['Grade'] then _i = 2 else _i = _o
 						return @pointColors[_i]
 					)
-					.attr('class', (d)=> if d['Grade'] then return 'grade-' + d['Grade'] else return name)
+					.attr('class', (d)=> if d['Grade'] then return 'student grade' + d['Grade'] else return name)
 					.attr('cx',(d)=>
 						_d = d.location.coords[0]
 						coords = @projection([_d['longitude'], _d['latitude']])
@@ -242,7 +242,7 @@ class Map
 						a = 3
 						b = 4
 						if name is 'location' then _o = b else _o = a
-						_sca = d['Grade'] - 7 || _o
+						if d['Grade'] then _sca = 2 else _sca = _o
 						d.scale = _sca * 2
 						return d.scale
 					)

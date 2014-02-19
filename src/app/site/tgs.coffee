@@ -32,7 +32,7 @@ class TGS
 	container			:	null
 
 	loader				:	null
-	classes				: ['grade-9', 'grade-10', 'grade-11','grade-12', 'faculty','location']
+	classes				: ['student', 'faculty','location']
 
 	constructor		:		()->
 		@loadFromConfig()
@@ -116,18 +116,42 @@ class TGS
 		fn = (event)=>
 			s = event.currentTarget.id
 			l = $('.' + s)
+			e = $('#' + s)
+			ts = 300
 
 			_v = (el, idx, arr) =>
 
 				_m = (d)=>
-					$('.' + s).off 'mouseout'
-					_.each @classes, (el, idx, arr)-> $('.' + el).css('opacity', 1)
+					_.each @classes, (el, idx, arr)->
+						$('.' + el).css('opacity', 1)
+
+					e.off 'mouseleave'
+					panel.on 'mouseover', fn
+
+					d3.selectAll('.' + el)
+						.transition()
+						.delay(()->
+							del = Math.random() * ts
+							return del)
+						.attr('r', (d)-> return d.scale)
+						.style('z-index', 10)
 
 				if el is s
-					$('.' + s).on 'mouseout', _m
+					e.mouseleave _m
+					panel.off 'mouseover'
+					
+					d3.selectAll('.' + el)
+						.transition()
+						.delay(()->
+							del = Math.random() * ts
+							return del)
+						.attr('r', (d)-> return d.scale * ((Math.random() * 3) + 2))
+						.style('z-index', 10000)
+
 					_u = 1
+
 				else
-					u =0
+					_u = 0.3
 
 				$('.' + el).css('opacity', _u)
 			_.each @classes, _v
@@ -140,7 +164,17 @@ class TGS
 		EventManager.addListener Events.MAP_LOADED,			@onMapLoaded
 		EventManager.addListener Events.SERVER_UPDATED,			@changeTitle
 		EventManager.addListener Events.SOCKET_CONNECTED,		@onSocketConnected
+		EventManager.addListener Events.FACEBOOK_LOGIN,		@onFacebookLogin
 		#EventManager.addListener Events.BOOKING_LOADED, @onBookingLoaded
+		
+	onFacebookLogin		: (event)=>
+		id  = event.location.id
+		src = Config.FACEBOOK.location
+
+		fn = (d)=>
+			console.log d
+		
+		d3.json src + id, fn
 		
 	onMapLoaded				:	()=>
 		#@createBookingData() 

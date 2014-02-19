@@ -58,8 +58,7 @@
     }
 
     SocketServer.prototype.createSocket = function() {
-      this.socket.io.sockets.on('connection', this.onConnectionHandler);
-      return this.socket.io.sockets.on('gps', this.onGPSHandler);
+      return this.socket.io.sockets.on('connection', this.onConnectionHandler);
     };
 
     SocketServer.prototype.createRoutes = function() {

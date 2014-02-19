@@ -1084,27 +1084,40 @@ li {
     transform: scale(3);
   }
 }
-/* line 55, ../../src/sass/tgs.scss */
+/* line 51, ../../src/sass/tgs.scss */
+#fb_app {
+  position: absolute;
+  z-index: 20000;
+  bottom: 20px;
+  left: 30px;
+}
+
+/* line 58, ../../src/sass/tgs.scss */
+.mvs {
+  opacity: 0 !important;
+}
+
+/* line 66, ../../src/sass/tgs.scss */
 .grade-12 {
   opacity: 1;
 }
 
-/* line 55, ../../src/sass/tgs.scss */
+/* line 66, ../../src/sass/tgs.scss */
 .grade-11 {
   opacity: 1;
 }
 
-/* line 55, ../../src/sass/tgs.scss */
+/* line 66, ../../src/sass/tgs.scss */
 .grade-10 {
   opacity: 1;
 }
 
-/* line 55, ../../src/sass/tgs.scss */
+/* line 66, ../../src/sass/tgs.scss */
 .grade-9 {
   opacity: 1;
 }
 
-/* line 61, ../../src/sass/tgs.scss */
+/* line 72, ../../src/sass/tgs.scss */
 #location-title {
   position: absolute;
   width: 100%;
@@ -1115,7 +1128,7 @@ li {
   /*-webkit-transition	:		all 400ms ease-in;*/
   /*-webkit-transition-delay : 1000ms;*/
 }
-/* line 70, ../../src/sass/tgs.scss */
+/* line 81, ../../src/sass/tgs.scss */
 #location-title p {
   color: white;
   font-size: 40px;
@@ -1124,11 +1137,11 @@ li {
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
 }
 
-/* line 81, ../../src/sass/tgs.scss */
+/* line 92, ../../src/sass/tgs.scss */
 .marker-type {
   position: relative;
 }
-/* line 84, ../../src/sass/tgs.scss */
+/* line 95, ../../src/sass/tgs.scss */
 .marker-type .icon {
   width: 26px;
   height: 26px;
@@ -1139,10 +1152,10 @@ li {
   left: 8px;
   top: 6px;
 }
-/* line 95, ../../src/sass/tgs.scss */
+/* line 106, ../../src/sass/tgs.scss */
 .marker-type li {
   display: block;
-  background: white;
+  background: #d3d3e3;
   position: relative;
   /*width:70%;*/
   margin: 10px;
@@ -1153,7 +1166,7 @@ li {
   border: 1px solid #d3d3d3;
   border-radius: 5px;
 }
-/* line 108, ../../src/sass/tgs.scss */
+/* line 119, ../../src/sass/tgs.scss */
 .marker-type h2 {
   padding-right: 15px;
   text-align: center;
@@ -1166,12 +1179,12 @@ li {
   /*text-transform : uppercase;*/
 }
 
-/* line 121, ../../src/sass/tgs.scss */
+/* line 132, ../../src/sass/tgs.scss */
 #panel {
   /*width				:		300px;*/
   /*height			:		200px;*/
   display: block;
-  background: white;
+  background: rgba(230, 240, 220, 0.65);
   position: absolute;
   z-index: 3000;
   bottom: 50px;

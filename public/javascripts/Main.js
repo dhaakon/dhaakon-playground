@@ -10,7 +10,7 @@
         location: 'red',
         grade: {
           9: 'blue',
-          10: 'green',
+          10: 'orange',
           11: 'orange',
           12: 'brown'
         },
@@ -71,6 +71,9 @@
       src: '/tgslocations/',
       students_src: '/students/',
       faculty_src: '/faculty/'
+    },
+    FACEBOOK: {
+      location: 'http://graph.facebook.com/'
     }
   };
 
@@ -127,16 +130,17 @@
 
   })();
 
-  EventManager = new EventEmitter();
+  window.EventManager = EventManager = new EventEmitter();
 
-  Events = {
+  window.Events = Events = {
     MAP_LOADED: 'onMapLoaded',
     BOOKING_LOADED: 'onBookingLoaded',
     MARKER_FOCUS: 'onMarkerFocus',
     MAP_CLICKED: 'onMapClicked',
     SERVER_UPDATED: 'onServerUpdated',
     SERVER_STARTED: 'onServerStarted',
-    SOCKET_CONNECTED: 'onSocketConnected'
+    SOCKET_CONNECTED: 'onSocketConnected',
+    FACEBOOK_LOGIN: 'onFacebookLogin'
   };
 
   Map = (function() {
@@ -367,11 +371,15 @@
             } else {
               _o = a;
             }
-            _i = d['Grade'] - 8 || _o;
+            if (d['Grade']) {
+              _i = 2;
+            } else {
+              _i = _o;
+            }
             return _this.pointColors[_i];
           }).attr('class', function(d) {
             if (d['Grade']) {
-              return 'grade-' + d['Grade'];
+              return 'student grade' + d['Grade'];
             } else {
               return name;
             }
@@ -409,7 +417,11 @@
             } else {
               _o = a;
             }
-            _sca = d['Grade'] - 7 || _o;
+            if (d['Grade']) {
+              _sca = 2;
+            } else {
+              _sca = _o;
+            }
             d.scale = _sca * 2;
             return d.scale;
           });
@@ -808,12 +820,13 @@
 
     TGS.prototype.loader = null;
 
-    TGS.prototype.classes = ['grade-9', 'grade-10', 'grade-11', 'grade-12', 'faculty', 'location'];
+    TGS.prototype.classes = ['student', 'faculty', 'location'];
 
     function TGS() {
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
+      this.onFacebookLogin = __bind(this.onFacebookLogin, this);
       this.onSocketConnected = __bind(this.onSocketConnected, this);
       this.loop = __bind(this.loop, this);
       this.changeTitle = __bind(this.changeTitle, this);
@@ -918,22 +931,40 @@
         _this = this;
       panel = $('.marker-type li');
       fn = function(event) {
-        var l, s, _v;
+        var e, l, s, ts, _v;
         s = event.currentTarget.id;
         l = $('.' + s);
+        e = $('#' + s);
+        ts = 300;
         _v = function(el, idx, arr) {
-          var u, _m, _u;
+          var _m, _u;
           _m = function(d) {
-            $('.' + s).off('mouseout');
-            return _.each(_this.classes, function(el, idx, arr) {
+            _.each(_this.classes, function(el, idx, arr) {
               return $('.' + el).css('opacity', 1);
             });
+            e.off('mouseleave');
+            panel.on('mouseover', fn);
+            return d3.selectAll('.' + el).transition().delay(function() {
+              var del;
+              del = Math.random() * ts;
+              return del;
+            }).attr('r', function(d) {
+              return d.scale;
+            }).style('z-index', 10);
           };
           if (el === s) {
-            $('.' + s).on('mouseout', _m);
+            e.mouseleave(_m);
+            panel.off('mouseover');
+            d3.selectAll('.' + el).transition().delay(function() {
+              var del;
+              del = Math.random() * ts;
+              return del;
+            }).attr('r', function(d) {
+              return d.scale * ((Math.random() * 3) + 2);
+            }).style('z-index', 10000);
             _u = 1;
           } else {
-            u = 0;
+            _u = 0.3;
           }
           return $('.' + el).css('opacity', _u);
         };
@@ -945,7 +976,19 @@
     TGS.prototype.addListeners = function() {
       EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
       EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
-      return EventManager.addListener(Events.SOCKET_CONNECTED, this.onSocketConnected);
+      EventManager.addListener(Events.SOCKET_CONNECTED, this.onSocketConnected);
+      return EventManager.addListener(Events.FACEBOOK_LOGIN, this.onFacebookLogin);
+    };
+
+    TGS.prototype.onFacebookLogin = function(event) {
+      var fn, id, src,
+        _this = this;
+      id = event.location.id;
+      src = Config.FACEBOOK.location;
+      fn = function(d) {
+        return console.log(d);
+      };
+      return d3.json(src + id, fn);
     };
 
     TGS.prototype.onMapLoaded = function() {

@@ -4,6 +4,7 @@ block added-scripts
 	script(src='/javascripts/Main.js')
 
 block content
+	include fb_sdk
 	include loader
 	include url_config_javascript
 
@@ -12,22 +13,25 @@ block content
 	div#location-title
 	div#panel
 		ul.marker-type
-			li#grade-9
-				span.icon(style='background:blue;')
-				h2 Grade 9
-			li#grade-10
-				span.icon(style='background:green;')
-				h2 Grade 10
-			li#grade-11
+			//-li#grade-9
+				//-span.icon(style='background:blue;')
+				//-h2 Grade 9
+			//-li#grade-10
+				//-span.icon(style='background:green;')
+				//-h2 Grade 10
+			//-li#grade-11
+				//-span.icon(style='background:orange;')
+				//-h2 Grade 11
+			//-br
+			//-li#grade-12
+				//-span.icon(style='background:brown;')
+				//-h2 Grade 12
+			li#student
 				span.icon(style='background:orange;')
-				h2 Grade 11
-			br
-			li#grade-12
-				span.icon(style='background:brown;')
-				h2 Grade 12
+				h2 Students
 			li#faculty
 				span.icon(style='background:yellow;')
-				h2 Faculty
+				h2 Staff
 			li#location
 				span.icon(style='background:red;')
 				h2 Locations

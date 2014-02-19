@@ -4,7 +4,7 @@ Config	=	window.Config =
 			location : 'red'
 			grade:
 				9		:	'blue'
-				10	:	'green'
+				10	:	'orange'
 				11	:	'orange'
 				12	:	'brown'
 			faculty : 'yellow'
@@ -95,3 +95,5 @@ Config	=	window.Config =
 		students_src	:		'/students/'
 		faculty_src		:		'/faculty/'
 
+	FACEBOOK	:	
+		location	:		'http://graph.facebook.com/'

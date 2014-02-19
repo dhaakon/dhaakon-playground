@@ -1,6 +1,6 @@
-EventManager	=	 new EventEmitter()
+window.EventManager = EventManager	=	 new EventEmitter()
 
-Events	=	
+window.Events = Events	=	
 	MAP_LOADED				:	'onMapLoaded'
 	BOOKING_LOADED		:	'onBookingLoaded'
 	MARKER_FOCUS			:	'onMarkerFocus'
@@ -8,3 +8,4 @@ Events	=
 	SERVER_UPDATED		:	'onServerUpdated'
 	SERVER_STARTED		:	'onServerStarted'
 	SOCKET_CONNECTED	:	'onSocketConnected'
+	FACEBOOK_LOGIN		:	'onFacebookLogin'
