@@ -204,6 +204,7 @@ class Map
 					'.y2011-y2012'
 					'.y2010-y2012'
 					]
+
 	onDateSelect					:		(obj)=>
 		console.log obj
 
@@ -220,8 +221,6 @@ class Map
 					return
 				else
 					$(year).css('opacity', 0)
-
-
 
 	createPoints	:	( name, data, @color )->
 		@[name] = @[name].concat data
@@ -299,8 +298,6 @@ class Map
 						g.on 'mouseover', @onLocationMouseOver
 					#console.log g
 					#.each('end', @trans)
-					
-
 
 			when 'canvas'
 				@canvas.select('canvas')
@@ -417,14 +414,18 @@ class Map
 
 	drawCountries	:	()->
 		switch @renderer
-			when 'svg'
-				@group.selectAll('.country')
-					.data(@countries)
-					.enter().insert('path', '.graticule')
-					.attr('class', 'country')
-					.attr('d', @path)
-					.style('fill', @fillNeighbors)
-					.style('stroke', 'rgba(100,100,255,1)')
+			try()
+				when 'svg'
+					@group.selectAll('.country')
+						.data(@countries)
+						.enter().insert('path', '.graticule')
+						.attr('class', 'country')
+						.attr('d', @path)
+						.style('fill', @fillNeighbors)
+						.style('stroke', 'rgba(100,100,255,1)')
+			catch (e)->
+				console.log e
+
 
 			when 'canvas'
 				@context.save()
