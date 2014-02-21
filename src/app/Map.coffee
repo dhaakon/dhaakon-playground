@@ -207,7 +207,7 @@ class Map
 					.attr('fill', (d)=>
 						b = 0
 						a = @pointColors.length - 1
-						if name is 'location' then _o = b else _o = a
+						if name is 'location' then _o = b else if name is 'faculty' then _o = a else i = 4
 						if d['Grade'] then _i = 2 else _i = _o
 						return @pointColors[_i]
 					)

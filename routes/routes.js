@@ -139,6 +139,10 @@
 
   })();
 
+  exports.dual = function(req, res) {
+    return res.render('dual');
+  };
+
   exports.thinkData = function(req, res) {
     var cb, citycount, correctNames, f, filename, fs, geo, i, obj, pages, photos, _,
       _this = this;

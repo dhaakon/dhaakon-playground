@@ -47,6 +47,7 @@ class Server
 		@app.get		'/students/',											Router.getstudents
 		@app.get		'/faculty/',											Router.getfaculty
 		@app.get		'/tgslocations/',									Router.tgslocations
+		@app.get		'/tgs-dual/',											Router.dual
 
 		if 'development' == @app.get 'env'
 			@app.use @express.errorHandler()

@@ -151,6 +151,7 @@
       this.app.get('/students/', Router.getstudents);
       this.app.get('/faculty/', Router.getfaculty);
       this.app.get('/tgslocations/', Router.tgslocations);
+      this.app.get('/tgs-dual/', Router.dual);
       if ('development' === this.app.get('env')) {
         return this.app.use(this.express.errorHandler());
       }

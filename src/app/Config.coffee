@@ -48,6 +48,7 @@ Config	=	window.Config =
 			markerSize			:	2
 			rotation				:	[ 0, -15 ]
 			velocity				:	20
+
 	user :
 		Settings	:
 			jsonPath			:	'/json/world.json'

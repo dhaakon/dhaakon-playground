@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="206px" height="47px" viewBox="0 0 206 47" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>tgs-pin-star</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient x1="136.420037%" y1="35.8332783%" x2="-36.4529239%" y2="35.8332783%" id="linearGradient-1">
+            <stop stop-color="#7A7A7A" offset="0%"></stop>
+            <stop stop-color="#B9B9B9" offset="48.0237574%"></stop>
+            <stop stop-color="#686868" offset="100%"></stop>
+        </linearGradient>
+        <radialGradient cx="64.4243777%" cy="34.7436418%" fx="64.4243777%" fy="34.7436418%" r="66.8971598%" id="radialGradient-2">
+            <stop stop-color="#FF0009" offset="0%"></stop>
+            <stop stop-color="#570105" stop-opacity="0.860197101" offset="82.5807445%"></stop>
+            <stop stop-color="#A71A1E" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="64.4243777%" cy="34.7436418%" fx="64.4243777%" fy="34.7436418%" r="66.8971598%" id="radialGradient-3">
+            <stop stop-color="#FF00C9" offset="0%"></stop>
+            <stop stop-color="#570144" stop-opacity="0.901482077" offset="82.5807445%"></stop>
+            <stop stop-color="#944C75" stop-opacity="0.867848116" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="64.4243777%" cy="34.7436418%" fx="64.4243777%" fy="34.7436418%" r="71.0885882%" id="radialGradient-4">
+            <stop stop-color="#FFC000" offset="0%"></stop>
+            <stop stop-color="#570105" stop-opacity="0.860197101" offset="82.5807445%"></stop>
+            <stop stop-color="#A6A71A" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="64.4243777%" cy="34.7436418%" fx="64.4243777%" fy="34.7436418%" r="72.712326%" id="radialGradient-5">
+            <stop stop-color="#434CFF" offset="0%"></stop>
+            <stop stop-color="#070237" stop-opacity="0.860197101" offset="82.5807445%"></stop>
+            <stop stop-color="#565BFF" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Markers" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="red_pin" sketch:type="MSLayerGroup" transform="translate(76.000000, 2.000000)">
+            <path d="M8.3982684,19.0116279 L9.87012987,45.0202608 L11.3419913,19.0116279 L8.3982684,19.0116279 Z" id="needle" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
+            <path d="M10,20.1453488 C15.5228478,20.1453488 20,15.6356592 20,10.0726744 C20,4.50968967 15.5228478,0 10,0 C4.47715223,0 0,4.50968967 0,10.0726744 C0,15.6356592 4.47715223,20.1453488 10,20.1453488 Z" id="pin" fill="url(#radialGradient-2)" sketch:type="MSShapeGroup"></path>
+        </g>
+        <g id="purple_pin" sketch:type="MSLayerGroup" transform="translate(117.000000, 2.000000)">
+            <path d="M8.3982684,19.0116279 L9.87012987,45.0202608 L11.3419913,19.0116279 L8.3982684,19.0116279 Z" id="needle" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
+            <path d="M10,20.1453488 C15.5228478,20.1453488 20,15.6356592 20,10.0726744 C20,4.50968967 15.5228478,0 10,0 C4.47715223,0 0,4.50968967 0,10.0726744 C0,15.6356592 4.47715223,20.1453488 10,20.1453488 Z" id="pin" fill="url(#radialGradient-3)" sketch:type="MSShapeGroup"></path>
+        </g>
+        <g id="orange_pin" sketch:type="MSLayerGroup" transform="translate(38.000000, 2.000000)">
+            <path d="M8.3982684,19.0116279 L9.87012987,45.0202608 L11.3419913,19.0116279 L8.3982684,19.0116279 Z" id="needle" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
+            <path d="M10,20.1453488 C15.5228478,20.1453488 20,15.6356592 20,10.0726744 C20,4.50968967 15.5228478,0 10,0 C4.47715223,0 0,4.50968967 0,10.0726744 C0,15.6356592 4.47715223,20.1453488 10,20.1453488 Z" id="pin" fill="url(#radialGradient-4)" sketch:type="MSShapeGroup"></path>
+        </g>
+        <g id="blue_pin" sketch:type="MSLayerGroup" transform="translate(1.000000, 2.000000)">
+            <path d="M8.3982684,19.0116279 L9.87012987,45.0202608 L11.3419913,19.0116279 L8.3982684,19.0116279 Z" id="needle" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
+            <path d="M10,20.1453488 C15.5228478,20.1453488 20,15.6356592 20,10.0726744 C20,4.50968967 15.5228478,0 10,0 C4.47715223,0 0,4.50968967 0,10.0726744 C0,15.6356592 4.47715223,20.1453488 10,20.1453488 Z" id="pin" fill="url(#radialGradient-5)" sketch:type="MSShapeGroup"></path>
+        </g>
+        <polygon id="Star-1" stroke="#F6A623" fill="#FFEE00" sketch:type="MSShapeGroup" points="182 33.5 169.656511 39.9893576 172.013907 26.2446788 162.027813 16.5106436 175.828257 14.5053201 182 2 188.171747 14.5053232 201.97219 16.5106536 191.986092 26.2446815 194.343489 39.9893579 "></polygon>
+    </g>
+</svg>

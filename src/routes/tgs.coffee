@@ -1,5 +1,7 @@
 #import flickr.coffee
 #import geocoder.coffee
+exports.dual = (req, res)->
+	res.render 'dual'
 
 exports.thinkData = ( req, res )->
 	fs	= require 'fs'
