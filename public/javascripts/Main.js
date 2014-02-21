@@ -400,26 +400,26 @@
       return console.log(obj);
     };
 
-    Map.prototype.years = ['.y2010-y2012', '.y2011-y2012', '.y2012-y2013', '.y2013-y2014', '.y2014-y2015'];
+    Map.prototype.years = ['.y2014-y2015', '.y2013-y2014', '.y2012-y2013', '.y2011-y2012', '.y2010-y2012'];
 
     Map.prototype.onDateSelect = function(obj) {
-      var h, year, _i, _len, _ref;
+      var year, _i, _len, _ref;
       console.log(obj);
       if (obj === "none") {
 
       } else {
-        h = d3.selectAll(obj);
+        $('.faculty').css('opacity', 0);
         _ref = this.years;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           year = _ref[_i];
           if (year === obj) {
             console.log($(year));
             $(year).css('opacity', 1);
+            return;
           } else {
             $(year).css('opacity', 0);
           }
         }
-        return $('.faculty').css('opacity', 0);
       }
     };
 
@@ -456,13 +456,14 @@
               str = name;
             }
             if (d['year']) {
-              if (d['month'] < 10) {
+              if (d['month'] > 8) {
                 _p = parseInt(d['year'].split('20')[1]) + 1;
                 str += ' y' + d['year'] + '-y20' + _p;
               } else {
                 _p = parseInt(d['year'].split('20')[1]) - 1;
                 str += ' y20' + _p + '-y' + d['year'];
               }
+              console.log(d);
             }
             if (d['Year']) {
               str += ' y' + d['Year'];

@@ -198,11 +198,11 @@ class Map
 		console.log obj
 
 	years :	[		
-					'.y2010-y2012'
-					'.y2011-y2012'
-					'.y2012-y2013'
-					'.y2013-y2014'
 					'.y2014-y2015'
+					'.y2013-y2014'
+					'.y2012-y2013'
+					'.y2011-y2012'
+					'.y2010-y2012'
 					]
 	onDateSelect					:		(obj)=>
 		console.log obj
@@ -210,16 +210,17 @@ class Map
 		if obj is "none"
 			return
 		else
-			h = d3.selectAll(obj)
+			$('.faculty').css('opacity', 0)
+
 			for year in @years
 				#console.log year, obj
 				if year is obj
 					console.log $(year)
 					$(year).css('opacity', 1)
+					return
 				else
 					$(year).css('opacity', 0)
 
-			$('.faculty').css('opacity', 0)
 
 
 	createPoints	:	( name, data, @color )->
@@ -244,13 +245,13 @@ class Map
 						.attr('class', (d)=>
 							if d['Grade'] then str = 'student grade' + d['Grade'] else str = name
 							if d['year']
-								if d['month'] < 10
+								if d['month'] > 8
 									_p = parseInt(d['year'].split('20')[1]) + 1
 									str += ' y' + d['year'] + '-y20' + _p
 								else
 									_p = parseInt(d['year'].split('20')[1]) - 1
 									str += ' y20' + _p + '-y' + d['year']
-
+								console.log d
 							if d['Year']
 								str += ' y' + d['Year']
 								_p = parseInt(d['Year'].split('20')[1]) + 1

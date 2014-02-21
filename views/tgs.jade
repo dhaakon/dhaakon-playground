@@ -11,7 +11,7 @@ block content
 	div#main 
 		div#map-container
 	div#location-title
-	div#panel
+	div.panel.people
 		ul.marker-type
 			//-li#grade-9
 				//-span.icon(style='background:blue;')
@@ -35,11 +35,10 @@ block content
 			li#location
 				span.icon(style='background:red;')
 				h2 Locations
-		ul.dropdown
+	div.panel.year
+		div.dropdown
 			select(id='year-dropdown')
 				option(value='.y2010-y2011') 2010-2011
 				option(value='.y2011-y2012') 2011-2012
 				option(value='.y2012-y2013') 2012-2013
 				option(value='.y2013-y2014') 2013-2014
-		ul.marker-year
-
