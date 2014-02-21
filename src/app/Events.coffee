@@ -8,4 +8,5 @@ window.Events = Events	=
 	SERVER_UPDATED		:	'onServerUpdated'
 	SERVER_STARTED		:	'onServerStarted'
 	SOCKET_CONNECTED	:	'onSocketConnected'
+	ON_DATE_SELECT		:	'onDateSelect'
 	FACEBOOK_LOGIN		:	'onFacebookLogin'

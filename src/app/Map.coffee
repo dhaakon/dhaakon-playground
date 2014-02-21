@@ -73,6 +73,7 @@ class Map
 	addListeners	:	()->
 		EventManager.addListener Events.SERVER_UPDATED, @onServerUpdated
 		EventManager.addListener Events.SERVER_STARTED, @onServerStarted
+		EventManager.addListener Events.ON_DATE_SELECT, @onDateSelect
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
@@ -81,9 +82,10 @@ class Map
 						  .attr('width', @width)
 						  .attr('height', @height)
 							
-					  
+		console.log Config['userType'] is 'user'
 		@group	=	@svg.append('g')
-									.on('mousedown', @onMouseDownHandler)
+		if Config['userType'] is 'user'
+			@group.on('mousedown', @onMouseDownHandler)
 									#.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", @zoomed))
 
 
@@ -191,6 +193,34 @@ class Map
 			@context.fillRect(coords[0], coords[1],size, size)
 
 		d[0].forEach(fn)
+	onLocationMouseOver		:		(obj)=>
+		console.log 'over'
+		console.log obj
+
+	years :	[		
+					'.y2010-y2012'
+					'.y2011-y2012'
+					'.y2012-y2013'
+					'.y2013-y2014'
+					'.y2014-y2015'
+					]
+	onDateSelect					:		(obj)=>
+		console.log obj
+
+		if obj is "none"
+			return
+		else
+			h = d3.selectAll(obj)
+			for year in @years
+				#console.log year, obj
+				if year is obj
+					console.log $(year)
+					$(year).css('opacity', 1)
+				else
+					$(year).css('opacity', 0)
+
+			$('.faculty').css('opacity', 0)
+
 
 	createPoints	:	( name, data, @color )->
 		@[name] = @[name].concat data
@@ -199,54 +229,77 @@ class Map
 		l = 0
 		switch @renderer
 			when 'svg'
-				@group.selectAll('group')
-					.data(@[name])
-					.enter()
-					.append('circle')
-					.attr('r', @markerSize * 2 )
-					.attr('fill', (d)=>
-						b = 0
-						a = @pointColors.length - 1
-						if name is 'location' then _o = b else if name is 'faculty' then _o = a else i = 4
-						if d['Grade'] then _i = 2 else _i = _o
-						return @pointColors[_i]
-					)
-					.attr('class', (d)=> if d['Grade'] then return 'student grade' + d['Grade'] else return name)
-					.attr('cx',(d)=>
-						_d = d.location.coords[0]
-						coords = @projection([_d['longitude'], _d['latitude']])
-						return coords[0]
-					)
-					.attr('cy',(d)=>
-						_d = d.location.coords[0]
-						coords = @projection([_d['longitude'], _d['latitude']])
-						return coords[1]
-					)
-					.on('mouseover', @onMarkerMouseOver)
-					.style('opacity', 0)
-					.transition()
-					.delay( (d) ->
-						l += (l * 4)
-						a = 3
-						b = 4
-						if name is 'location' then _o = b else _o = a
-						_gr = d['Grade'] - 5 || _o
-						_gr *= 100
-						_gr += (l * 10)
+				g = @group.selectAll('group')
+						.data(@[name])
+						.enter()
+						.append('circle')
+						.attr('r', @markerSize * 2 )
+						.attr('fill', (d)=>
+							b = 0
+							a = @pointColors.length - 1
+							if name is 'location' then _o = b else if name is 'faculty' then _o = a else i = 4
+							if d['Grade'] then _i = 2 else _i = _o
+							return @pointColors[_i]
+						)
+						.attr('class', (d)=>
+							if d['Grade'] then str = 'student grade' + d['Grade'] else str = name
+							if d['year']
+								if d['month'] < 10
+									_p = parseInt(d['year'].split('20')[1]) + 1
+									str += ' y' + d['year'] + '-y20' + _p
+								else
+									_p = parseInt(d['year'].split('20')[1]) - 1
+									str += ' y20' + _p + '-y' + d['year']
 
-						return _gr
-					)
-					.style('opacity', 1)
-					.attr('r', (d)->
-						d.isPulsed = true
-						a = 3
-						b = 4
-						if name is 'location' then _o = b else _o = a
-						if d['Grade'] then _sca = 2 else _sca = _o
-						d.scale = _sca * 2
-						return d.scale
-					)
+							if d['Year']
+								str += ' y' + d['Year']
+								_p = parseInt(d['Year'].split('20')[1]) + 1
+								str += '-y20' +  _p
+							return str
+						)
+						.attr('cx',(d)=>
+							_d = d.location.coords[0]
+							coords = @projection([_d['longitude'], _d['latitude']])
+							return coords[0]
+						)
+						.attr('cy',(d)=>
+							_d = d.location.coords[0]
+							coords = @projection([_d['longitude'], _d['latitude']])
+							return coords[1]
+						)
+						.on('mouseover', @onMarkerMouseOver)
+						.style('opacity', 0)
+						.transition()
+						.delay( (d) ->
+							l += (l * 4)
+							a = 3
+							b = 4
+							if name is 'location' then _o = b else _o = a
+							_gr = d['Grade'] - 5 || _o
+							_gr *= 100
+							_gr += (l * 10)
+
+							return _gr
+						)
+						.style('opacity', 1)
+						.attr('r', (d)->
+							d.isPulsed = true
+							a = 3
+							b = 4
+							if name is 'location' then _o = b else _o = a
+							if d['Grade'] then _sca = 5 else _sca = _o
+							d.scale = _sca * 2
+							return d.scale
+						)
+
+
+					if name is 'student'
+						console.log student
+						g.on 'mouseover', @onLocationMouseOver
+					#console.log g
 					#.each('end', @trans)
+					
+
 
 			when 'canvas'
 				@canvas.select('canvas')

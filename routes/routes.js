@@ -280,7 +280,7 @@
     csv = require('fast-csv');
     fs = require('fs');
     _ = require('underscore');
-    _path = 'public/csv/students_9_12.csv';
+    _path = 'public/csv/student_enrollment.csv';
     _stream = fs.createReadStream(_path);
     i = 0;
     opts = {};
@@ -291,6 +291,33 @@
       _d = eval(_data);
       return res.send(_d);
     });
+    return;
+    cb = function(data) {
+      var first, last, o, obj, prop, property, _i, _len;
+      if (i === 0) {
+        for (_i = 0, _len = data.length; _i < _len; _i++) {
+          prop = data[_i];
+          opts[prop] = '';
+        }
+        return ++i;
+      } else {
+        obj = {};
+        o = 0;
+        for (property in opts) {
+          if (property === 'Name') {
+            first = data[o].split(',')[1].replace(' ', '').replace("'", '');
+            last = data[o].split(',')[0];
+            obj["first"] = first;
+            obj["last"] = last;
+          } else {
+            obj['year'] = data[o];
+          }
+          ++o;
+        }
+        students.push(obj);
+        return ++i;
+      }
+    };
     return;
     geo = new Geocoder();
     cb = function(data) {

@@ -130,7 +130,7 @@ exports.getstudents		=		( req, res)->
 	fs  = require 'fs'
 	_		=	require 'underscore'
 
-	_path = 'public/csv/students_9_12.csv'
+	_path = 'public/csv/student_enrollment.csv'
 
 	_stream = fs.createReadStream _path
 	i = 0
@@ -138,11 +138,43 @@ exports.getstudents		=		( req, res)->
 	students = []
 
 	filename = 'public/json/students_9_12.json'
+
+
 	fs.readFile filename,'utf-8',
 		(err, _data)->
 			_d = eval _data
-
 			res.send _d
+
+			#c = csv(_stream)
+					#.on('data', cb )
+					#.on('end', onEnd)
+					#.parse()
+
+	return
+			#res.send _d
+
+	cb = (data) =>
+		if i == 0
+			for prop in data
+				opts[prop] = ''
+			++i
+		else
+			obj = {}
+			o = 0
+			for property of opts
+				#console.log property
+				if property is 'Name'
+					first = data[o].split(',')[1].replace(' ', '').replace("'", '')
+					last = data[o].split(',')[0]
+					obj["first"] = first
+					obj["last"] = last
+				else
+					obj['year'] = data[o]
+				++o
+			students.push obj
+			++i
+
+
 
 	return
 

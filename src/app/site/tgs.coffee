@@ -166,7 +166,8 @@ class TGS
 		EventManager.addListener Events.SOCKET_CONNECTED,		@onSocketConnected
 		EventManager.addListener Events.FACEBOOK_LOGIN,		@onFacebookLogin
 		#EventManager.addListener Events.BOOKING_LOADED, @onBookingLoaded
-		
+	
+		$('#year-dropdown').on 'change', (e)->EventManager.emitEvent Events.ON_DATE_SELECT,[e.target.value]
 	onFacebookLogin		: (event)=>
 		id  = event.location.id
 		src = Config.FACEBOOK.location

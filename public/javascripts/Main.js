@@ -173,6 +173,7 @@
     SERVER_UPDATED: 'onServerUpdated',
     SERVER_STARTED: 'onServerStarted',
     SOCKET_CONNECTED: 'onSocketConnected',
+    ON_DATE_SELECT: 'onDateSelect',
     FACEBOOK_LOGIN: 'onFacebookLogin'
   };
 
@@ -267,6 +268,8 @@
       this.fillNeighbors = __bind(this.fillNeighbors, this);
       this.onMarkerMouseOver = __bind(this.onMarkerMouseOver, this);
       this.trans = __bind(this.trans, this);
+      this.onDateSelect = __bind(this.onDateSelect, this);
+      this.onLocationMouseOver = __bind(this.onLocationMouseOver, this);
       this.createPoint = __bind(this.createPoint, this);
       this.onServerStarted = __bind(this.onServerStarted, this);
       this.onServerUpdated = __bind(this.onServerUpdated, this);
@@ -291,12 +294,17 @@
 
     Map.prototype.addListeners = function() {
       EventManager.addListener(Events.SERVER_UPDATED, this.onServerUpdated);
-      return EventManager.addListener(Events.SERVER_STARTED, this.onServerStarted);
+      EventManager.addListener(Events.SERVER_STARTED, this.onServerStarted);
+      return EventManager.addListener(Events.ON_DATE_SELECT, this.onDateSelect);
     };
 
     Map.prototype.createSVG = function() {
       this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
-      return this.group = this.svg.append('g').on('mousedown', this.onMouseDownHandler);
+      console.log(Config['userType'] === 'user');
+      this.group = this.svg.append('g');
+      if (Config['userType'] === 'user') {
+        return this.group.on('mousedown', this.onMouseDownHandler);
+      }
     };
 
     Map.prototype.createCanvas = function() {
@@ -387,15 +395,43 @@
       return d[0].forEach(fn);
     };
 
+    Map.prototype.onLocationMouseOver = function(obj) {
+      console.log('over');
+      return console.log(obj);
+    };
+
+    Map.prototype.years = ['.y2010-y2012', '.y2011-y2012', '.y2012-y2013', '.y2013-y2014', '.y2014-y2015'];
+
+    Map.prototype.onDateSelect = function(obj) {
+      var h, year, _i, _len, _ref;
+      console.log(obj);
+      if (obj === "none") {
+
+      } else {
+        h = d3.selectAll(obj);
+        _ref = this.years;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          year = _ref[_i];
+          if (year === obj) {
+            console.log($(year));
+            $(year).css('opacity', 1);
+          } else {
+            $(year).css('opacity', 0);
+          }
+        }
+        return $('.faculty').css('opacity', 0);
+      }
+    };
+
     Map.prototype.createPoints = function(name, data, color) {
-      var l,
+      var g, l,
         _this = this;
       this.color = color;
       this[name] = this[name].concat(data);
       l = 0;
       switch (this.renderer) {
         case 'svg':
-          return this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', function(d) {
+          g = this.group.selectAll('group').data(this[name]).enter().append('circle').attr('r', this.markerSize * 2).attr('fill', function(d) {
             var a, b, i, _i, _o;
             b = 0;
             a = _this.pointColors.length - 1;
@@ -413,11 +449,27 @@
             }
             return _this.pointColors[_i];
           }).attr('class', function(d) {
+            var str, _p;
             if (d['Grade']) {
-              return 'student grade' + d['Grade'];
+              str = 'student grade' + d['Grade'];
             } else {
-              return name;
+              str = name;
             }
+            if (d['year']) {
+              if (d['month'] < 10) {
+                _p = parseInt(d['year'].split('20')[1]) + 1;
+                str += ' y' + d['year'] + '-y20' + _p;
+              } else {
+                _p = parseInt(d['year'].split('20')[1]) - 1;
+                str += ' y20' + _p + '-y' + d['year'];
+              }
+            }
+            if (d['Year']) {
+              str += ' y' + d['Year'];
+              _p = parseInt(d['Year'].split('20')[1]) + 1;
+              str += '-y20' + _p;
+            }
+            return str;
           }).attr('cx', function(d) {
             var coords, _d;
             _d = d.location.coords[0];
@@ -453,13 +505,18 @@
               _o = a;
             }
             if (d['Grade']) {
-              _sca = 2;
+              _sca = 5;
             } else {
               _sca = _o;
             }
             d.scale = _sca * 2;
             return d.scale;
           });
+          if (name === 'student') {
+            console.log(student);
+            return g.on('mouseover', this.onLocationMouseOver);
+          }
+          break;
         case 'canvas':
           return this.canvas.select('canvas').data(this[name]).enter().call(this.createPoint);
       }
@@ -1012,7 +1069,10 @@
       EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
       EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
       EventManager.addListener(Events.SOCKET_CONNECTED, this.onSocketConnected);
-      return EventManager.addListener(Events.FACEBOOK_LOGIN, this.onFacebookLogin);
+      EventManager.addListener(Events.FACEBOOK_LOGIN, this.onFacebookLogin);
+      return $('#year-dropdown').on('change', function(e) {
+        return EventManager.emitEvent(Events.ON_DATE_SELECT, [e.target.value]);
+      });
     };
 
     TGS.prototype.onFacebookLogin = function(event) {
