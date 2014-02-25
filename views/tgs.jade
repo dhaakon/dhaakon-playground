@@ -2,13 +2,13 @@ extends layout
 
 block added-scripts
 	script(src='/javascripts/Main.js')
+	- if (facebook)
+		script(src="http://connect.facebook.net/en_US/all.js")
+
 
 block content
 	include loader
 	include url_config_javascript
-
-	- if (facebook)
-		include fb_sdk
 
 	div#main 
 		div#map-container
@@ -50,9 +50,6 @@ block content
 				span.icon(style='background:rgba(65,121,151,1);')
 				h2 Facebook
 
-
-
-
 	div.panel.year
 		div.dropdown
 			select(id='year-dropdown')
@@ -60,3 +57,7 @@ block content
 				option(value='.y2011-y2012') 2011-2012
 				option(value='.y2012-y2013') 2012-2013
 				option(value='.y2013-y2014') 2013-2014
+
+	- if (facebook)
+		include fb_sdk
+
