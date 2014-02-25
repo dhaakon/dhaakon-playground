@@ -38,8 +38,9 @@ class Map
 	flickr				:	[]
 	students			:	[]
 	location			:	[]
+	facebook			:	[]
 	faculty				:	[]
-	redis					:	[]
+	tedxteen					:	[]
 
 	bgColor				:	'rgba(' + [ 230, 240, 220, 0.65].join(',') + ')'
 	
@@ -83,7 +84,9 @@ class Map
 						  .attr('height', @height)
 							
 		console.log Config['userType'] is 'user'
+
 		@group	=	@svg.append('g')
+		
 		if Config['userType'] is 'user'
 			@group.on('mousedown', @onMouseDownHandler)
 
@@ -122,7 +125,7 @@ class Map
 				@context.stroke()
 
 	onServerUpdated		: (event)=>
-		@redis.push event
+		@tedxteen.push event
 
 		if @hasGrid then @drawGrid()
 
@@ -131,11 +134,12 @@ class Map
 
 		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
-		@createPoints 'redis', [], 'black'
+		@createPoints 'tedxteen', [], 'black'
 
 	onServerStarted		: (event)=>
+		console.log event
 		event = event || []
-		@redis = @redis.concat event
+		@tedxteen = @tedxteen.concat event
 
 		#@drawBackground()
 		if @hasGrid then @drawGrid()
@@ -145,7 +149,7 @@ class Map
 
 		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
-		@createPoints 'redis', [], 'black'
+		@createPoints 'tedxteen', [], 'yellow'
 
 	drawBackground	:	()->
 		switch @renderer
@@ -245,6 +249,8 @@ class Map
 								else
 									_p = parseInt(d['year'].split('20')[1]) - 1
 									str += ' y20' + _p + '-y' + d['year'] + ' m' + m
+								
+								str += ' ' + d['type'] + '-location'
 							if d['Year']
 								str += ' y' + d['Year']
 								_p = parseInt(d['Year'].split('20')[1]) + 1

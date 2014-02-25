@@ -10,3 +10,4 @@ window.Events = Events	=
 	SOCKET_CONNECTED	:	'onSocketConnected'
 	ON_DATE_SELECT		:	'onDateSelect'
 	FACEBOOK_LOGIN		:	'onFacebookLogin'
+	FACEBOOK_LOADED		:	'onFacebookMarkersLoaded'

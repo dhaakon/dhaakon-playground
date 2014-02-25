@@ -10,14 +10,21 @@ class SocketServer
 	createRoutes			:		()->
 		@app.io.route('serverStarted', (req)=>
 			@redis.client.get 'keys', (err, resp)=>
-				obj = JSON.stringify resp
-				console.log 'keys got'
+				obj = JSON.stringify resp		
 				@socket.io.sockets.emit 'locationsLoaded', obj
+
+			@redis.client.get 'facebook', (err, resp)=>
+				obj = JSON.stringify resp		
+				console.log 'facebookLoaded'
+				@socket.io.sockets.emit 'facebookLoaded', obj
 		)
 
+		@app.io.route 'facebook', (req)=>
+			console.log req
+
 		@app.io.route('gps', (req)=>
+
 			@socket.io.sockets.emit 'receiveResponse', req.data
-			console.log req.data.location
 
 			uid = Math.random().toString(36).substr(2,9)
 
@@ -32,6 +39,24 @@ class SocketServer
 				@redis.client.set 'keys', JSON.stringify(keys)
 			)
 
+		@app.io.route('facebook', (req)=>
+			@redis.client.get 'facebook', (err,resp)=>
+				obj = JSON.stringify req.data
+
+				keys = JSON.parse(resp) || {locations : []}
+				console.log keys
+
+				if keys
+					for o of keys.locations
+						a = parseInt(keys.locations[o].id)
+						b = parseInt(JSON.parse(obj).id)
+						
+						if a is b then return
+
+				keys.locations.push obj
+
+				@redis.client.set 'facebook', JSON.stringify(keys)
+		)
 
 	onConnectionHandler			:		(socket)=>
 		@createRoutes()

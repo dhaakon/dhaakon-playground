@@ -7,11 +7,6 @@ class SocketClient
 		opts =
 			port : Config.port
 
-		console.log location.origin
-		url = location.origin
-		#url += @host.substring(0, @host.length-1)
-		#url += ':' + opts.port
-		#opts	=		'transports': ['xhr-polling']
 		@socket = io.connect()
 		@addListeners()
 
@@ -24,6 +19,7 @@ class SocketClient
 			when 'display'
 				@socket.on 'receiveResponse', @onReceiveHandler
 				@socket.on 'locationsLoaded', @onLocationsLoaded
+				@socket.on 'facebookLoaded', @onFacebookLoaded
 				@socket.emit 'serverStarted'
  
 		@socket.on 'connection', @onConnectionHandler
@@ -50,24 +46,30 @@ class SocketClient
 						latitude		:	data.longitude
 						longitude		:	data.latitude
 					]
-			@socket.emit 'gps', opts
-		EventManager.addListener Events.MAP_CLICKED, cb
+			#@socket.emit 'gps', opts
 
-		console.info 'Received location event'
+		EventManager.addListener Events.MAP_CLICKED, cb
 
 	onReceiveHandler				:		( data )=>
 		EventManager.emitEvent Events.SERVER_UPDATED, [data]
 
 	onConnectionHandler			:		( socket )=>
-		console.log socket
+		null
+
+	onFacebookLoaded	:		(data)=>
+		obj = JSON.parse JSON.parse data
+		EventManager.emitEvent Events.FACEBOOK_LOADED, [obj]
 
 	onLocationsLoaded				:		(data)=>
 		obj = JSON.parse JSON.parse data
+
 		objects = []
+		
 		if obj?
 			for loc of obj.locations
 				_locs = JSON.parse obj.locations[loc]
 				objects.push _locs
+
 			EventManager.emitEvent Events.SERVER_STARTED, [objects]
 		
 		#console.log data

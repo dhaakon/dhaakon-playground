@@ -174,7 +174,8 @@
     SERVER_STARTED: 'onServerStarted',
     SOCKET_CONNECTED: 'onSocketConnected',
     ON_DATE_SELECT: 'onDateSelect',
-    FACEBOOK_LOGIN: 'onFacebookLogin'
+    FACEBOOK_LOGIN: 'onFacebookLogin',
+    FACEBOOK_LOADED: 'onFacebookMarkersLoaded'
   };
 
   Map = (function() {
@@ -226,9 +227,11 @@
 
     Map.prototype.location = [];
 
+    Map.prototype.facebook = [];
+
     Map.prototype.faculty = [];
 
-    Map.prototype.redis = [];
+    Map.prototype.tedxteen = [];
 
     Map.prototype.bgColor = 'rgba(' + [230, 240, 220, 0.65].join(',') + ')';
 
@@ -337,7 +340,7 @@
     };
 
     Map.prototype.onServerUpdated = function(event) {
-      this.redis.push(event);
+      this.tedxteen.push(event);
       if (this.hasGrid) {
         this.drawGrid();
       }
@@ -347,19 +350,20 @@
       }
       this.createPoints('location', [], 'red');
       this.createPoints('students', [], 'blue');
-      return this.createPoints('redis', [], 'black');
+      return this.createPoints('tedxteen', [], 'black');
     };
 
     Map.prototype.onServerStarted = function(event) {
+      console.log(event);
       event = event || [];
-      this.redis = this.redis.concat(event);
+      this.tedxteen = this.tedxteen.concat(event);
       if (this.hasGrid) {
         this.drawGrid();
       }
       this.drawCountries();
       this.createPoints('location', [], 'red');
       this.createPoints('students', [], 'blue');
-      return this.createPoints('redis', [], 'black');
+      return this.createPoints('tedxteen', [], 'yellow');
     };
 
     Map.prototype.drawBackground = function() {
@@ -460,6 +464,7 @@
                 _p = parseInt(d['year'].split('20')[1]) - 1;
                 str += ' y20' + _p + '-y' + d['year'] + ' m' + m;
               }
+              str += ' ' + d['type'] + '-location';
             }
             if (d['Year']) {
               str += ' y' + d['Year'];
@@ -760,6 +765,7 @@
       this.host = host;
       this.type = type;
       this.onLocationsLoaded = __bind(this.onLocationsLoaded, this);
+      this.onFacebookLoaded = __bind(this.onFacebookLoaded, this);
       this.onConnectionHandler = __bind(this.onConnectionHandler, this);
       this.onReceiveHandler = __bind(this.onReceiveHandler, this);
       this.onLocationHandler = __bind(this.onLocationHandler, this);
@@ -767,12 +773,10 @@
     }
 
     SocketClient.prototype.createSocketConnection = function() {
-      var opts, url;
+      var opts;
       opts = {
         port: Config.port
       };
-      console.log(location.origin);
-      url = location.origin;
       this.socket = io.connect();
       return this.addListeners();
     };
@@ -785,6 +789,7 @@
         case 'display':
           this.socket.on('receiveResponse', this.onReceiveHandler);
           this.socket.on('locationsLoaded', this.onLocationsLoaded);
+          this.socket.on('facebookLoaded', this.onFacebookLoaded);
           this.socket.emit('serverStarted');
       }
       this.socket.on('connection', this.onConnectionHandler);
@@ -811,7 +816,7 @@
         _this = this;
       cb = function(data) {
         var opts;
-        opts = {
+        return opts = {
           location: {
             title: data.location,
             coords: [
@@ -822,10 +827,8 @@
             ]
           }
         };
-        return _this.socket.emit('gps', opts);
       };
-      EventManager.addListener(Events.MAP_CLICKED, cb);
-      return console.info('Received location event');
+      return EventManager.addListener(Events.MAP_CLICKED, cb);
     };
 
     SocketClient.prototype.onReceiveHandler = function(data) {
@@ -833,7 +836,13 @@
     };
 
     SocketClient.prototype.onConnectionHandler = function(socket) {
-      return console.log(socket);
+      return null;
+    };
+
+    SocketClient.prototype.onFacebookLoaded = function(data) {
+      var obj;
+      obj = JSON.parse(JSON.parse(data));
+      return EventManager.emitEvent(Events.FACEBOOK_LOADED, [obj]);
     };
 
     SocketClient.prototype.onLocationsLoaded = function(data) {
@@ -900,13 +909,14 @@
 
     TGS.prototype.loader = null;
 
-    TGS.prototype.classes = ['student', 'faculty', 'location'];
+    TGS.prototype.classes = ['student', 'faculty', 'past-location', 'current-location', 'future-location', 'tedxteen', 'facebook'];
 
     function TGS() {
       this.onMarkerFocused = __bind(this.onMarkerFocused, this);
       this.onBookingLoaded = __bind(this.onBookingLoaded, this);
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.onFacebookLogin = __bind(this.onFacebookLogin, this);
+      this.onFacebookMarkersLoaded = __bind(this.onFacebookMarkersLoaded, this);
       this.onSocketConnected = __bind(this.onSocketConnected, this);
       this.loop = __bind(this.loop, this);
       this.changeTitle = __bind(this.changeTitle, this);
@@ -1058,9 +1068,13 @@
       EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
       EventManager.addListener(Events.SOCKET_CONNECTED, this.onSocketConnected);
       EventManager.addListener(Events.FACEBOOK_LOGIN, this.onFacebookLogin);
-      return $('#year-dropdown').on('change', function(e) {
-        return EventManager.emitEvent(Events.ON_DATE_SELECT, [e.target.value]);
-      });
+      return EventManager.addListener(Events.FACEBOOK_LOADED, this.onFacebookMarkersLoaded);
+    };
+
+    TGS.prototype.onFacebookMarkersLoaded = function(event) {
+      console.log(event);
+      this.map.createPoints('facebook', event.locations, 'blue');
+      return null;
     };
 
     TGS.prototype.onFacebookLogin = function(event) {
@@ -1069,7 +1083,15 @@
       id = event.location.id;
       src = Config.FACEBOOK.location;
       fn = function(d) {
-        return console.log(d);
+        var key;
+        key = {
+          id: event.id,
+          location: {
+            coords: [d.location],
+            name: d.name
+          }
+        };
+        return _this.socket.socket.emit('facebook', key);
       };
       return d3.json(src + id, fn);
     };

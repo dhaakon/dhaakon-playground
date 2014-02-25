@@ -32,7 +32,13 @@ class TGS
 	container			:	null
 
 	loader				:	null
-	classes				: ['student', 'faculty','location']
+	classes				: [		'student',
+											'faculty',
+											'past-location',
+											'current-location',
+											'future-location',
+											'tedxteen',
+											'facebook'	]
 
 	constructor		:		()->
 		@loadFromConfig()
@@ -85,9 +91,7 @@ class TGS
 		if @renderer is 'canvas' then @map.context.clearRect( 0,0,@mapWidth, @mapHeight)
 		@map.projection = @map.projection.rotate([@origin + @velocity * (Date.now() - @start), -15])
 		@map.drawMap()
-		#return
-		#@map.createPoints 'students',	@studentData,	'blue'
-		#@map.createPoints 'flickr',		@flickrData,	'red'
+
 		if @hasLines then @map.drawLines [	'students',	'location'	]
 	
 	onTGSFlickrDataLoaded		:		(@flickrData)->
@@ -117,7 +121,7 @@ class TGS
 			s = event.currentTarget.id
 			l = $('.' + s)
 			e = $('#' + s)
-			ts = 300
+			ts = 300	
 
 			_v = (el, idx, arr) =>
 
@@ -165,18 +169,31 @@ class TGS
 		EventManager.addListener Events.SERVER_UPDATED,			@changeTitle
 		EventManager.addListener Events.SOCKET_CONNECTED,		@onSocketConnected
 		EventManager.addListener Events.FACEBOOK_LOGIN,		@onFacebookLogin
-		#EventManager.addListener Events.BOOKING_LOADED, @onBookingLoaded
+		EventManager.addListener Events.FACEBOOK_LOADED,		@onFacebookMarkersLoaded
 	
-		$('#year-dropdown').on 'change', (e)->EventManager.emitEvent Events.ON_DATE_SELECT,[e.target.value]
+		#$('#year-dropdown').on 'change', (e)->EventManager.emitEvent Events.ON_DATE_SELECT,[e.target.value]
+	
+	onFacebookMarkersLoaded		:		(event)		=>
+		console.log event
+		@map.createPoints 'facebook', event.locations, 'blue'
+		null
+		
 	onFacebookLogin		: (event)=>
-		id  = event.location.id
+		id  = event.location.id		
+
 		src = Config.FACEBOOK.location
 
 		fn = (d)=>
-			console.log d
+			key=
+				id : event.id
+				location: 
+					coords: [ d.location ]
+					name	:		d.name
+
+			@socket.socket.emit 'facebook', key
 		
 		d3.json src + id, fn
-		
+
 	onMapLoaded				:	()=>
 		#@createBookingData() 
 		@loader.remove()

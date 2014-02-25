@@ -64,17 +64,24 @@
     SocketServer.prototype.createRoutes = function() {
       var _this = this;
       this.app.io.route('serverStarted', function(req) {
-        return _this.redis.client.get('keys', function(err, resp) {
+        _this.redis.client.get('keys', function(err, resp) {
           var obj;
           obj = JSON.stringify(resp);
-          console.log('keys got');
           return _this.socket.io.sockets.emit('locationsLoaded', obj);
         });
+        return _this.redis.client.get('facebook', function(err, resp) {
+          var obj;
+          obj = JSON.stringify(resp);
+          console.log('facebookLoaded');
+          return _this.socket.io.sockets.emit('facebookLoaded', obj);
+        });
       });
-      return this.app.io.route('gps', function(req) {
+      this.app.io.route('facebook', function(req) {
+        return console.log(req);
+      });
+      this.app.io.route('gps', function(req) {
         var uid;
         _this.socket.io.sockets.emit('receiveResponse', req.data);
-        console.log(req.data.location);
         uid = Math.random().toString(36).substr(2, 9);
         _this.redis.get;
         return _this.redis.client.get('keys', function(err, resp) {
@@ -85,6 +92,24 @@
           };
           keys.locations.push(obj);
           return _this.redis.client.set('keys', JSON.stringify(keys));
+        });
+      });
+      return this.app.io.route('facebook', function(req) {
+        return _this.redis.client.get('facebook', function(err, resp) {
+          var a, b, keys, o, obj;
+          obj = JSON.stringify(req.data);
+          keys = JSON.parse(resp) || {
+            locations: []
+          };
+          console.log(keys);
+          if (keys) {
+            for (o in keys.locations) {
+              a = parseInt(keys.locations[o].id);
+              b = parseInt(JSON.parse(obj).id);
+              console.log(a, b);
+            }
+          }
+          return keys.locations.push(obj);
         });
       });
     };
