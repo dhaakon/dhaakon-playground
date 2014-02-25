@@ -219,6 +219,8 @@
 
     Map.prototype.projection = null;
 
+    Map.prototype.countryStroke = 'rgba(100,100,255,1)';
+
     Map.prototype.pointColors = [Config.Graphics.Colors.location, Config.Graphics.Colors.grade['9'], Config.Graphics.Colors.grade['10'], Config.Graphics.Colors.grade['11'], Config.Graphics.Colors.grade['12'], Config.Graphics.Colors.faculty];
 
     Map.prototype.flickr = [];
@@ -371,7 +373,7 @@
         case 'svg':
           this.group.append("defs").append("path").datum({
             type: "Sphere"
-          }).attr('id', 'sphere').attr("d", this.path).style("fill", this.bgColor);
+          }).attr('id', 'sphere').attr("d", this.path).attr("stroke", this.countryStroke).attr("stroke-width", '1px').style("fill", this.bgColor);
           this.group.append("use").attr("class", "stroke").attr("xlink:href", "#sphere");
           return this.group.append("use").attr("class", "fill").attr("xlink:href", "#sphere");
         case 'canvas':
@@ -379,6 +381,32 @@
           str = 'rgba(' + rgba.join(',') + ')';
           this.context.fillStyle = str;
           return this.context.fillRect(0, 0, this.width, this.height);
+      }
+    };
+
+    Map.prototype.drawCountries = function() {
+      var error;
+      switch (this.renderer) {
+        case 'svg':
+          try {
+            return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', this.countryStroke);
+          } catch (_error) {
+            error = _error;
+            return console.log(error);
+          }
+          break;
+        case 'canvas':
+          this.context.save();
+          this.context.fillStyle = 'rgba( 255, 255, 255, 0.5 )';
+          this.context.lineWidth = '0.2px';
+          this.context.strokeStyle = 'rgba( 0, 0, 0, 0.7 )';
+          this.context.beginPath();
+          this.context.fill();
+          this.path(this.countries);
+          this.context.fill();
+          this.path(this.neigbors);
+          this.context.stroke();
+          return this.context.restore();
       }
     };
 
@@ -616,32 +644,6 @@
       a = 0.6;
       colorString = 'rgba(' + [r, g, b, a].join(',') + ')';
       return 'rgba(225,225,255,0.8)';
-    };
-
-    Map.prototype.drawCountries = function() {
-      var error;
-      switch (this.renderer) {
-        case 'svg':
-          try {
-            return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
-          } catch (_error) {
-            error = _error;
-            return console.log(error);
-          }
-          break;
-        case 'canvas':
-          this.context.save();
-          this.context.fillStyle = 'rgba( 255, 255, 255, 0.5 )';
-          this.context.lineWidth = '0.2px';
-          this.context.strokeStyle = 'rgba( 0, 0, 0, 0.7 )';
-          this.context.beginPath();
-          this.context.fill();
-          this.path(this.countries);
-          this.context.fill();
-          this.path(this.neigbors);
-          this.context.stroke();
-          return this.context.restore();
-      }
     };
 
     Map.prototype.onMouseMove = function() {

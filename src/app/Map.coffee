@@ -25,6 +25,7 @@ class Map
 	height					:	null
 	container				:	null
 	projection			:	null
+	countryStroke :		'rgba(100,100,255,1)'
 
 	pointColors		: [
 										Config.Graphics.Colors.location,	
@@ -158,6 +159,8 @@ class Map
 					.datum({type: "Sphere"})
 					.attr('id','sphere')
 					.attr("d", @path)
+					.attr("stroke", @countryStroke)
+					.attr("stroke-width", '1px')
 					.style("fill", @bgColor)
 
 				@group.append("use")
@@ -178,7 +181,33 @@ class Map
 				@context.fillStyle = str
 				@context.fillRect( 0, 0, @width, @height)
 	
-	
+	drawCountries	:	()->
+		switch @renderer
+			when 'svg'
+				try
+					@group.selectAll('.country')
+						.data(@countries)
+						.enter().insert('path', '.graticule')
+						.attr('class', 'country')
+						.attr('d', @path)
+						.style('fill', @fillNeighbors)
+						.style('stroke', @countryStroke)
+				catch error
+					console.log error
+
+			when 'canvas'
+				@context.save()
+				@context.fillStyle = 'rgba( 255, 255, 255, 0.5 )'
+				@context.lineWidth = '0.2px'
+				@context.strokeStyle = 'rgba( 0, 0, 0, 0.7 )'
+				@context.beginPath()
+				@context.fill()
+				@path(@countries)
+				@context.fill()
+				@path(@neigbors)
+				@context.stroke()
+				@context.restore()
+
 	createPoint : (d) =>
 		fn = (el, idx, array) =>
 			_d = el.__data__.location.coords[0]
@@ -409,33 +438,6 @@ class Map
 		colorString = 'rgba(' + [r,g,b,a].join(',') + ')'
 
 		return 'rgba(225,225,255,0.8)' #colorString
-
-	drawCountries	:	()->
-		switch @renderer
-			when 'svg'
-				try
-					@group.selectAll('.country')
-						.data(@countries)
-						.enter().insert('path', '.graticule')
-						.attr('class', 'country')
-						.attr('d', @path)
-						.style('fill', @fillNeighbors)
-						.style('stroke', 'rgba(100,100,255,1)')
-				catch error
-					console.log error
-
-			when 'canvas'
-				@context.save()
-				@context.fillStyle = 'rgba( 255, 255, 255, 0.5 )'
-				@context.lineWidth = '0.2px'
-				@context.strokeStyle = 'rgba( 0, 0, 0, 0.7 )'
-				@context.beginPath()
-				@context.fill()
-				@path(@countries)
-				@context.fill()
-				@path(@neigbors)
-				@context.stroke()
-				@context.restore()
 
 	onMouseMove				:	()->
 		m = d3.mouse @

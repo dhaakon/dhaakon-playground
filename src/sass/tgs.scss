@@ -1,3 +1,10 @@
+@import "bourbon/css3/font-face";
+
+@font-face{
+	font-family:'Gotham'; 
+	src:url('/assets/fonts/Gotham-Medium.otf');
+}
+
 #main{
 	width				:		auto;
 	height			:		auto;
@@ -86,11 +93,23 @@ $grades : 4;
 		text-shadow		:		4px 4px 4px rgba(0,0,0,0.4);
 	}
 }
-
+// Marker
+#marker{
+	background	: url('/images/marker.png');
+	display			:	block;
+	position		:	absolute;
+	z-index			:	1000;
+	width				:	50px;
+	height			:	50px;
+	left				:	5px;
+	right				:	5px;
+	/*-webkit-transform: scale(0.5);*/
+}
 // PANEL
 
 .marker-type{
 	position	:		relative;
+	width			:		148px;
 
 	.icon{
 		$size: 16px;
@@ -108,13 +127,14 @@ $grades : 4;
 		background:white;
 		position:relative;
 		/*width:70%;*/
-		margin:10px;
+		margin-top:5px;
 		float:right;
 		/*padding:5px;*/
-		width:110px;
+		width:150px;
 		height:30px;
 		border: 1px solid #d3d3d3;
 		border-radius:5px;
+		color		:		grey;
 	}
 	h2{
 		padding-right:15px;
@@ -123,27 +143,32 @@ $grades : 4;
 		/*float:right;*/
 		text-indent:24px;
 		display:inline-block;
-		font-family:Helvetica;
+		font-family:'Gotham';
 		line-height : 28px;
 		font-size		: 12px;
+		text-transform:uppercase;
 		/*text-transform : uppercase;*/
 	}
 }
 
 .panel{
-	width				:		170px;
+	border: 1px solid #d3d3d3;
+
+	width				:		auto;
 	text-align	:		center;
 	/*height			:		200px;*/
 	display			:		block;
 	background	:		rgba(242,236,223,1);
 	position		:		absolute;
 	z-index			:		3000;
+	border-radius:4px;
 }
 
 .people{
-	bottom			:		0px;
-	left				:		0px;
-	padding			:		20px;
+	bottom			:		100px;
+	left				:		100px;
+	padding: 10px;
+	padding-top: 8px;
 }
 
 .year{

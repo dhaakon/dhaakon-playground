@@ -16,6 +16,9 @@ module.exports = (grunt) ->
 									'percolator:dev',
 									'copy:codemirror'
 								]
+			assets		:
+				files		:	['src/assets/**/*']
+				tasks		:	['copy:assets']
 
 		compass  :
 			dev      :
@@ -56,7 +59,12 @@ module.exports = (grunt) ->
 				dest		:	'./public/javascripts'
 				flatten		:	false
 				expand		:	true
-
+			assets	:
+				cwd			:	'./src/assets/'
+				src			:	'**/*'
+				dest		:	'./public/assets/'
+				flatten		:	false
+				expand		:	true
 
 		percolator	:
 			main		:
@@ -107,6 +115,7 @@ module.exports = (grunt) ->
 					'compass:dev',
 					'copy:codemirror',
 					'copy:codemirror_addons',
+					'copy:assets',
 					'percolator:routes',
 					'watch'
 					]
