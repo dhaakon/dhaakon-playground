@@ -50,10 +50,6 @@ class Server
 		@app.get		'/tgslocations/',									Router.tgslocations
 		@app.get		'/tgs-dual/',											Router.dual
 
-		@app.post('/*', (request, response)->
-			response.redirect('/')
-		)
-
 		@app.post('/tgs-facebook/', (request, response)->
 			response.redirect('/tgs-facebook/')
 		)
