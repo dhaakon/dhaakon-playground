@@ -50,6 +50,10 @@ class Server
 		@app.get		'/tgslocations/',									Router.tgslocations
 		@app.get		'/tgs-dual/',											Router.dual
 
+		@app.post('/*', (request, response)->
+			response.redirect('/')
+		)
+
 		if 'development' == @app.get 'env'
 			@app.use @express.errorHandler()
 
