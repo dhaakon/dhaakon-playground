@@ -60,9 +60,10 @@ block fb_sdk
 			FB.api('/me', function(response) {
 				var eventManager	=	window.EventManager;
 				var events			=	window.Events;
+				console.log('logged in');
 
 				eventManager.emitEvent(events.FACEBOOK_LOGIN, [response]);
 			});
 		}
-	//-div#fb_app
-		//-fb:login-button(show-faces="true" caption="false" width="200" max-rows="1")
+	div#fb_app
+		//-rfb:login-button(show-faces="true" caption="false" width="200" max-rows="1")
