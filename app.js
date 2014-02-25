@@ -104,12 +104,15 @@
           console.log(keys);
           if (keys) {
             for (o in keys.locations) {
-              a = parseInt(keys.locations[o].id);
-              b = parseInt(JSON.parse(obj).id);
-              console.log(a, b);
+              a = keys.locations[o].id;
+              b = JSON.parse(obj).id;
+              if (a === b) {
+                return;
+              }
             }
           }
-          return keys.locations.push(obj);
+          keys.locations.push(obj);
+          return _this.redis.client.set('facebook', JSON.stringify(keys));
         });
       });
     };

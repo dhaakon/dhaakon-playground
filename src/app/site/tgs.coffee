@@ -183,10 +183,12 @@ class TGS
 
 		src = Config.FACEBOOK.location
 
+		uid = Math.random().toString(36).substr(2,9)
+
 		fn = (d)=>
 			key=
-				id : event.id
-				location: 
+				id : event.id || uid()
+				location:
 					coords: [ d.location ]
 					name	:		d.name
 

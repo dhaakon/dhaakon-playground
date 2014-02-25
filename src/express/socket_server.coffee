@@ -48,8 +48,8 @@ class SocketServer
 
 				if keys
 					for o of keys.locations
-						a = parseInt(keys.locations[o].id)
-						b = parseInt(JSON.parse(obj).id)
+						a = keys.locations[o].id
+						b = JSON.parse(obj).id
 						
 						if a is b then return
 

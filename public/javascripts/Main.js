@@ -1078,14 +1078,15 @@
     };
 
     TGS.prototype.onFacebookLogin = function(event) {
-      var fn, id, src,
+      var fn, id, src, uid,
         _this = this;
       id = event.location.id;
       src = Config.FACEBOOK.location;
+      uid = Math.random().toString(36).substr(2, 9);
       fn = function(d) {
         var key;
         key = {
-          id: event.id,
+          id: event.id || uid(),
           location: {
             coords: [d.location],
             name: d.name
