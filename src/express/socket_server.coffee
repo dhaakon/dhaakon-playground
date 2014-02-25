@@ -19,9 +19,6 @@ class SocketServer
 				@socket.io.sockets.emit 'facebookLoaded', obj
 		)
 
-		@app.io.route 'facebook', (req)=>
-			console.log req
-
 		@app.io.route('gps', (req)=>
 
 			@socket.io.sockets.emit 'receiveResponse', req.data

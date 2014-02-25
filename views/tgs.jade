@@ -10,24 +10,14 @@ block content
 	include loader
 	include url_config_javascript
 
+	- if (facebook != null)
+		include fb_sdk
+
 	div#main 
 		div#map-container
 	div#location-title
 	div.panel.people
 		ul.marker-type
-			//-li#grade-9
-				//-span.icon(style='background:blue;')
-				//-h2 Grade 9
-			//-li#grade-10
-				//-span.icon(style='background:green;')
-				//-h2 Grade 10
-			//-li#grade-11
-				//-span.icon(style='background:orange;')
-				//-h2 Grade 11
-			//-br
-			//-li#grade-12
-				//-span.icon(style='background:brown;')
-				//-h2 Grade 12
 			li#student
 				span.icon(style='background:rgba(128,130,133,1);')
 				h2 Students
@@ -58,6 +48,4 @@ block content
 				option(value='.y2012-y2013') 2012-2013
 				option(value='.y2013-y2014') 2013-2014
 
-	- if (facebook)
-		include fb_sdk
 

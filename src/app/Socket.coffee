@@ -11,31 +11,28 @@ class SocketClient
 		@addListeners()
 
 	addListeners						:		()->
-		switch @type
+
+		@socket.on 'connection', @onConnectionHandler
+		@socket.on 'connect', @connect
+		@socket.on 'data', @data
+		@socket.on 'error', @error
+
+	connect									:		(data)=>
+		console.info('Successfully established a working connection')
+		switch Config.userType
 			when 'user'
 				@socket.on 'location', @onLocationHandler
-				#@socket.on 'receiveResponse',  @onReceiveHandler
 
 			when 'display'
 				@socket.on 'receiveResponse', @onReceiveHandler
 				@socket.on 'locationsLoaded', @onLocationsLoaded
 				@socket.on 'facebookLoaded', @onFacebookLoaded
 				@socket.emit 'serverStarted'
- 
-		@socket.on 'connection', @onConnectionHandler
-		@socket.on 'connect', @connect
-		@socket.on 'data', @data
-		@socket.on 'error', @error
 
-	connect									:		(data)->
-		console.info('Successfully established a working connection');
 		EventManager.emitEvent Events.SOCKET_CONNECTED
 
 	data										:		(data)->
-		console.log data
-
 	error										:		(error)->
-		console.log error
 
 	onLocationHandler				:		( data )=>
 		cb = (data) =>
@@ -57,10 +54,12 @@ class SocketClient
 		null
 
 	onFacebookLoaded	:		(data)=>
+		console.log 'fb loaded'
 		obj = JSON.parse JSON.parse data
 		EventManager.emitEvent Events.FACEBOOK_LOADED, [obj]
 
 	onLocationsLoaded				:		(data)=>
+		console.log 'locations loaded'
 		obj = JSON.parse JSON.parse data
 
 		objects = []

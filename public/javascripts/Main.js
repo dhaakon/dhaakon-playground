@@ -283,7 +283,6 @@
         this.createSVG();
       }
       this.readJSON();
-      this.addListeners();
     }
 
     Map.prototype.loadFromConfig = function() {
@@ -301,7 +300,7 @@
     };
 
     Map.prototype.createSVG = function() {
-      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
+      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height).call(d3.behavior.zoom, this.zoom);
       console.log(Config['userType'] === 'user');
       this.group = this.svg.append('g');
       if (Config['userType'] === 'user') {
@@ -751,6 +750,7 @@
       this.createProjection();
       this.createPath();
       this.drawMap();
+      this.addListeners();
       return EventManager.emitEvent(Events.MAP_LOADED);
     };
 
@@ -769,6 +769,7 @@
       this.onConnectionHandler = __bind(this.onConnectionHandler, this);
       this.onReceiveHandler = __bind(this.onReceiveHandler, this);
       this.onLocationHandler = __bind(this.onLocationHandler, this);
+      this.connect = __bind(this.connect, this);
       this.createSocketConnection();
     }
 
@@ -782,7 +783,15 @@
     };
 
     SocketClient.prototype.addListeners = function() {
-      switch (this.type) {
+      this.socket.on('connection', this.onConnectionHandler);
+      this.socket.on('connect', this.connect);
+      this.socket.on('data', this.data);
+      return this.socket.on('error', this.error);
+    };
+
+    SocketClient.prototype.connect = function(data) {
+      console.info('Successfully established a working connection');
+      switch (Config.userType) {
         case 'user':
           this.socket.on('location', this.onLocationHandler);
           break;
@@ -792,24 +801,12 @@
           this.socket.on('facebookLoaded', this.onFacebookLoaded);
           this.socket.emit('serverStarted');
       }
-      this.socket.on('connection', this.onConnectionHandler);
-      this.socket.on('connect', this.connect);
-      this.socket.on('data', this.data);
-      return this.socket.on('error', this.error);
-    };
-
-    SocketClient.prototype.connect = function(data) {
-      console.info('Successfully established a working connection');
       return EventManager.emitEvent(Events.SOCKET_CONNECTED);
     };
 
-    SocketClient.prototype.data = function(data) {
-      return console.log(data);
-    };
+    SocketClient.prototype.data = function(data) {};
 
-    SocketClient.prototype.error = function(error) {
-      return console.log(error);
-    };
+    SocketClient.prototype.error = function(error) {};
 
     SocketClient.prototype.onLocationHandler = function(data) {
       var cb,
@@ -841,12 +838,14 @@
 
     SocketClient.prototype.onFacebookLoaded = function(data) {
       var obj;
+      console.log('fb loaded');
       obj = JSON.parse(JSON.parse(data));
       return EventManager.emitEvent(Events.FACEBOOK_LOADED, [obj]);
     };
 
     SocketClient.prototype.onLocationsLoaded = function(data) {
       var loc, obj, objects, _locs;
+      console.log('locations loaded');
       obj = JSON.parse(JSON.parse(data));
       objects = [];
       if (obj != null) {

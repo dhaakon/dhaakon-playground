@@ -158,12 +158,6 @@ $grades : 4;
 	display			:		block;
 }
 
-.location.y2010-y2011, 
-.location.y2011-y2012, 
-.location.y2012-y2013{
-	fill				:		rgba(91,164,174,1);
-}
-
 .student{
 	fill:rgba(128,130,133,1);
 }
@@ -180,4 +174,16 @@ $grades : 4;
 	fill:rgba(65,121,151,1);
 }
 
+.future-location{
+	fill:rgba(160,57,62,1);
+}
 
+.past-location{
+	fill				:		rgba(91,164,174,1);
+}
+
+$cntry : rgba( 240, 200, 100, 1);
+
+.country{
+	/*fill:$cntry !important;*/
+}

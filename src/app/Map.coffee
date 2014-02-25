@@ -62,8 +62,7 @@ class Map
 			@createSVG()
 
 		@readJSON()
-		@addListeners()
-
+		
 	loadFromConfig	:		() ->
 		@xOffset					=	Config[Config.userType].Map.xOffset
 		@yOffset					=	Config[Config.userType].Map.yOffset
@@ -82,6 +81,7 @@ class Map
 						  .attr('id', 'svg-map')
 						  .attr('width', @width)
 						  .attr('height', @height)
+							.call(d3.behavior.zoom, @zoom)
 							
 		console.log Config['userType'] is 'user'
 
@@ -559,5 +559,7 @@ class Map
 		@createPath()
 
 		@drawMap()
+
+		@addListeners()
 
 		EventManager.emitEvent(Events.MAP_LOADED)

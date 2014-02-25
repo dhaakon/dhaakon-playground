@@ -188,33 +188,41 @@
 }
 
 /* line 161, ../../src/sass/tgs.scss */
-.location.y2010-y2011,
-.location.y2011-y2012,
-.location.y2012-y2013 {
-  fill: #5ba4ae;
-}
-
-/* line 167, ../../src/sass/tgs.scss */
 .student {
   fill: #808285;
 }
 
-/* line 170, ../../src/sass/tgs.scss */
+/* line 164, ../../src/sass/tgs.scss */
 .faculty {
   fill: #deba51;
 }
 
-/* line 173, ../../src/sass/tgs.scss */
+/* line 167, ../../src/sass/tgs.scss */
 .location {
   fill: #c41230;
 }
 
-/* line 176, ../../src/sass/tgs.scss */
+/* line 170, ../../src/sass/tgs.scss */
 .tedxteen {
   fill: #d26436;
 }
 
-/* line 179, ../../src/sass/tgs.scss */
+/* line 173, ../../src/sass/tgs.scss */
 .facebook {
   fill: #417997;
+}
+
+/* line 177, ../../src/sass/tgs.scss */
+.future-location {
+  fill: #a0393e;
+}
+
+/* line 181, ../../src/sass/tgs.scss */
+.past-location {
+  fill: #5ba4ae;
+}
+
+/* line 187, ../../src/sass/tgs.scss */
+.country {
+  /*fill:$cntry !important;*/
 }

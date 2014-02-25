@@ -76,9 +76,6 @@
           return _this.socket.io.sockets.emit('facebookLoaded', obj);
         });
       });
-      this.app.io.route('facebook', function(req) {
-        return console.log(req);
-      });
       this.app.io.route('gps', function(req) {
         var uid;
         _this.socket.io.sockets.emit('receiveResponse', req.data);

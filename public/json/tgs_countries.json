@@ -183,7 +183,7 @@
     "year": "2013",
     "country": "Hyderabad",
     "city": "India",
-	"type": "current",
+	"type": "past",
     "location": {
         "coords": [{
             "latitude": 17.385044,
@@ -203,7 +203,7 @@
     "year": "2013",
     "country": "Tanzania",
     "city": "Dodoma",
-	"type": "current",
+	"type": "past",
     "location": {
         "coords": [{
             "latitude": -6.1730556,
@@ -236,6 +236,66 @@
             "streetName": null,
             "streetNumber": null,
             "countryCode": "JP"
+        }]
+	}
+}, {
+    "month": "9",
+    "year": "2014",
+    "country": "New Zealand",
+    "city": "Auckland",
+	"type": "future",
+    "location": {
+        "coords": [{
+            "latitude": 36.8408,
+            "longitude": 174.7399,
+            "country": "New Zealand",
+            "city": "Auckland",
+            "state": "",
+            "stateCode": "",
+            "zipcode": null,
+            "streetName": null,
+            "streetNumber": null,
+            "countryCode": "NZ"
+        }]
+    }
+}, {
+    "month": "12",
+    "year": "2014",
+    "country": "Turkey",
+    "city": "Istanbul",
+	"type": "future",
+    "location": {
+        "coords": [{
+            "latitude": 41.01396,
+            "longitude": 28.9550,
+            "country": "Turkey",
+            "city": "Istanbul",
+            "state": "",
+            "stateCode": "",
+            "zipcode": null,
+            "streetName": null,
+            "streetNumber": null,
+            "countryCode": "TR"
+        }]
+    }
+}, {
+    "month": "4",
+    "year": "2015",
+    "country": "Athens",
+    "city": "Greece",
+	"type": "future",
+    "location": {
+        "coords": [{
+            "latitude": 37.9667,
+            "longitude": 23.7167,
+            "country": "Greece",
+            "city": "Athens",
+            "state": "",
+            "stateCode": "",
+            "zipcode": null,
+            "streetName": null,
+            "streetNumber": null,
+            "countryCode": "GC"
         }]
     }
 }]
