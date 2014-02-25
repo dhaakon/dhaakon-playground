@@ -6,19 +6,26 @@ class SocketClient
 	createSocketConnection	:		()->
 		opts =
 			port : Config.port
+		
+		EventManager.addListener Events.MAP_LOADED, @onMapLoaded
 
 		@socket = io.connect()
 		@addListeners()
 
 	addListeners						:		()->
-
 		@socket.on 'connection', @onConnectionHandler
 		@socket.on 'connect', @connect
 		@socket.on 'data', @data
 		@socket.on 'error', @error
-
+	
 	connect									:		(data)=>
-		console.info('Successfully established a working connection')
+		EventManager.emitEvent Events.SOCKET_CONNECTED
+
+	data										:		(data)->
+	error										:		(error)->
+
+	onMapLoaded							:		(event)=>
+		console.log 'map loaded'
 		switch Config.userType
 			when 'user'
 				@socket.on 'location', @onLocationHandler
@@ -28,11 +35,6 @@ class SocketClient
 				@socket.on 'locationsLoaded', @onLocationsLoaded
 				@socket.on 'facebookLoaded', @onFacebookLoaded
 				@socket.emit 'serverStarted'
-
-		EventManager.emitEvent Events.SOCKET_CONNECTED
-
-	data										:		(data)->
-	error										:		(error)->
 
 	onLocationHandler				:		( data )=>
 		cb = (data) =>

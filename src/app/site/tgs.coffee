@@ -111,6 +111,8 @@ class TGS
 		@booking = new Booking @CSV_PATH
 
 	onSocketConnected	: ()=>
+		console.log 'socket connected'
+		
 		@createMap()
 		@addPanelHover()
 

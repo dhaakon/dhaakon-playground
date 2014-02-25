@@ -16,6 +16,7 @@ class SocketServer
 			@redis.client.get 'facebook', (err, resp)=>
 				obj = JSON.stringify resp		
 				console.log 'facebookLoaded'
+				
 				@socket.io.sockets.emit 'facebookLoaded', obj
 		)
 

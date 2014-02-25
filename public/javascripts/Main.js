@@ -769,6 +769,7 @@
       this.onConnectionHandler = __bind(this.onConnectionHandler, this);
       this.onReceiveHandler = __bind(this.onReceiveHandler, this);
       this.onLocationHandler = __bind(this.onLocationHandler, this);
+      this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.connect = __bind(this.connect, this);
       this.createSocketConnection();
     }
@@ -778,6 +779,7 @@
       opts = {
         port: Config.port
       };
+      EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
       this.socket = io.connect();
       return this.addListeners();
     };
@@ -790,23 +792,25 @@
     };
 
     SocketClient.prototype.connect = function(data) {
-      console.info('Successfully established a working connection');
-      switch (Config.userType) {
-        case 'user':
-          this.socket.on('location', this.onLocationHandler);
-          break;
-        case 'display':
-          this.socket.on('receiveResponse', this.onReceiveHandler);
-          this.socket.on('locationsLoaded', this.onLocationsLoaded);
-          this.socket.on('facebookLoaded', this.onFacebookLoaded);
-          this.socket.emit('serverStarted');
-      }
       return EventManager.emitEvent(Events.SOCKET_CONNECTED);
     };
 
     SocketClient.prototype.data = function(data) {};
 
     SocketClient.prototype.error = function(error) {};
+
+    SocketClient.prototype.onMapLoaded = function(event) {
+      console.log('map loaded');
+      switch (Config.userType) {
+        case 'user':
+          return this.socket.on('location', this.onLocationHandler);
+        case 'display':
+          this.socket.on('receiveResponse', this.onReceiveHandler);
+          this.socket.on('locationsLoaded', this.onLocationsLoaded);
+          this.socket.on('facebookLoaded', this.onFacebookLoaded);
+          return this.socket.emit('serverStarted');
+      }
+    };
 
     SocketClient.prototype.onLocationHandler = function(data) {
       var cb,
@@ -1011,6 +1015,7 @@
     };
 
     TGS.prototype.onSocketConnected = function() {
+      console.log('socket connected');
       this.createMap();
       return this.addPanelHover();
     };
