@@ -524,12 +524,12 @@
   exports.facebook = function(req, res) {
     var arr, key, opt, opts, params, urlOption, urlOptions, value, _i, _len;
     params = {
-      renderer: 'undefined',
-      grid: 'undefined',
-      rotate: 'undefined',
-      lines: 'undefined',
-      scale: 'undefined',
-      projectionKey: 'undefined',
+      renderer: 'svg',
+      grid: false,
+      rotate: false,
+      lines: false,
+      scale: 240,
+      projectionKey: 4,
       velocity: 'undefined',
       rotation: '0,0',
       height: 'undefined',
