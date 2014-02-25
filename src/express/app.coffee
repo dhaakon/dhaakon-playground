@@ -54,6 +54,10 @@ class Server
 			response.redirect('/')
 		)
 
+		@app.post('/tgs-facebook/', (request, response)->
+			response.redirect('/tgs-facebook/')
+		)
+
 		if 'development' == @app.get 'env'
 			@app.use @express.errorHandler()
 
