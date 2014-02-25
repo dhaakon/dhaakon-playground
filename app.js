@@ -153,9 +153,6 @@
       this.app.get('/faculty/', Router.getfaculty);
       this.app.get('/tgslocations/', Router.tgslocations);
       this.app.get('/tgs-dual/', Router.dual);
-      this.app.post('/*', function(request, response) {
-        return response.redirect('/');
-      });
       this.app.post('/tgs-facebook/', function(request, response) {
         return response.redirect('/tgs-facebook/');
       });
