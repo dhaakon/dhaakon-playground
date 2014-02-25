@@ -8,7 +8,7 @@ class Map
 	renderer				:	null
 
 	type						:	'countries'
-	projectionType	: null	
+	projectionType	:	null	
 
 	scale						:	null
 	xOffset					: null
@@ -42,7 +42,7 @@ class Map
 	redis					:	[]
 
 	bgColor				:	'rgba(' + [ 230, 240, 220, 0.65].join(',') + ')'
-
+	
 	data						:	null
 	countries				:	null
 	neighbors				:	null
@@ -86,8 +86,6 @@ class Map
 		@group	=	@svg.append('g')
 		if Config['userType'] is 'user'
 			@group.on('mousedown', @onMouseDownHandler)
-									#.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", @zoomed))
-
 
 	createCanvas	:	()->
 		@canvas	=	d3.select(@container)
@@ -96,7 +94,6 @@ class Map
 							  .attr('height', @height)
 							  .attr('id', 'marker-canvas')
 								.on('click', @onMouseDownHandler)
-								#.call(d3.behavior.zoom().scaleExtent([@scaleMin,@scaleMax]).on('zoom', @zoomed))
 
 		@context =	@canvas.node().getContext('2d')
 		 
@@ -125,12 +122,8 @@ class Map
 				@context.stroke()
 
 	onServerUpdated		: (event)=>
-		#console.log event
-		#return
-
 		@redis.push event
 
-		#@drawBackground()
 		if @hasGrid then @drawGrid()
 
 		@drawCountries()
@@ -153,7 +146,6 @@ class Map
 		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
 		@createPoints 'redis', [], 'black'
-
 
 	drawBackground	:	()->
 		switch @renderer
@@ -193,9 +185,9 @@ class Map
 			@context.fillRect(coords[0], coords[1],size, size)
 
 		d[0].forEach(fn)
+
 	onLocationMouseOver		:		(obj)=>
-		console.log 'over'
-		console.log obj
+		return #noop
 
 	years :	[		
 					'.y2014-y2015'
@@ -225,7 +217,6 @@ class Map
 	createPoints	:	( name, data, @color )->
 		@[name] = @[name].concat data
 
-		#if name is 'students' then console.log  data
 		l = 0
 		switch @renderer
 			when 'svg'
@@ -237,24 +228,28 @@ class Map
 						.attr('fill', (d)=>
 							b = 0
 							a = @pointColors.length - 1
+							
 							if name is 'location' then _o = b else if name is 'faculty' then _o = a else i = 4
 							if d['Grade'] then _i = 2 else _i = _o
+
 							return @pointColors[_i]
 						)
 						.attr('class', (d)=>
 							if d['Grade'] then str = 'student grade' + d['Grade'] else str = name
-							if d['year']
-								if d['month'] > 8
+
+							if d['year']								
+								m = d['month']
+								if m > 8
 									_p = parseInt(d['year'].split('20')[1]) + 1
-									str += ' y' + d['year'] + '-y20' + _p
+									str += ' y' + d['year'] + '-y20' + _p + ' m' + m
 								else
 									_p = parseInt(d['year'].split('20')[1]) - 1
-									str += ' y20' + _p + '-y' + d['year']
-								console.log d
+									str += ' y20' + _p + '-y' + d['year'] + ' m' + m
 							if d['Year']
 								str += ' y' + d['Year']
 								_p = parseInt(d['Year'].split('20')[1]) + 1
 								str += '-y20' +  _p
+
 							return str
 						)
 						.attr('cx',(d)=>
@@ -394,9 +389,6 @@ class Map
 						 .enter()
 						 .call(fn)
 
-					
-					null
-
 	onMarkerMouseOver	:	(d)=>
 		EventManager.emitEvent Events.MARKER_FOCUS, [d]
 
@@ -414,8 +406,8 @@ class Map
 
 	drawCountries	:	()->
 		switch @renderer
-			try()
-				when 'svg'
+			when 'svg'
+				try
 					@group.selectAll('.country')
 						.data(@countries)
 						.enter().insert('path', '.graticule')
@@ -423,9 +415,8 @@ class Map
 						.attr('d', @path)
 						.style('fill', @fillNeighbors)
 						.style('stroke', 'rgba(100,100,255,1)')
-			catch (e)->
-				console.log e
-
+				catch error
+					console.log error
 
 			when 'canvas'
 				@context.save()
@@ -546,26 +537,6 @@ class Map
 			when 'svg'
 				@path = d3.geo.path()
 									.projection(@projection)
-
-	drawPointsOnCanvas :	()=>
-		#return
-		if not @data? then return
-
-		i = -1
-		n = @data.length - 1
-		
-		while ++i < n
-			d = @data[i]
-			p = @projection([d.tour_lat, d.tour_lon])
-			#@context.beginPath()
-			#@context.moveTo p[0], p[1]
-			#@canvas.fillRect( p[0], p[1], 10, 10)
-			#@context.arc(	p[0], p[1], 5, 0, 2 * Math.PI		)
-			#@context.closePath()
-			#@context.fill()
-
-		#@context.fill()
-
 
 	update			:	()=>
 		@drawMap()

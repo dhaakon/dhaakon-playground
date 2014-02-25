@@ -43,6 +43,7 @@ class Server
 		@app.get		'/loaders',												Router.loaders
 		@app.get		'/tgsData',												Router.thinkData
 		@app.get		'/tgs/:role',											Router.tgs
+		@app.get		'/tgs-facebook/',									Router.facebook
 		@app.get		'/location/:lat/:long',						Router.getlocation
 		@app.get		'/students/',											Router.getstudents
 		@app.get		'/faculty/',											Router.getfaculty

@@ -25,6 +25,17 @@
     return res.render('index', obj);
   };
 
+  exports.worldjson = function(req, res) {
+    var filename, fs;
+    fs = require('fs');
+    filename = 'public/json/world.json';
+    return fs.readFile(filename, 'utf-8', function(err, _data) {
+      var _d;
+      _d = eval(_data);
+      return res.send(_d);
+    });
+  };
+
   exports.loaders = function(req, res) {
     var obj;
     obj = {
@@ -508,6 +519,40 @@
       return geo.getLocationByCityName(loc, fn);
     };
     c = csv(_stream).on('data', cb).on('end', onEnd).parse();
+  };
+
+  exports.facebook = function(req, res) {
+    var arr, key, opt, opts, params, urlOption, urlOptions, value, _i, _len;
+    params = {
+      renderer: 'undefined',
+      grid: 'undefined',
+      rotate: 'undefined',
+      lines: 'undefined',
+      scale: 'undefined',
+      projectionKey: 'undefined',
+      velocity: 'undefined',
+      rotation: '0,0',
+      height: 'undefined',
+      width: 'undefined'
+    };
+    if (req.originalUrl.split('?').length > 1) {
+      urlOption = req.originalUrl.split('?')[1];
+      urlOptions = urlOption.split('&');
+      for (_i = 0, _len = urlOptions.length; _i < _len; _i++) {
+        opt = urlOptions[_i];
+        arr = opt.split('=');
+        key = arr[0];
+        value = arr[1];
+        params[key] = value;
+      }
+    }
+    opts = {
+      amount: 10,
+      role: 'user',
+      params: params,
+      port: req.app.settings.port
+    };
+    return res.render('tgs', opts);
   };
 
   exports.list = function(req, res) {

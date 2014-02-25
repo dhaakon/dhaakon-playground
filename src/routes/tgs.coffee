@@ -397,3 +397,39 @@ exports.tgslocations		=		( req, res)->
 	
 	return
 
+
+exports.facebook		=		( req, res ) ->
+	#console.log !req.originalUrl.split('?')
+	#console.log req
+	params =
+		renderer	:		'undefined'
+		grid			:		'undefined'
+		rotate		:		'undefined'
+		lines			:		'undefined'
+		scale			:		'undefined'
+		projectionKey		:		'undefined'
+		velocity	:		'undefined'
+		rotation	:		'0,0'
+		height		:		'undefined'
+		width			:		'undefined'
+
+	if req.originalUrl.split('?').length > 1
+		urlOption = req.originalUrl.split('?')[1]
+		urlOptions = urlOption.split('&')	
+
+		for opt in urlOptions
+			arr			=		opt.split('=')
+			key			=		arr[0]
+			value		=		arr[1]
+			params[key] = value
+
+	opts =
+		amount						:		10
+		role							:		'user'
+		params						:		params
+		port							:		req.app.settings.port
+
+	#console.log opts.params
+
+	res.render 'tgs', opts
+

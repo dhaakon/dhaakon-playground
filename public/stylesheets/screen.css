@@ -1209,6 +1209,11 @@ li {
   display: block;
 }
 
+/* line 158, ../../src/sass/tgs.scss */
+.location.y2010-y2011, .location.y2011-y2012, .location.y2012-y2013 {
+  fill: green;
+}
+
 /* line 15, ../../src/sass/screen.scss */
 body, html {
   /*height							:				100%;*/

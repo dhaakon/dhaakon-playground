@@ -256,7 +256,6 @@
       this.startRotation = startRotation;
       this.onDataRead = __bind(this.onDataRead, this);
       this.update = __bind(this.update, this);
-      this.drawPointsOnCanvas = __bind(this.drawPointsOnCanvas, this);
       this.createPath = __bind(this.createPath, this);
       this.createProjection = __bind(this.createProjection, this);
       this.updateCanvas = __bind(this.updateCanvas, this);
@@ -395,10 +394,7 @@
       return d[0].forEach(fn);
     };
 
-    Map.prototype.onLocationMouseOver = function(obj) {
-      console.log('over');
-      return console.log(obj);
-    };
+    Map.prototype.onLocationMouseOver = function(obj) {};
 
     Map.prototype.years = ['.y2014-y2015', '.y2013-y2014', '.y2012-y2013', '.y2011-y2012', '.y2010-y2012'];
 
@@ -449,21 +445,21 @@
             }
             return _this.pointColors[_i];
           }).attr('class', function(d) {
-            var str, _p;
+            var m, str, _p;
             if (d['Grade']) {
               str = 'student grade' + d['Grade'];
             } else {
               str = name;
             }
             if (d['year']) {
-              if (d['month'] > 8) {
+              m = d['month'];
+              if (m > 8) {
                 _p = parseInt(d['year'].split('20')[1]) + 1;
-                str += ' y' + d['year'] + '-y20' + _p;
+                str += ' y' + d['year'] + '-y20' + _p + ' m' + m;
               } else {
                 _p = parseInt(d['year'].split('20')[1]) - 1;
-                str += ' y20' + _p + '-y' + d['year'];
+                str += ' y20' + _p + '-y' + d['year'] + ' m' + m;
               }
-              console.log(d);
             }
             if (d['Year']) {
               str += ' y' + d['Year'];
@@ -591,8 +587,7 @@
               };
               return d[0].forEach(_f);
             };
-            this.canvas.select('canvas').data(this[this.lines[0]]).enter().call(fn);
-            _results.push(null);
+            _results.push(this.canvas.select('canvas').data(this[this.lines[0]]).enter().call(fn));
             break;
           default:
             _results.push(void 0);
@@ -620,9 +615,16 @@
     };
 
     Map.prototype.drawCountries = function() {
+      var error;
       switch (this.renderer) {
         case 'svg':
-          return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
+          try {
+            return this.group.selectAll('.country').data(this.countries).enter().insert('path', '.graticule').attr('class', 'country').attr('d', this.path).style('fill', this.fillNeighbors).style('stroke', 'rgba(100,100,255,1)');
+          } catch (_error) {
+            error = _error;
+            return console.log(error);
+          }
+          break;
         case 'canvas':
           this.context.save();
           this.context.fillStyle = 'rgba( 255, 255, 255, 0.5 )';
@@ -728,21 +730,6 @@
         case 'svg':
           return this.path = d3.geo.path().projection(this.projection);
       }
-    };
-
-    Map.prototype.drawPointsOnCanvas = function() {
-      var d, i, n, p, _results;
-      if (this.data == null) {
-        return;
-      }
-      i = -1;
-      n = this.data.length - 1;
-      _results = [];
-      while (++i < n) {
-        d = this.data[i];
-        _results.push(p = this.projection([d.tour_lat, d.tour_lon]));
-      }
-      return _results;
     };
 
     Map.prototype.update = function() {

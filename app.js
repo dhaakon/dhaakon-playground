@@ -147,6 +147,7 @@
       this.app.get('/loaders', Router.loaders);
       this.app.get('/tgsData', Router.thinkData);
       this.app.get('/tgs/:role', Router.tgs);
+      this.app.get('/tgs-facebook/', Router.facebook);
       this.app.get('/location/:lat/:long', Router.getlocation);
       this.app.get('/students/', Router.getstudents);
       this.app.get('/faculty/', Router.getfaculty);
