@@ -817,7 +817,7 @@
         _this = this;
       cb = function(data) {
         var opts;
-        return opts = {
+        opts = {
           location: {
             title: data.location,
             coords: [
@@ -828,6 +828,7 @@
             ]
           }
         };
+        return _this.socket.emit('gps', opts);
       };
       return EventManager.addListener(Events.MAP_CLICKED, cb);
     };
@@ -1084,6 +1085,7 @@
     TGS.prototype.onFacebookLogin = function(event) {
       var fn, id, src, uid,
         _this = this;
+      console.log(event);
       id = event.location.id;
       src = Config.FACEBOOK.location;
       uid = Math.random().toString(36).substr(2, 9);

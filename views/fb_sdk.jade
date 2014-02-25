@@ -7,7 +7,6 @@ block fb_sdk
 				status     : true,
 				xfbml      : true
 			});
-		
 		FB.Event.subscribe('auth.authResponseChange', function(response) {
 				if (response.status === 'connected') {
 					testAPI();
@@ -18,8 +17,6 @@ block fb_sdk
 				}
 			});
 		};
-		(function(d){
-
 		function testAPI() {
 			FB.api('/me', function(response) {
 				var eventManager	=	window.EventManager;
@@ -28,6 +25,5 @@ block fb_sdk
 				eventManager.emitEvent(events.FACEBOOK_LOGIN, [response]);
 			});
 		}
-
 	div#fb_app
 		//-rfb:login-button(show-faces="true" caption="false" width="200" max-rows="1")

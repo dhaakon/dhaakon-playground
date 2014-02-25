@@ -45,7 +45,7 @@ class SocketClient
 						latitude		:	data.longitude
 						longitude		:	data.latitude
 					]
-			#@socket.emit 'gps', opts
+			@socket.emit 'gps', opts
 
 		EventManager.addListener Events.MAP_CLICKED, cb
 

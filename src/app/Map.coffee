@@ -487,23 +487,6 @@ class Map
 									return 'translate(' + coords.join(',') + ')'
 							)
 
-				#l = @group.selectAll('group')
-						#.data(@data)
-						#.enter()
-						#.append('path')
-						#.attr('d', (d)=>
-							##debugger
-							#_d = d.location.coords[0] || d.location
-
-							#m = 'M' + coords.join(' ')
-							#l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
-
-							#return [m,l].join(' ')
-						#)
-						#.attr('stroke','rgba(0,0,250,0.2)')
-						#.attr('stroke-width', '1')
-						#.attr('fill','none')
-
 	zoomed			:	()=>
 		switch @renderer
 			when 'svg'

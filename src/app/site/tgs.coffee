@@ -181,6 +181,7 @@ class TGS
 		null
 		
 	onFacebookLogin		: (event)=>
+		console.log event
 		id  = event.location.id		
 
 		src = Config.FACEBOOK.location
