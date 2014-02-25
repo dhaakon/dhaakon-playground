@@ -427,6 +427,7 @@ exports.facebook		=		( req, res ) ->
 		amount						:		10
 		role							:		'user'
 		params						:		params
+		facebook					:		true
 		port							:		req.app.settings.port
 
 	#console.log opts.params

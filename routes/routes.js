@@ -550,6 +550,7 @@
       amount: 10,
       role: 'user',
       params: params,
+      facebook: true,
       port: req.app.settings.port
     };
     return res.render('tgs', opts);

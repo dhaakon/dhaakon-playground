@@ -7,6 +7,9 @@ block content
 	include loader
 	include url_config_javascript
 
+	- if (facebook)
+		include fb_sdk
+
 	div#main 
 		div#map-container
 	div#location-title

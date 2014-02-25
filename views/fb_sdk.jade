@@ -1,9 +1,18 @@
 block fb_sdk
 	div#fb-root
+	//-script(src="http://connect.facebook.net/en_US/all.js")
+	//-script(type="text/javascript").
+		//-FB.init({
+			//-appId: '203047383055979',
+			//-status: true,
+			//-cookie: true,
+			//-//-oauth: true
+		//-});
+
 	script.
 		window.fbAsyncInit = function() {
 			FB.init({
-				appId      : '203047383055979',
+				appId      : '830390820309511',
 				status     : true,
 				xfbml      : true
 			});
@@ -55,5 +64,5 @@ block fb_sdk
 				eventManager.emitEvent(events.FACEBOOK_LOGIN, [response]);
 			});
 		}
-	div#fb_app
-		fb:login-button(show-faces="true" caption="false" width="200" max-rows="1")
+	//-div#fb_app
+		//-fb:login-button(show-faces="true" caption="false" width="200" max-rows="1")
