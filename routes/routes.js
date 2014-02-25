@@ -528,7 +528,7 @@
       grid: false,
       rotate: false,
       lines: false,
-      scale: 240,
+      scale: 300,
       projectionKey: 4,
       velocity: 'undefined',
       rotation: '0,0',
