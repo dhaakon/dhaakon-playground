@@ -84,7 +84,7 @@
         return _this.redis.client.get('keys', function(err, resp) {
           var keys, obj;
           obj = JSON.stringify(req.data);
-          keys = JSON.parse(resp) || {
+          keys = {
             locations: []
           };
           keys.locations.push(obj);
