@@ -485,8 +485,8 @@ class Map
 		#debugger
 		_h = @markerLocator.height()
 		_w = @markerLocator.width()
-		_x = coords[0] + _h
-		_y = coords[1] + _w
+		_x = coords[0] - (_h/2)
+		_y = coords[1] - (_w/2)
 	
 		opts =
 			left :	_x + 'px',
