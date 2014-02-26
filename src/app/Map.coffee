@@ -505,7 +505,15 @@ class Map
 				@updateCanvas d3.event.translate, d3.event.scale
 
 	updateSVG		:	( pos, scale)	=>
-		_str	=	'matrix(' + scale + ',0,0,' + scale + ',' +	pos.join(',') + ')'
+		@group.attr('transform', 'translate(' + pos.join(',') + ') scale('+ scale + ')')
+
+		return
+		tx = Math.min(0, Math.max(@width * (1 - scale), pos[0]))
+		ty = Math.min(0, Math.max(@height * (1 - scale), pos[1]))
+
+		l = @projection.translate([tx, ty])
+		
+		_str	=	'matrix(' + scale + ',0,0,' + scale + ',' + pos[0] + ',' + pos[1] + ')'
 		@group.attr('transform', _str)
 
 	updateCanvas	:	( pos, scale)	=>
@@ -554,5 +562,10 @@ class Map
 		@drawMap()
 
 		@addListeners()
+
+		if @renderer is 'svg'
+			@group.call(d3.behavior.zoom()
+				.scaleExtent([1, 8])
+				.on("zoom", @zoomed))
 
 		EventManager.emitEvent(Events.MAP_LOADED)

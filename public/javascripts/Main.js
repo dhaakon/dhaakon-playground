@@ -721,8 +721,13 @@
     };
 
     Map.prototype.updateSVG = function(pos, scale) {
-      var _str;
-      _str = 'matrix(' + scale + ',0,0,' + scale + ',' + pos.join(',') + ')';
+      var l, tx, ty, _str;
+      this.group.attr('transform', 'translate(' + pos.join(',') + ') scale(' + scale + ')');
+      return;
+      tx = Math.min(0, Math.max(this.width * (1 - scale), pos[0]));
+      ty = Math.min(0, Math.max(this.height * (1 - scale), pos[1]));
+      l = this.projection.translate([tx, ty]);
+      _str = 'matrix(' + scale + ',0,0,' + scale + ',' + pos[0] + ',' + pos[1] + ')';
       return this.group.attr('transform', _str);
     };
 
@@ -765,6 +770,9 @@
       this.createPath();
       this.drawMap();
       this.addListeners();
+      if (this.renderer === 'svg') {
+        this.group.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed));
+      }
       return EventManager.emitEvent(Events.MAP_LOADED);
     };
 
