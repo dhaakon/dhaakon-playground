@@ -175,7 +175,8 @@
     SOCKET_CONNECTED: 'onSocketConnected',
     ON_DATE_SELECT: 'onDateSelect',
     FACEBOOK_LOGIN: 'onFacebookLogin',
-    FACEBOOK_LOADED: 'onFacebookMarkersLoaded'
+    FACEBOOK_LOADED: 'onFacebookMarkersLoaded',
+    USER_LOCATING: 'onUserLocating'
   };
 
   Map = (function() {
@@ -247,6 +248,8 @@
 
     Map.prototype.arc = -100;
 
+    Map.prototype.markerLocator = null;
+
     Map.prototype.startRotation = [0, -15];
 
     function Map(src, width, height, container, renderer, scale, projectionKey, hasGrid, startRotation) {
@@ -277,8 +280,10 @@
       this.createPoint = __bind(this.createPoint, this);
       this.onServerStarted = __bind(this.onServerStarted, this);
       this.onServerUpdated = __bind(this.onServerUpdated, this);
+      this.onLocatingUser = __bind(this.onLocatingUser, this);
       this.projectionType = Config[Config.userType].Map.projections[this.projectionKey];
       this.loadFromConfig();
+      this.markerLocator = $('#marker');
       if (this.renderer === 'canvas') {
         this.createCanvas();
       } else {
@@ -298,16 +303,18 @@
     Map.prototype.addListeners = function() {
       EventManager.addListener(Events.SERVER_UPDATED, this.onServerUpdated);
       EventManager.addListener(Events.SERVER_STARTED, this.onServerStarted);
-      return EventManager.addListener(Events.ON_DATE_SELECT, this.onDateSelect);
+      EventManager.addListener(Events.ON_DATE_SELECT, this.onDateSelect);
+      return EventManager.addListener(Events.USER_LOCATING, this.onLocatingUser);
     };
 
     Map.prototype.createSVG = function() {
       this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height).call(d3.behavior.zoom, this.zoom);
       console.log(Config['userType'] === 'user');
-      this.group = this.svg.append('g');
-      if (Config['userType'] === 'user') {
-        return this.group.on('mousedown', this.onMouseDownHandler);
-      }
+      return this.group = this.svg.append('g');
+    };
+
+    Map.prototype.onLocatingUser = function() {
+      return this.group.on('mousedown', this.onMouseDownHandler);
     };
 
     Map.prototype.createCanvas = function() {
@@ -658,6 +665,7 @@
 
     Map.prototype.onLocationReceived = function(err, data) {
       var city, country, loc, obj, state;
+      console.log(err, data);
       if (data[0] != null) {
         country = data[0].country;
         if (country === 'United States') {
@@ -683,20 +691,24 @@
     };
 
     Map.prototype.onMouseDownHandler = function() {
-      var c, coords, geo_loc, str, _m,
-        _this = this;
+      var coords, geo_loc, opts, str, _h, _m, _w, _x, _y;
       _m = d3.event;
       coords = [_m['offsetX'], _m['offsetY']];
-      console.log(coords);
       geo_loc = this.projection.invert(coords);
       str = '/location/' + geo_loc.join('/') + '/';
+      console.log(str);
       d3.json(str, this.onLocationReceived);
-      switch (this.renderer) {
-        case 'svg':
-          return c = this.group.append('circle').attr('r', this.markerSize).attr('fill', 'rgba(150,100,0,0.8)').attr('transform', function(d) {
-            return 'translate(' + coords.join(',') + ')';
-          });
-      }
+      _h = this.markerLocator.height();
+      _w = this.markerLocator.width();
+      _x = coords[0] + _h;
+      _y = coords[1] + _w;
+      opts = {
+        left: _x + 'px',
+        top: _y + 'px',
+        opacity: 1
+      };
+      this.markerLocator.css(opts);
+      return this.group.on('mousedown', null);
     };
 
     Map.prototype.zoomed = function() {
@@ -787,6 +799,13 @@
     };
 
     SocketClient.prototype.addListeners = function() {
+      switch (Config.userType) {
+        case 'user':
+          this.socket.on('location', this.onLocationHandler);
+          break;
+        case 'facebook':
+          this.socket.on('location', this.onLocationHandler);
+      }
       this.socket.on('connection', this.onConnectionHandler);
       this.socket.on('connect', this.connect);
       this.socket.on('data', this.data);
@@ -804,8 +823,6 @@
     SocketClient.prototype.onMapLoaded = function(event) {
       console.log('map loaded');
       switch (Config.userType) {
-        case 'user':
-          return this.socket.on('location', this.onLocationHandler);
         case 'display':
           this.socket.on('receiveResponse', this.onReceiveHandler);
           this.socket.on('locationsLoaded', this.onLocationsLoaded);
@@ -817,8 +834,10 @@
     SocketClient.prototype.onLocationHandler = function(data) {
       var cb,
         _this = this;
+      console.log('location');
       cb = function(data) {
         var opts;
+        console.log('map clicked');
         opts = {
           location: {
             title: data.location,
@@ -923,6 +942,7 @@
       this.onMapLoaded = __bind(this.onMapLoaded, this);
       this.onFacebookLogin = __bind(this.onFacebookLogin, this);
       this.onFacebookMarkersLoaded = __bind(this.onFacebookMarkersLoaded, this);
+      this.addUserLocator = __bind(this.addUserLocator, this);
       this.onSocketConnected = __bind(this.onSocketConnected, this);
       this.loop = __bind(this.loop, this);
       this.changeTitle = __bind(this.changeTitle, this);
@@ -944,15 +964,21 @@
     }
 
     TGS.prototype.changeTitle = function(event) {
-      var _this = this;
-      this.title.animate({
+      var el, l;
+      if (typeof event.location === "string") {
+        l = event.location;
+      } else {
+        l = event.location.title;
+      }
+      if (Config.userType === 'user') {
+        el = $('#marker-icon');
+        el.removeClass('active');
+        el.addClass('inactive');
+      }
+      this.title.css({
         'opacity': 1
-      }, 'fast', function() {
-        return _this.title.delay(1100).animate({
-          opacity: 0
-        }, 'slow');
       });
-      return this.title.html('<p>' + event.location.title + '</p>');
+      return this.title.html('<p>' + l + '</p>');
     };
 
     TGS.prototype.loadFromConfig = function() {
@@ -1073,9 +1099,31 @@
     TGS.prototype.addListeners = function() {
       EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
       EventManager.addListener(Events.SERVER_UPDATED, this.changeTitle);
+      EventManager.addListener(Events.MAP_CLICKED, this.changeTitle);
       EventManager.addListener(Events.SOCKET_CONNECTED, this.onSocketConnected);
       EventManager.addListener(Events.FACEBOOK_LOGIN, this.onFacebookLogin);
-      return EventManager.addListener(Events.FACEBOOK_LOADED, this.onFacebookMarkersLoaded);
+      EventManager.addListener(Events.FACEBOOK_LOADED, this.onFacebookMarkersLoaded);
+      if (Config.userType === 'user') {
+        return this.addUserLocator();
+      }
+    };
+
+    TGS.prototype.isSelectingLocation = false;
+
+    TGS.prototype.addUserLocator = function() {
+      var f, userElement,
+        _this = this;
+      console.log('adding user locator');
+      f = function(event) {
+        var a;
+        _this.isSelectingLocation = true;
+        a = $(event.currentTarget);
+        a.addClass('active');
+        a.removeClass('inactive');
+        return EventManager.emitEvent(Events.USER_LOCATING, [event]);
+      };
+      userElement = $('#marker-icon');
+      return userElement.on('click', f);
     };
 
     TGS.prototype.onFacebookMarkersLoaded = function(event) {

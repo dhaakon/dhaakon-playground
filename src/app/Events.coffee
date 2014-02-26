@@ -11,3 +11,4 @@ window.Events = Events	=
 	ON_DATE_SELECT		:	'onDateSelect'
 	FACEBOOK_LOGIN		:	'onFacebookLogin'
 	FACEBOOK_LOADED		:	'onFacebookMarkersLoaded'
+	USER_LOCATING			:	'onUserLocating'

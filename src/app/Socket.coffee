@@ -13,6 +13,12 @@ class SocketClient
 		@addListeners()
 
 	addListeners						:		()->
+		switch Config.userType
+			when 'user'
+				@socket.on 'location', @onLocationHandler
+			when 'facebook'
+				@socket.on 'location', @onLocationHandler
+
 		@socket.on 'connection', @onConnectionHandler
 		@socket.on 'connect', @connect
 		@socket.on 'data', @data
@@ -27,9 +33,6 @@ class SocketClient
 	onMapLoaded							:		(event)=>
 		console.log 'map loaded'
 		switch Config.userType
-			when 'user'
-				@socket.on 'location', @onLocationHandler
-
 			when 'display'
 				@socket.on 'receiveResponse', @onReceiveHandler
 				@socket.on 'locationsLoaded', @onLocationsLoaded
@@ -37,7 +40,9 @@ class SocketClient
 				@socket.emit 'serverStarted'
 
 	onLocationHandler				:		( data )=>
+		console.log 'location'
 		cb = (data) =>
+			console.log 'map clicked'
 			opts=
 				location		:	
 					title :		data.location
@@ -45,6 +50,7 @@ class SocketClient
 						latitude		:	data.longitude
 						longitude		:	data.latitude
 					]
+	
 			@socket.emit 'gps', opts
 
 		EventManager.addListener Events.MAP_CLICKED, cb

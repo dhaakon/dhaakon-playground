@@ -50,12 +50,15 @@ class Map
 	neighbors				:	null
 	hasGrid					:	true
 	arc							:	-100
+	markerLocator		:	null
 
 	startRotation		:	[ 0, -15 ]
 
 	constructor		:	(@src, @width, @height, @container, @renderer, @scale, @projectionKey, @hasGrid, @startRotation)->
 		@projectionType = Config[Config.userType].Map.projections[	@projectionKey ]
 		@loadFromConfig()
+
+		@markerLocator = $ '#marker'
 
 		if @renderer is 'canvas'
 			@createCanvas()
@@ -75,6 +78,7 @@ class Map
 		EventManager.addListener Events.SERVER_UPDATED, @onServerUpdated
 		EventManager.addListener Events.SERVER_STARTED, @onServerStarted
 		EventManager.addListener Events.ON_DATE_SELECT, @onDateSelect
+		EventManager.addListener Events.USER_LOCATING,  @onLocatingUser
 
 	createSVG		:	()->
 		@svg	=	d3.select(@container)
@@ -87,9 +91,9 @@ class Map
 		console.log Config['userType'] is 'user'
 
 		@group	=	@svg.append('g')
-		
-		if Config['userType'] is 'user'
-			@group.on('mousedown', @onMouseDownHandler)
+
+	onLocatingUser	: ()=>
+		@group.on('mousedown', @onMouseDownHandler)
 
 	createCanvas	:	()->
 		@canvas	=	d3.select(@container)
@@ -446,6 +450,7 @@ class Map
 		m = d3.event.wheelDeltaY
 
 	onLocationReceived	: (err, data)=>
+		console.log err, data
 		if data[0]?
 			country		=	data[0].country
 			if country is 'United States'
@@ -463,31 +468,34 @@ class Map
 				location	:	loc
 				latitude	:	data[0].longitude
 				longitude	:	data[0].latitude
-
 			EventManager.emitEvent Events.MAP_CLICKED, [obj]
  
 	onMouseDownHandler	:		()=>
 		#return #for now
 		_m = d3.event
 		coords = [_m['offsetX'], _m['offsetY']]
-		console.log coords
 
 		geo_loc = @projection.invert(coords)
 
 		## get location
 		str = '/location/' + geo_loc.join('/') + '/'
+		console.log str
 
 		d3.json str, @onLocationReceived
 		#debugger
+		_h = @markerLocator.height()
+		_w = @markerLocator.width()
+		_x = coords[0] + _h
+		_y = coords[1] + _w
 	
-		switch @renderer
-			when 'svg'
-				c = @group.append('circle')
-							.attr('r', @markerSize )
-							.attr('fill', 'rgba(150,100,0,0.8)')
-							.attr('transform', (d)=>
-									return 'translate(' + coords.join(',') + ')'
-							)
+		opts =
+			left :	_x + 'px',
+			top	 :	_y + 'px',
+			opacity : 1
+
+		@markerLocator.css(opts)	
+		@group.on('mousedown', null)
+
 
 	zoomed			:	()=>
 		switch @renderer

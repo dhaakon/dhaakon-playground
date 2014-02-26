@@ -62,8 +62,15 @@ class TGS
 		@socket			=		new SocketClient(url, Config.userType)
 
 	changeTitle		:		(event)=>
-		@title.animate( {'opacity': 1}, 'fast', ()=> @title.delay(1100).animate {opacity: 0}, 'slow')
-		@title.html	'<p>' + event.location.title + '</p>'
+		if typeof event.location is "string" then l = event.location else l = event.location.title
+
+		if Config.userType == 'user'
+			el = $ '#marker-icon'
+			el.removeClass 'active'
+			el.addClass 'inactive'
+
+		@title.css( {'opacity': 1})
+		@title.html	'<p>' + l + '</p>'
 
 	loadFromConfig	:		()->
 		@mapHeight			=		Config[Config.userType].Map.height
@@ -169,12 +176,27 @@ class TGS
 
 		EventManager.addListener Events.MAP_LOADED,			@onMapLoaded
 		EventManager.addListener Events.SERVER_UPDATED,			@changeTitle
+		EventManager.addListener Events.MAP_CLICKED,			@changeTitle
 		EventManager.addListener Events.SOCKET_CONNECTED,		@onSocketConnected
 		EventManager.addListener Events.FACEBOOK_LOGIN,		@onFacebookLogin
 		EventManager.addListener Events.FACEBOOK_LOADED,		@onFacebookMarkersLoaded
-	
+
+		if Config.userType is 'user' then @addUserLocator()
 		#$('#year-dropdown').on 'change', (e)->EventManager.emitEvent Events.ON_DATE_SELECT,[e.target.value]
-	
+	isSelectingLocation				:		false
+	addUserLocator						:		()=>
+		
+		console.log 'adding user locator'
+		f = (event)=>
+			@isSelectingLocation = true
+			a = $ event.currentTarget
+			a.addClass 'active'
+			a.removeClass 'inactive'
+			EventManager.emitEvent Events.USER_LOCATING, [event]
+			
+		userElement = $ '#marker-icon'
+		userElement.on 'click', f
+
 	onFacebookMarkersLoaded		:		(event)		=>
 		console.log event
 		@map.createPoints 'facebook', event.locations, 'blue'
