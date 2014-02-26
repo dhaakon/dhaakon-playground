@@ -10,17 +10,18 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
-@import "tgs";
 
 body, html{
 	/*height							:				100%;*/
 }
 
 $sand		:		rgba(242,236,223,1);
+$gold		:		rgba(172,166,153,0.8);
 
 body{
-  background					:				$sand;
+	@include radial-gradient($gold, $sand, $fallback: $sand);
 }
+@import "tgs";
 
 #content{
 	position				:	absolute;

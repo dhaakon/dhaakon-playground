@@ -12,6 +12,7 @@ block content
 
 	- if (facebook != null)
 		include fb_sdk
+
 	
 	div#marker
 	div#logo
@@ -40,6 +41,10 @@ block content
 					li#facebook
 						span.icon(style='background:rgba(65,121,151,1);')
 						h2 Facebook
+			- if (role == 'user')
+				div#marker-icon.inactive
+					img.inactive(src='/assets/images/marker_small.png')
+
 		div#location-title
 
 

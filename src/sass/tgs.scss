@@ -108,6 +108,42 @@ $grades : 4;
 	opacity			:	0;
 	/*-webkit-transform: scale(0.5);*/
 }
+#marker-icon{
+	background	: rgba(242,236,223,0.6);
+	position		:		absolute;
+	width				:		48px;
+	height			:		48px;
+	z-index			:		5000;
+	right				:		30px;
+	bottom			:		20px;
+	border-radius:2px;
+	border			:1px solid #d3d3d3;
+
+	.active{
+		background	:		rgba(142,136,123, 0.6);
+		opacty			:		1;
+	}
+	
+
+	img{
+			width:28px;
+			height:28px;
+			margin:10px;
+			opacity: 0.6;
+	}
+
+}
+
+.inactive{
+	/*margin			:		20px;*/
+	opacity			:		0.6;
+}
+
+
+#marker-icon:hover{
+	opacity :		1;
+}
+
 //LOGO
 #logo{
 	position: relative;
@@ -139,7 +175,7 @@ $grades : 4;
 	}
 	li{
 		display:block;
-		background:white;
+		background:rgba(255,255,233,0.6);
 		position:relative;
 		/*width:70%;*/
 		margin-top:5px;
@@ -222,8 +258,8 @@ $grades : 4;
 	fill				:		rgba(91,164,174,1);
 }
 
-$cntry : rgba( 240, 200, 100, 1);
+$cntry : rgba(172,166,153,0.5);
 
 .country{
-	/*fill:$cntry !important;*/
+	fill:$cntry !important;
 }

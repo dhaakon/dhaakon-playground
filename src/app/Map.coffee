@@ -25,7 +25,7 @@ class Map
 	height					:	null
 	container				:	null
 	projection			:	null
-	countryStroke :		'rgba(100,100,255,1)'
+	countryStroke :		'rgba(72,66,53,0.5)'
 
 	pointColors		: [
 										Config.Graphics.Colors.location,	
@@ -43,7 +43,7 @@ class Map
 	faculty				:	[]
 	tedxteen					:	[]
 
-	bgColor				:	'rgba(' + [ 230, 240, 220, 0.65].join(',') + ')'
+	bgColor				: 'rgba(242,236,223,0.4)';	
 	
 	data						:	null
 	countries				:	null

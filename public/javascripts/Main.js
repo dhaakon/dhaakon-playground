@@ -219,7 +219,7 @@
 
     Map.prototype.projection = null;
 
-    Map.prototype.countryStroke = 'rgba(100,100,255,1)';
+    Map.prototype.countryStroke = 'rgba(72,66,53,0.5)';
 
     Map.prototype.pointColors = [Config.Graphics.Colors.location, Config.Graphics.Colors.grade['9'], Config.Graphics.Colors.grade['10'], Config.Graphics.Colors.grade['11'], Config.Graphics.Colors.grade['12'], Config.Graphics.Colors.faculty];
 
@@ -235,7 +235,7 @@
 
     Map.prototype.tedxteen = [];
 
-    Map.prototype.bgColor = 'rgba(' + [230, 240, 220, 0.65].join(',') + ')';
+    Map.prototype.bgColor = 'rgba(242,236,223,0.4)';
 
     Map.prototype.data = null;
 
