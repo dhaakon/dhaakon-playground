@@ -26,7 +26,6 @@ module.exports = (grunt) ->
 					config   : './src/config.rb'
 					cssDir   : './public/stylesheets/'
 
-
 		copy  :
 			main	:
 				cwd			:	'./'
@@ -72,6 +71,7 @@ module.exports = (grunt) ->
 				output		:	'./public/javascripts/Main.js'
 				main	  	:	'Main.coffee'
 				compile		:	true
+				#opts		:	'--minify'
 
 			server		:
 				source		:	'./src/express/'
@@ -91,7 +91,6 @@ module.exports = (grunt) ->
 				main	:	'main.coffee'
 				compile	:	true
 				#opts	:	'--bare'
-
 
 		express		:
 			prod		:

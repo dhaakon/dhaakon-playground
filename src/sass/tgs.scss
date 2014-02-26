@@ -10,6 +10,7 @@
 	height			:		auto;
 	margin			:		0 auto;
 	display			:		block;
+	position		:		relative;
 	/*margin-top	:		50px;*/
 }
 
@@ -17,6 +18,7 @@
 	margin	:		0 auto;
 	width		:		100%;
 	height	:		100%;
+	position:		relative;
 }
 #marker-canvas{
 	/*-webkit-transform		:		scale3d(2,2,2);*/
@@ -95,7 +97,7 @@ $grades : 4;
 }
 // Marker
 #marker{
-	background	: url('/images/marker.png');
+	background	: url('/assets/images/marker.png');
 	display			:	block;
 	position		:	absolute;
 	z-index			:	1000;
@@ -103,8 +105,21 @@ $grades : 4;
 	height			:	50px;
 	left				:	5px;
 	right				:	5px;
+	opacity			:	0;
 	/*-webkit-transform: scale(0.5);*/
 }
+//LOGO
+#logo{
+	position: relative;
+	margin: 0 auto;
+	width: 300px;
+	background: url('/assets/images/tgs_logo_medium.png');
+	z-index:3000;
+	height:75px
+}
+
+
+
 // PANEL
 
 .marker-type{
@@ -165,8 +180,8 @@ $grades : 4;
 }
 
 .people{
-	bottom			:		100px;
-	left				:		100px;
+	bottom			:		20px;
+	left				:		30px;
 	padding: 10px;
 	padding-top: 8px;
 }

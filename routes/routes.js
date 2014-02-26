@@ -528,12 +528,12 @@
       grid: false,
       rotate: false,
       lines: false,
-      scale: 300,
+      scale: 250,
       projectionKey: 4,
       velocity: 'undefined',
       rotation: '0,0',
-      height: 'undefined',
-      width: 'undefined'
+      height: 800,
+      width: 1600
     };
     if (req.originalUrl.split('?').length > 1) {
       urlOption = req.originalUrl.split('?')[1];
