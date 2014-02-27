@@ -203,6 +203,7 @@ class TGS
 		null
 		
 	onFacebookLogin		: (event)=>
+		console.log 'facebook loaded'
 		console.log event
 		id  = event.location.id		
 

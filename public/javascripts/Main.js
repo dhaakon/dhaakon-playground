@@ -1143,6 +1143,7 @@
     TGS.prototype.onFacebookLogin = function(event) {
       var fn, id, src, uid,
         _this = this;
+      console.log('facebook loaded');
       console.log(event);
       id = event.location.id;
       src = Config.FACEBOOK.location;
