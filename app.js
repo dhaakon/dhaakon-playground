@@ -96,7 +96,7 @@
         return _this.redis.client.get('facebook', function(err, resp) {
           var a, b, keys, o, obj;
           obj = req.data;
-          keys = {
+          keys = JSON.parse(resp) || {
             locations: []
           };
           console.log(keys);

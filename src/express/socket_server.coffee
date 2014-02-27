@@ -43,7 +43,7 @@ class SocketServer
 			@redis.client.get 'facebook', (err,resp)=>
 				obj = req.data
 
-				keys = {locations : []}
+				keys = JSON.parse(resp) || {locations : []}
 				console.log keys
 
 				if keys
