@@ -73,6 +73,7 @@
           var obj;
           obj = JSON.stringify(resp);
           console.log('facebookLoaded');
+          console.log(obj);
           return _this.socket.io.sockets.emit('facebookLoaded', obj);
         });
       });
@@ -94,8 +95,8 @@
       return this.app.io.route('facebook', function(req) {
         return _this.redis.client.get('facebook', function(err, resp) {
           var a, b, keys, o, obj;
-          obj = JSON.stringify(req.data);
-          keys = JSON.parse(resp) || {
+          obj = req.data;
+          keys = {
             locations: []
           };
           console.log(keys);

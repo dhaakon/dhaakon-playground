@@ -16,6 +16,7 @@ class SocketServer
 			@redis.client.get 'facebook', (err, resp)=>
 				obj = JSON.stringify resp		
 				console.log 'facebookLoaded'
+				console.log obj
 				
 				@socket.io.sockets.emit 'facebookLoaded', obj
 		)
@@ -40,9 +41,9 @@ class SocketServer
 
 		@app.io.route('facebook', (req)=>
 			@redis.client.get 'facebook', (err,resp)=>
-				obj = JSON.stringify req.data
+				obj = req.data
 
-				keys = JSON.parse(resp) || {locations : []}
+				keys = {locations : []}
 				console.log keys
 
 				if keys
