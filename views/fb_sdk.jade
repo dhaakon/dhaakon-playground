@@ -9,10 +9,13 @@ block fb_sdk
 			});
 		FB.Event.subscribe('auth.authResponseChange', function(response) {
 				if (response.status === 'connected') {
+					console.log('fb connected');	
 					testAPI();
 				} else if (response.status === 'not_authorized') {
+					console.log('fb unauthorized');
 					FB.login();
 				} else {
+					console.log('fb unknown exception');
 					FB.login();
 				}
 			});
@@ -33,4 +36,4 @@ block fb_sdk
 			});
 		}
 	div#fb_app
-		//-rfb:login-button(show-faces="true" caption="false" width="200" max-rows="1")
+		fb:login-button(show-faces="true" caption="false" width="200" max-rows="1")
