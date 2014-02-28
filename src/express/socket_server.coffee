@@ -29,8 +29,8 @@ class SocketServer
 			@redis.client.get 'keys', (err, resp)=>
 				obj = JSON.stringify req.data
 
-				#keys = JSON.parse(resp) || {locations : []}
-				keys = {locations : []}
+				keys = JSON.parse(resp) || {locations : []}
+				#keys = {locations : []}
 				keys.locations.push obj
 
 				@redis.client.set 'keys', JSON.stringify(keys)

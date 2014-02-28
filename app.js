@@ -72,8 +72,6 @@
         return _this.redis.client.get('facebook', function(err, resp) {
           var obj;
           obj = JSON.stringify(resp);
-          console.log('facebookLoaded');
-          console.log(obj);
           return _this.socket.io.sockets.emit('facebookLoaded', obj);
         });
       });
@@ -85,7 +83,7 @@
         return _this.redis.client.get('keys', function(err, resp) {
           var keys, obj;
           obj = JSON.stringify(req.data);
-          keys = {
+          keys = JSON.parse(resp) || {
             locations: []
           };
           keys.locations.push(obj);
@@ -120,9 +118,7 @@
       return socket.emit('location');
     };
 
-    SocketServer.prototype.onGPSHandler = function(event) {
-      return console.log(event);
-    };
+    SocketServer.prototype.onGPSHandler = function(event) {};
 
     return SocketServer;
 
