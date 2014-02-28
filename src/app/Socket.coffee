@@ -1,6 +1,6 @@
 class SocketClient
 	socket	:		null
-	constructor							: (@host, @type)->
+	constructor							: (@host, @type, @isFacebook)->
 		@createSocketConnection()
 
 	createSocketConnection	:		()->
@@ -9,8 +9,11 @@ class SocketClient
 		
 		EventManager.addListener Events.MAP_LOADED, @onMapLoaded
 
-		@socket = io.connect()
-		@addListeners()
+		if @isFacebook is false
+			@socket = io.connect()
+			@addListeners()
+		else
+			EventManager.emitEvent Events.SOCKET_CONNECTED
 
 	addListeners						:		()->
 		switch Config.userType
@@ -31,6 +34,9 @@ class SocketClient
 	error										:		(error)->
 
 	onMapLoaded							:		(event)=>
+		#console.log Config.isFacebook
+		#console.log Config
+		if Config.isFacebook then return
 		switch Config.userType
 			when 'display'
 				@socket.on 'receiveResponse', @onReceiveHandler

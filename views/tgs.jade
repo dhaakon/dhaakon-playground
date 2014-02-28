@@ -6,8 +6,8 @@ block added-scripts
 block content
 	include loader
 	include url_config_javascript
-	- if (facebook != null)
-		include fb_sdk
+	//-- if (facebook != false)
+		//-include fb_sdk
 
 	header
 		div#logo
@@ -41,9 +41,9 @@ block content
 						li#tedxteen
 							span.icon(style='background:rgba(210,100,54,1);')
 							h2 TedXTeen
-						li#facebook
-							span.icon(style='background:rgba(65,121,151,1);')
-							h2 Facebook
+						//-li#facebook
+							//-span.icon(style='background:rgba(65,121,151,1);')
+							//-h2 Facebook
 				div#location-title-container
 					div#location-title
 		- if (role == 'user')

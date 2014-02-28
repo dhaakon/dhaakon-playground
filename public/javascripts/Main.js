@@ -793,9 +793,10 @@
   SocketClient = (function() {
     SocketClient.prototype.socket = null;
 
-    function SocketClient(host, type) {
+    function SocketClient(host, type, isFacebook) {
       this.host = host;
       this.type = type;
+      this.isFacebook = isFacebook;
       this.onLocationsLoaded = __bind(this.onLocationsLoaded, this);
       this.onFacebookLoaded = __bind(this.onFacebookLoaded, this);
       this.onConnectionHandler = __bind(this.onConnectionHandler, this);
@@ -812,8 +813,12 @@
         port: Config.port
       };
       EventManager.addListener(Events.MAP_LOADED, this.onMapLoaded);
-      this.socket = io.connect();
-      return this.addListeners();
+      if (this.isFacebook === false) {
+        this.socket = io.connect();
+        return this.addListeners();
+      } else {
+        return EventManager.emitEvent(Events.SOCKET_CONNECTED);
+      }
     };
 
     SocketClient.prototype.addListeners = function() {
@@ -839,6 +844,9 @@
     SocketClient.prototype.error = function(error) {};
 
     SocketClient.prototype.onMapLoaded = function(event) {
+      if (Config.isFacebook) {
+        return;
+      }
       switch (Config.userType) {
         case 'display':
           this.socket.on('receiveResponse', this.onReceiveHandler);
@@ -973,7 +981,7 @@
         height: this.mapHeight
       });
       this.addListeners();
-      this.socket = new SocketClient(url, Config.userType);
+      this.socket = new SocketClient(url, Config.userType, Config.isFacebook);
     }
 
     TGS.prototype.maxLocationWdith = 500;
@@ -1061,7 +1069,6 @@
     };
 
     TGS.prototype.onSocketConnected = function() {
-      console.log('socket connected');
       this.createMap();
       return this.addPanelHover();
     };

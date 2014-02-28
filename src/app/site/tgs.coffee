@@ -62,15 +62,16 @@ class TGS
 
 		@addListeners()
 
-		@socket			=		new SocketClient(url, Config.userType)
+		@socket			=		new SocketClient(url, Config.userType, Config.isFacebook)
+
 	maxLocationWdith	:		500
 	changeTitle		:		(event)=>
 		if typeof event.location is "string" then l = event.location else l = event.location.title
 
 		if Config.userType == 'user'
 			el = $ '#marker-icon'
-			el.removeClass 'active'
-			el.addClass 'inactive'
+			el.removeClass	'active'
+			el.addClass			'inactive'
 
 		len =  Math.min (l.length * Math.max(l.length, 15)), @maxLocationWdith
 
@@ -124,8 +125,6 @@ class TGS
 		@booking = new Booking @CSV_PATH
 
 	onSocketConnected	: ()=>
-		console.log 'socket connected'
-		
 		@createMap()
 		@addPanelHover()
 

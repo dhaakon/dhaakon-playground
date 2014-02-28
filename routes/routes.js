@@ -280,7 +280,8 @@
       amount: 10,
       role: req.params['role'],
       params: params,
-      port: req.app.settings.port
+      port: req.app.settings.port,
+      facebook: false
     };
     return res.render('tgs', opts);
   };
@@ -528,12 +529,12 @@
       grid: false,
       rotate: false,
       lines: false,
-      scale: 250,
+      scale: 0,
       projectionKey: 4,
       velocity: 'undefined',
       rotation: '0,0',
-      height: 800,
-      width: 1600
+      height: 'undefined',
+      width: 'undefined'
     };
     if (req.originalUrl.split('?').length > 1) {
       urlOption = req.originalUrl.split('?')[1];
@@ -548,7 +549,7 @@
     }
     opts = {
       amount: 10,
-      role: 'user',
+      role: 'display',
       params: params,
       facebook: true,
       port: req.app.settings.port

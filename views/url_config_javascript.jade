@@ -5,6 +5,7 @@ block url_config_javascript
 			|	Config = window.Config || {};
 			|	Config.userType				=	!{JSON.stringify(role)};
 			|	Config.port = !{port}
+			|	Config.isFacebook = !{facebook}
 
 			|	Config[Config.userType].Settings.renderer		=	('!{params.renderer || null}' !== 'undefined') 
 			|													?	!{JSON.stringify(params.renderer)} 
