@@ -354,6 +354,9 @@
       if (this.hasGrid) {
         this.drawGrid();
       }
+      if (Config.userType === 'user') {
+        return;
+      }
       this.drawCountries();
       if (this.hasLines) {
         this.drawLines(this.lines);
@@ -366,6 +369,9 @@
     Map.prototype.onServerStarted = function(event) {
       console.log('Server Started');
       event = event || [];
+      if (Config.userType === 'user') {
+        return;
+      }
       this.tedxteen = this.tedxteen.concat(event);
       if (this.hasGrid) {
         this.drawGrid();
@@ -675,11 +681,11 @@
         }
         state = data[0].state;
         loc = '';
-        loc += country + ', ';
         if (city != null) {
           loc += city;
         }
         loc += state;
+        loc += ', ' + country;
         obj = {
           location: loc,
           latitude: data[0].longitude,
@@ -1156,6 +1162,9 @@
 
     TGS.prototype.onMapLoaded = function() {
       this.loader.remove();
+      if (Config.userType === 'user') {
+        return;
+      }
       d3.json(this.flickrSrc, _.bind(this.onTGSFlickrDataLoaded, this));
       return d3.json(this.facultySRC, _.bind(this.onTGSFacultyLoaded, this));
     };

@@ -222,6 +222,7 @@ class TGS
 
 	onMapLoaded				:	()=>
 		@loader.remove()
+		if Config.userType == 'user' then return
 		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
 		d3.json @facultySRC, _.bind @onTGSFacultyLoaded, @
 				

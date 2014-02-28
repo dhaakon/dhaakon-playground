@@ -132,6 +132,7 @@ class Map
 		@tedxteen.push event
 
 		if @hasGrid then @drawGrid()
+		if Config.userType == 'user' then return
 
 		@drawCountries()
 		if @hasLines then @drawLines(@lines)
@@ -143,6 +144,7 @@ class Map
 	onServerStarted		: (event)=>
 		console.log 'Server Started'
 		event = event || []
+		if Config.userType == 'user' then return
 		@tedxteen = @tedxteen.concat event
 
 		if @hasGrid then @drawGrid()
@@ -449,9 +451,9 @@ class Map
 			state			=	data[0].state
 
 			loc = ''
-			loc += country + ', '
 			if city? then loc += city
 			loc += state
+			loc += ', ' + country
 
 			obj=
 				location	:	loc
