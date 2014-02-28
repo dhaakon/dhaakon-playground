@@ -13,7 +13,7 @@ Config	=	window.Config =
 		Settings	:
 			jsonPath			:	'/json/world.json'
 			csvPath				:	'/csv/booking_small.csv'
-			renderer			:	'canvas'
+			renderer			:	'svg'
 			hasGrid				:	false
 			hasRotation		:	false
 			hasLines			:	false
@@ -44,7 +44,7 @@ Config	=	window.Config =
 										'transverseMercator'		# 11
 										]
 
-			projectionKey		:	4
+			projectionKey		:	2
 			markerSize			:	2
 			rotation				:	[ 0, -15 ]
 			velocity				:	20
@@ -53,7 +53,7 @@ Config	=	window.Config =
 		Settings	:
 			jsonPath			:	'/json/world.json'
 			csvPath				:	'/csv/booking_small.csv'
-			renderer			:	'canvas'
+			renderer			:	'svg'
 			hasGrid				:	false
 			hasRotation		:	false
 			hasLines			: false	
@@ -84,7 +84,7 @@ Config	=	window.Config =
 										'transverseMercator'		# 11
 										]
 
-			projectionKey		:	4
+			projectionKey		:	2
 			markerSize			:	2
 			rotation				:	[ 0, -15 ]
 			velocity				:	20

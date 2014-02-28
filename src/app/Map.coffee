@@ -43,7 +43,7 @@ class Map
 	faculty					:	[]
 	tedxteen				:	[]
 
-	bgColor				: 'rgba(242,236,223,0.5)';	
+	bgColor				: 'rgba(242,236,233,0.65)';	
 	
 	data						:	null
 	countries				:	null
@@ -102,11 +102,16 @@ class Map
 											.on("zoom", @zoomed)
 
 		@group	=	@svg.append('g')
+									#.attr("transform", "translate(" + @width / 2 + "," + @height / 2 + ")")
+									.call(@zoomBehavior, @zoom)
+									.append('g')
+									.attr('id','mc')
+
+
 		@rect		= @svg.append('rect')
 								  .attr('width', @width)
 									.attr('height', @height)
 									.attr('fill', 'none')
-									.call(@zoomBehavior, @zoom)
 
 
 	createCanvas	:	()->
@@ -150,25 +155,25 @@ class Map
 		if @hasGrid then @drawGrid()
 		if Config.userType == 'user' then return
 
-		@drawCountries()
-		if @hasLines then @drawLines(@lines)
+		@drawMap()
 
 		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
 		@createPoints 'tedxteen', [], 'black'
+		@createPoints 'facebook', [], 'black'
+		@createPoints 'faculty', [], 'black'
 
 	onServerStarted		: (event)=>
-		console.log 'Server Started'
 		event = event || []
 		if Config.userType == 'user' then return
 		@tedxteen = @tedxteen.concat event
 
-		if @hasGrid then @drawGrid()
-		@drawCountries()
-		
+		@drawMap()
+
 		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
 		@createPoints 'tedxteen', [], 'yellow'
+		@createPoints 'faculty', [], 'yellow'
 
 	drawBackground	:	()->
 		switch @renderer
@@ -203,6 +208,16 @@ class Map
 		switch @renderer
 			when 'svg'
 				try
+					#@group.append('path')
+								#.datum(@countries)
+								#.attr('class', 'land')
+								#.attr('d', @path)
+					#@group.append("path")
+								#.datum(topojson.mesh(@world, @world.objects.countries, (a, b) -> return a is not b ))
+								#.attr("class", "boundary")
+								#.attr("d", @path)
+					#return
+
 					@group.selectAll('.country')
 						.data(@countries)
 						.enter().insert('path', '.graticule')
@@ -457,7 +472,6 @@ class Map
 		m = d3.event.wheelDeltaY
 
 	onLocationReceived	: (err, data)=>
-		console.log err, data
 		if data[0]?
 			country		=	data[0].country
 			if country is 'United States'
@@ -480,27 +494,32 @@ class Map
 	onMouseDownHandler	:		()=>
 		#return #for now
 		_m = d3.event
-		coords = [_m['offsetX'], _m['offsetY']]
+		if @mark then @mark.remove()
+		coords = d3.mouse $('#mc')[0]
 
-		geo_loc = @projection.invert(coords)
+		_xx = (coords[0] + @zoomPos[0])
+		_yy = (coords[1] + @zoomPos[1])
+
+		_a = [_xx, _yy]
+
+
+		geo_loc = @projection.invert coords, @zoomScale
 
 		## get location
 		str = '/location/' + geo_loc.join('/') + '/'
-		console.log str
 
 		d3.json str, @onLocationReceived
 		#debugger
-		_h = @markerLocator.height()
-		_w = @markerLocator.width()
-		_x = coords[0] - (_h/2)
-		_y = coords[1] - (_w/2)
-	
-		opts =
-			left :	_x + 'px',
-			top	 :	_y + 'px',
-			opacity : 1
+		#
+		@mark = @group.append('circle')
+									#.attr('xlink:href', '/assets/images/marker.png')
+									.attr('cx', coords[0])
+									.attr('cy', coords[1])
+									.attr('r', '5')
+									.attr('fill', 'rgba(255,0,0,0.3)')
+									.attr('stroke', 'red')
+									.attr('stroke-width', '2px')
 
-		@markerLocator.css(opts)	
 		@group.on('mousedown', null)
 
 	zoomed			:	()=>
@@ -509,8 +528,21 @@ class Map
 				@updateSVG d3.event.translate, d3.event.scale
 			when 'canvas'
 				@updateCanvas d3.event.translate, d3.event.scale
-
+	zoomPos	 : [0,0]
+	zoomScale : 1
 	updateSVG		:	( pos, scale)	=>
+		@zoomPos = pos
+		@zoomScale = scale
+		#t = pos
+		#s = scale
+		#t[0] = Math.max(-s / 2, Math.min(@width + s / 2, t[0]))
+		#t[1] = Math.max(-s / 2, Math.min(@height + s / 2, t[1]))
+		#log
+		#@zoomBehavior.translate(t)
+
+		#@projection.translate(pos).scale(scale)
+		#@group.attr 'transform', 'translate(' + t.join(',') + ')' +  ' scale(' + s + ')'
+	
 		@group.attr('transform', 'translate(' + pos.join(',') + ') scale('+ scale + ')')
 
 		return
@@ -536,8 +568,6 @@ class Map
 		@projection =	@projector[@projectionType]()
 						.scale((@width) / 2 / Math.PI)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
-						.rotate( @startRotation )
-						.precision(.25)
 
 	createPath			:	()=>
 		switch @renderer
@@ -553,11 +583,12 @@ class Map
 	update			:	()=>
 		@drawMap()
 
-	onDataRead		:	( error, world )=>
+	onDataRead		:	( error, @world )=>
 		if @renderer is 'canvas'
 			@countries		=	topojson.feature(world, world.objects[@COUNTRIES])
 		else
 			@countries		=	topojson.feature(world, world.objects[@COUNTRIES]).features
+
 
 		@neighbors		=	topojson.neighbors(world.objects[@COUNTRIES].geometries)
 

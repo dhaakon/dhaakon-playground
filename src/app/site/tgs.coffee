@@ -63,7 +63,7 @@ class TGS
 		@addListeners()
 
 		@socket			=		new SocketClient(url, Config.userType)
-
+	maxLocationWdith	:		500
 	changeTitle		:		(event)=>
 		if typeof event.location is "string" then l = event.location else l = event.location.title
 
@@ -72,8 +72,11 @@ class TGS
 			el.removeClass 'active'
 			el.addClass 'inactive'
 
+		len =  Math.min (l.length * Math.max(l.length, 15)), @maxLocationWdith
+
 		@title.css( {'opacity': 1})
 		@title.html	'<p>' + l + '</p>'
+		@title.css('width', len + 'px')
 
 	loadFromConfig	:		()->
 		@mapHeight			=		Config[Config.userType].Map.height

@@ -21,7 +21,7 @@
       Settings: {
         jsonPath: '/json/world.json',
         csvPath: '/csv/booking_small.csv',
-        renderer: 'canvas',
+        renderer: 'svg',
         hasGrid: false,
         hasRotation: false,
         hasLines: false
@@ -36,7 +36,7 @@
         scaleMin: 0.75,
         scaleMax: 10,
         projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
-        projectionKey: 4,
+        projectionKey: 2,
         markerSize: 2,
         rotation: [0, -15],
         velocity: 20
@@ -46,7 +46,7 @@
       Settings: {
         jsonPath: '/json/world.json',
         csvPath: '/csv/booking_small.csv',
-        renderer: 'canvas',
+        renderer: 'svg',
         hasGrid: false,
         hasRotation: false,
         hasLines: false
@@ -61,7 +61,7 @@
         scaleMin: 0.75,
         scaleMax: 10,
         projections: ['stereographic', 'orthographic', 'mercator', 'gnomonic', 'equirectangular', 'conicEquidistant', 'conicConformal', 'conicEqualArea', 'azimuthalEquidistant', 'azimuthalEqualArea', 'albersUsa', 'transverseMercator'],
-        projectionKey: 4,
+        projectionKey: 2,
         markerSize: 2,
         rotation: [0, -15],
         velocity: 20
@@ -236,7 +236,7 @@
 
     Map.prototype.tedxteen = [];
 
-    Map.prototype.bgColor = 'rgba(242,236,223,0.5)';
+    Map.prototype.bgColor = 'rgba(242,236,233,0.65)';
 
     Map.prototype.data = null;
 
@@ -322,8 +322,8 @@
         this.rect = null;
       }
       this.zoomBehavior = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed);
-      this.group = this.svg.append('g');
-      return this.rect = this.svg.append('rect').attr('width', this.width).attr('height', this.height).attr('fill', 'none').call(this.zoomBehavior, this.zoom);
+      this.group = this.svg.append('g').call(this.zoomBehavior, this.zoom).append('g').attr('id', 'mc');
+      return this.rect = this.svg.append('rect').attr('width', this.width).attr('height', this.height).attr('fill', 'none');
     };
 
     Map.prototype.createCanvas = function() {
@@ -367,29 +367,25 @@
       if (Config.userType === 'user') {
         return;
       }
-      this.drawCountries();
-      if (this.hasLines) {
-        this.drawLines(this.lines);
-      }
+      this.drawMap();
       this.createPoints('location', [], 'red');
       this.createPoints('students', [], 'blue');
-      return this.createPoints('tedxteen', [], 'black');
+      this.createPoints('tedxteen', [], 'black');
+      this.createPoints('facebook', [], 'black');
+      return this.createPoints('faculty', [], 'black');
     };
 
     Map.prototype.onServerStarted = function(event) {
-      console.log('Server Started');
       event = event || [];
       if (Config.userType === 'user') {
         return;
       }
       this.tedxteen = this.tedxteen.concat(event);
-      if (this.hasGrid) {
-        this.drawGrid();
-      }
-      this.drawCountries();
+      this.drawMap();
       this.createPoints('location', [], 'red');
       this.createPoints('students', [], 'blue');
-      return this.createPoints('tedxteen', [], 'yellow');
+      this.createPoints('tedxteen', [], 'yellow');
+      return this.createPoints('faculty', [], 'yellow');
     };
 
     Map.prototype.drawBackground = function() {
@@ -680,7 +676,6 @@
 
     Map.prototype.onLocationReceived = function(err, data) {
       var city, country, loc, obj, state;
-      console.log(err, data);
       if (data[0] != null) {
         country = data[0].country;
         if (country === 'United States') {
@@ -706,23 +701,19 @@
     };
 
     Map.prototype.onMouseDownHandler = function() {
-      var coords, geo_loc, opts, str, _h, _m, _w, _x, _y;
+      var coords, geo_loc, str, _a, _m, _xx, _yy;
       _m = d3.event;
-      coords = [_m['offsetX'], _m['offsetY']];
-      geo_loc = this.projection.invert(coords);
+      if (this.mark) {
+        this.mark.remove();
+      }
+      coords = d3.mouse($('#mc')[0]);
+      _xx = coords[0] + this.zoomPos[0];
+      _yy = coords[1] + this.zoomPos[1];
+      _a = [_xx, _yy];
+      geo_loc = this.projection.invert(coords, this.zoomScale);
       str = '/location/' + geo_loc.join('/') + '/';
-      console.log(str);
       d3.json(str, this.onLocationReceived);
-      _h = this.markerLocator.height();
-      _w = this.markerLocator.width();
-      _x = coords[0] - (_h / 2);
-      _y = coords[1] - (_w / 2);
-      opts = {
-        left: _x + 'px',
-        top: _y + 'px',
-        opacity: 1
-      };
-      this.markerLocator.css(opts);
+      this.mark = this.group.append('circle').attr('cx', coords[0]).attr('cy', coords[1]).attr('r', '5').attr('fill', 'rgba(255,0,0,0.3)').attr('stroke', 'red').attr('stroke-width', '2px');
       return this.group.on('mousedown', null);
     };
 
@@ -735,8 +726,14 @@
       }
     };
 
+    Map.prototype.zoomPos = [0, 0];
+
+    Map.prototype.zoomScale = 1;
+
     Map.prototype.updateSVG = function(pos, scale) {
       var l, tx, ty, _str;
+      this.zoomPos = pos;
+      this.zoomScale = scale;
       this.group.attr('transform', 'translate(' + pos.join(',') + ') scale(' + scale + ')');
       return;
       tx = Math.min(0, Math.max(this.width * (1 - scale), pos[0]));
@@ -758,7 +755,7 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.width / 2 / Math.PI).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).rotate(this.startRotation).precision(.25);
+      return this.projection = this.projector[this.projectionType]().scale(this.width / 2 / Math.PI).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]);
     };
 
     Map.prototype.createPath = function() {
@@ -775,6 +772,7 @@
     };
 
     Map.prototype.onDataRead = function(error, world) {
+      this.world = world;
       if (this.renderer === 'canvas') {
         this.countries = topojson.feature(world, world.objects[this.COUNTRIES]);
       } else {
@@ -978,8 +976,10 @@
       this.socket = new SocketClient(url, Config.userType);
     }
 
+    TGS.prototype.maxLocationWdith = 500;
+
     TGS.prototype.changeTitle = function(event) {
-      var el, l;
+      var el, l, len;
       if (typeof event.location === "string") {
         l = event.location;
       } else {
@@ -990,10 +990,12 @@
         el.removeClass('active');
         el.addClass('inactive');
       }
+      len = Math.min(l.length * Math.max(l.length, 15), this.maxLocationWdith);
       this.title.css({
         'opacity': 1
       });
-      return this.title.html('<p>' + l + '</p>');
+      this.title.html('<p>' + l + '</p>');
+      return this.title.css('width', len + 'px');
     };
 
     TGS.prototype.loadFromConfig = function() {

@@ -17,7 +17,7 @@ block content
 				div#marker
 				div.panel.people
 					ul.marker-type
-						li.heading
+						li.heading(style='margin-top:0px;')
 							h3 TGS People
 						li#student
 							span.icon(style='background:rgba(128,130,133,1);')
@@ -44,13 +44,15 @@ block content
 						li#facebook
 							span.icon(style='background:rgba(65,121,151,1);')
 							h2 Facebook
+				div#location-title-container
+					div#location-title
 		- if (role == 'user')
 			div#map-container
 				div#marker
 				div#marker-icon.inactive
 					img.inactive(src='/assets/images/marker_small.png')
-
-		div#location-title
+				div#location-title-container
+					div#location-title
 
 
 	div.panel.year
