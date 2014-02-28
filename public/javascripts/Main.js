@@ -236,7 +236,7 @@
 
     Map.prototype.tedxteen = [];
 
-    Map.prototype.bgColor = 'rgba(242,236,223,1)';
+    Map.prototype.bgColor = 'rgba(242,236,223,0.5)';
 
     Map.prototype.data = null;
 
@@ -308,12 +308,22 @@
     };
 
     Map.prototype.createSVG = function() {
-      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height).call(d3.behavior.zoom, this.zoom);
-      return this.group = this.svg.append('g');
+      this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height);
+      return this.createGroup();
     };
 
     Map.prototype.onLocatingUser = function() {
       return this.group.on('mousedown', this.onMouseDownHandler);
+    };
+
+    Map.prototype.createGroup = function() {
+      if (this.group) {
+        this.group.html('');
+        this.rect = null;
+      }
+      this.zoomBehavior = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed);
+      this.group = this.svg.append('g');
+      return this.rect = this.svg.append('rect').attr('width', this.width).attr('height', this.height).attr('fill', 'none').call(this.zoomBehavior, this.zoom);
     };
 
     Map.prototype.createCanvas = function() {
@@ -748,7 +758,7 @@
     };
 
     Map.prototype.createProjection = function() {
-      return this.projection = this.projector[this.projectionType]().scale(this.scale).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).rotate(this.startRotation).precision(.25);
+      return this.projection = this.projector[this.projectionType]().scale(this.width / 2 / Math.PI).translate([(this.width / 2) - this.xOffset, (this.height / 2) - this.yOffset]).rotate(this.startRotation).precision(.25);
     };
 
     Map.prototype.createPath = function() {
@@ -775,9 +785,6 @@
       this.createPath();
       this.drawMap();
       this.addListeners();
-      if (this.renderer === 'svg') {
-        this.group.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", this.zoomed));
-      }
       return EventManager.emitEvent(Events.MAP_LOADED);
     };
 
@@ -957,7 +964,7 @@
       var url;
       this.loadFromConfig();
       url = 'http://' + window.location.hostname + '/';
-      this.mapHeight = this.mapHeight || $(window).height();
+      this.mapHeight = this.mapHeight || $(window).height() - $('header').height();
       this.mapWidth = this.mapWidth || $(window).width();
       this.loader = $('#loader-container');
       this.start = Date.now();

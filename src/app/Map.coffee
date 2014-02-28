@@ -43,7 +43,7 @@ class Map
 	faculty					:	[]
 	tedxteen				:	[]
 
-	bgColor				: 'rgba(242,236,223,1)';	
+	bgColor				: 'rgba(242,236,223,0.5)';	
 	
 	data						:	null
 	countries				:	null
@@ -86,12 +86,28 @@ class Map
 						  .attr('id', 'svg-map')
 						  .attr('width', @width)
 						  .attr('height', @height)
-							.call(d3.behavior.zoom, @zoom)
-
-		@group	=	@svg.append('g')
+							
+		@createGroup()		
 
 	onLocatingUser	: ()=>
 		@group.on('mousedown', @onMouseDownHandler)
+
+	createGroup			:	()->
+		if @group
+			@group.html('')
+			@rect = null
+
+		@zoomBehavior = d3.behavior.zoom()
+											.scaleExtent([1, 8])
+											.on("zoom", @zoomed)
+
+		@group	=	@svg.append('g')
+		@rect		= @svg.append('rect')
+								  .attr('width', @width)
+									.attr('height', @height)
+									.attr('fill', 'none')
+									.call(@zoomBehavior, @zoom)
+
 
 	createCanvas	:	()->
 		@canvas	=	d3.select(@container)
@@ -487,7 +503,6 @@ class Map
 		@markerLocator.css(opts)	
 		@group.on('mousedown', null)
 
-
 	zoomed			:	()=>
 		switch @renderer
 			when 'svg'
@@ -519,7 +534,7 @@ class Map
 
 	createProjection	:	()=>
 		@projection =	@projector[@projectionType]()
-						.scale(@scale)
+						.scale((@width) / 2 / Math.PI)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
 						.rotate( @startRotation )
 						.precision(.25)
@@ -552,10 +567,5 @@ class Map
 		@drawMap()
 
 		@addListeners()
-
-		if @renderer is 'svg'
-			@group.call(d3.behavior.zoom()
-				.scaleExtent([1, 8])
-				.on("zoom", @zoomed))
 
 		EventManager.emitEvent(Events.MAP_LOADED)

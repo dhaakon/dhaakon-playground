@@ -47,7 +47,7 @@ class TGS
 
 		url					=		'http://' + window.location.hostname + '/'
 
-		@mapHeight	=		@mapHeight or $(window).height()
+		@mapHeight	=		@mapHeight or $(window).height() - $('header').height()
 		@mapWidth		=		@mapWidth or $(window).width()
 
 		@loader			=		$('#loader-container')		
