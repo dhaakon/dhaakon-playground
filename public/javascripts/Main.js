@@ -236,7 +236,7 @@
 
     Map.prototype.tedxteen = [];
 
-    Map.prototype.bgColor = 'rgba(242,236,223,0.4)';
+    Map.prototype.bgColor = 'rgba(242,236,223,1)';
 
     Map.prototype.data = null;
 
@@ -309,7 +309,6 @@
 
     Map.prototype.createSVG = function() {
       this.svg = d3.select(this.container).append('svg').attr('id', 'svg-map').attr('width', this.width).attr('height', this.height).call(d3.behavior.zoom, this.zoom);
-      console.log(Config['userType'] === 'user');
       return this.group = this.svg.append('g');
     };
 
@@ -327,6 +326,9 @@
     };
 
     Map.prototype.drawMap = function() {
+      if (this.group) {
+        this.group.html('');
+      }
       this.drawBackground();
       if (this.hasGrid) {
         this.drawGrid();
@@ -362,7 +364,7 @@
     };
 
     Map.prototype.onServerStarted = function(event) {
-      console.log(event);
+      console.log('Server Started');
       event = event || [];
       this.tedxteen = this.tedxteen.concat(event);
       if (this.hasGrid) {
@@ -438,7 +440,6 @@
 
     Map.prototype.onDateSelect = function(obj) {
       var year, _i, _len, _ref;
-      console.log(obj);
       if (obj === "none") {
 
       } else {
@@ -447,7 +448,6 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           year = _ref[_i];
           if (year === obj) {
-            console.log($(year));
             $(year).css('opacity', 1);
             return;
           } else {
@@ -549,7 +549,6 @@
             return d.scale;
           });
           if (name === 'student') {
-            console.log(student);
             return g.on('mouseover', this.onLocationMouseOver);
           }
           break;
@@ -829,7 +828,6 @@
     SocketClient.prototype.error = function(error) {};
 
     SocketClient.prototype.onMapLoaded = function(event) {
-      console.log('map loaded');
       switch (Config.userType) {
         case 'display':
           this.socket.on('receiveResponse', this.onReceiveHandler);
@@ -842,10 +840,8 @@
     SocketClient.prototype.onLocationHandler = function(data) {
       var cb,
         _this = this;
-      console.log('location');
       cb = function(data) {
         var opts;
-        console.log('map clicked');
         opts = {
           location: {
             title: data.location,
@@ -872,14 +868,12 @@
 
     SocketClient.prototype.onFacebookLoaded = function(data) {
       var obj;
-      console.log('fb loaded');
       obj = JSON.parse(JSON.parse(data));
       return EventManager.emitEvent(Events.FACEBOOK_LOADED, [obj]);
     };
 
     SocketClient.prototype.onLocationsLoaded = function(data) {
       var loc, obj, objects, _locs;
-      console.log('locations loaded');
       obj = JSON.parse(JSON.parse(data));
       objects = [];
       if (obj != null) {
@@ -1121,7 +1115,6 @@
     TGS.prototype.addUserLocator = function() {
       var f, userElement,
         _this = this;
-      console.log('adding user locator');
       f = function(event) {
         var a;
         _this.isSelectingLocation = true;
@@ -1135,7 +1128,6 @@
     };
 
     TGS.prototype.onFacebookMarkersLoaded = function(event) {
-      console.log(event);
       this.map.createPoints('facebook', event.locations, 'blue');
       return null;
     };

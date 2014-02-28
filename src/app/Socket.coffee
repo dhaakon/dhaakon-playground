@@ -31,7 +31,6 @@ class SocketClient
 	error										:		(error)->
 
 	onMapLoaded							:		(event)=>
-		console.log 'map loaded'
 		switch Config.userType
 			when 'display'
 				@socket.on 'receiveResponse', @onReceiveHandler
@@ -40,13 +39,11 @@ class SocketClient
 				@socket.emit 'serverStarted'
 
 	onLocationHandler				:		( data )=>
-		console.log 'location'
 		cb = (data) =>
-			console.log 'map clicked'
 			opts=
 				location		:	
-					title :		data.location
-					coords	: [
+					title		:		data.location
+					coords	:		[
 						latitude		:	data.longitude
 						longitude		:	data.latitude
 					]
@@ -62,12 +59,10 @@ class SocketClient
 		null
 
 	onFacebookLoaded	:		(data)=>
-		console.log 'fb loaded'
 		obj = JSON.parse JSON.parse data
 		EventManager.emitEvent Events.FACEBOOK_LOADED, [obj]
 
 	onLocationsLoaded				:		(data)=>
-		console.log 'locations loaded'
 		obj = JSON.parse JSON.parse data
 
 		objects = []
@@ -78,8 +73,3 @@ class SocketClient
 				objects.push _locs
 
 			EventManager.emitEvent Events.SERVER_STARTED, [objects]
-		
-		#console.log data
-
-
-

@@ -12,14 +12,16 @@
 
 
 body, html{
-	/*height							:				100%;*/
+	height							:				100%;
 }
 
 $sand		:		rgba(242,236,223,1);
-$gold		:		rgba(172,166,153,0.8);
+$gold		:		rgba(142,136,123,0.8);
+$red		:		#c42032;
 
 body{
-	@include radial-gradient($gold, $sand, $fallback: $sand);
+	@include linear-gradient($gold, $sand, $fallback: $sand);
+	/*background:$gold;*/
 }
 @import "tgs";
 

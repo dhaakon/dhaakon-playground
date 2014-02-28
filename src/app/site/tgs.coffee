@@ -25,20 +25,22 @@ class TGS
 	map						:		null
 
 	bookingInformation	:	null
-	renderer			:	null
-	mapContainer	:	null
+	renderer						:	null
+	mapContainer				:	null
 
 	svg						:	null
 	container			:	null
 
 	loader				:	null
-	classes				: [		'student',
+	classes				: [	
+											'student',
 											'faculty',
 											'past-location',
 											'current-location',
 											'future-location',
 											'tedxteen',
-											'facebook'	]
+											'facebook'	
+									]
 
 	constructor		:		()->
 		@loadFromConfig()
@@ -59,6 +61,7 @@ class TGS
 		)
 
 		@addListeners()
+
 		@socket			=		new SocketClient(url, Config.userType)
 
 	changeTitle		:		(event)=>
@@ -101,11 +104,11 @@ class TGS
 
 		if @hasLines then @map.drawLines [	'students',	'location'	]
 	
-	onTGSFlickrDataLoaded		:		(@flickrData)->
+	onTGSFlickrDataLoaded			:		(@flickrData)->
 		@map.createPoints 'location', @flickrData, 'red'
 		d3.json @studentsSrc, _.bind @onTGSStudentsDataLoaded, @
 
-	onTGSFacultyLoaded		:		(@facultyData)->
+	onTGSFacultyLoaded				:		(@facultyData)->
 		@map.createPoints 'faculty', @facultyData, 'red'
 
 	onTGSStudentsDataLoaded		:		(@studentData)->
@@ -162,31 +165,27 @@ class TGS
 						.style('z-index', 10000)
 
 					_u = 1
-
 				else
 					_u = 0.3
 
 				$('.' + el).css('opacity', _u)
 			_.each @classes, _v
 
-
 		panel.on 'mouseover', fn
 
 	addListeners			:	()->
-
-		EventManager.addListener Events.MAP_LOADED,			@onMapLoaded
+		EventManager.addListener Events.MAP_LOADED,					@onMapLoaded
 		EventManager.addListener Events.SERVER_UPDATED,			@changeTitle
-		EventManager.addListener Events.MAP_CLICKED,			@changeTitle
+		EventManager.addListener Events.MAP_CLICKED,				@changeTitle
 		EventManager.addListener Events.SOCKET_CONNECTED,		@onSocketConnected
-		EventManager.addListener Events.FACEBOOK_LOGIN,		@onFacebookLogin
+		EventManager.addListener Events.FACEBOOK_LOGIN,			@onFacebookLogin
 		EventManager.addListener Events.FACEBOOK_LOADED,		@onFacebookMarkersLoaded
 
 		if Config.userType is 'user' then @addUserLocator()
 		#$('#year-dropdown').on 'change', (e)->EventManager.emitEvent Events.ON_DATE_SELECT,[e.target.value]
+
 	isSelectingLocation				:		false
 	addUserLocator						:		()=>
-		
-		console.log 'adding user locator'
 		f = (event)=>
 			@isSelectingLocation = true
 			a = $ event.currentTarget
@@ -198,7 +197,6 @@ class TGS
 		userElement.on 'click', f
 
 	onFacebookMarkersLoaded		:		(event)		=>
-		console.log event
 		@map.createPoints 'facebook', event.locations, 'blue'
 		null
 		
@@ -223,7 +221,6 @@ class TGS
 		d3.json src + id, fn
 
 	onMapLoaded				:	()=>
-		#@createBookingData() 
 		@loader.remove()
 		d3.json @flickrSrc, _.bind @onTGSFlickrDataLoaded, @
 		d3.json @facultySRC, _.bind @onTGSFacultyLoaded, @

@@ -27,23 +27,23 @@ class Map
 	projection			:	null
 	countryStroke :		'rgba(72,66,53,0.5)'
 
-	pointColors		: [
+	pointColors			: [
 										Config.Graphics.Colors.location,	
 										Config.Graphics.Colors.grade['9'],	
 										Config.Graphics.Colors.grade['10'],
 										Config.Graphics.Colors.grade['11'],
 										Config.Graphics.Colors.grade['12'],
 										Config.Graphics.Colors.faculty			
-									]
+										]
 
-	flickr				:	[]
-	students			:	[]
-	location			:	[]
-	facebook			:	[]
-	faculty				:	[]
-	tedxteen					:	[]
+	flickr					:	[]
+	students				:	[]
+	location				:	[]
+	facebook				:	[]
+	faculty					:	[]
+	tedxteen				:	[]
 
-	bgColor				: 'rgba(242,236,223,0.4)';	
+	bgColor				: 'rgba(242,236,223,1)';	
 	
 	data						:	null
 	countries				:	null
@@ -87,8 +87,6 @@ class Map
 						  .attr('width', @width)
 						  .attr('height', @height)
 							.call(d3.behavior.zoom, @zoom)
-							
-		console.log Config['userType'] is 'user'
 
 		@group	=	@svg.append('g')
 
@@ -109,6 +107,7 @@ class Map
 		d3.json		@src, @onDataRead
 
 	drawMap			:	()->
+		if @group then @group.html('')
 		@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()
@@ -120,9 +119,9 @@ class Map
 				@group.append("path")
 							.datum(d3.geo.graticule())
 							.attr("d", @path)
-							#.style("fill", "")
 							.style("stroke", "#ffffff")
 							.style("stroke-width", "0.5px")
+
 			when 'canvas'
 				@context.strokeStyle = 'white'
 				@context.beginPath()
@@ -142,16 +141,13 @@ class Map
 		@createPoints 'tedxteen', [], 'black'
 
 	onServerStarted		: (event)=>
-		console.log event
+		console.log 'Server Started'
 		event = event || []
 		@tedxteen = @tedxteen.concat event
 
-		#@drawBackground()
 		if @hasGrid then @drawGrid()
 		@drawCountries()
 		
-		#if @hasLines is true then @drawLines(event)
-
 		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
 		@createPoints 'tedxteen', [], 'yellow'
@@ -235,17 +231,13 @@ class Map
 					]
 
 	onDateSelect					:		(obj)=>
-		console.log obj
-
 		if obj is "none"
 			return
 		else
 			$('.faculty').css('opacity', 0)
 
 			for year in @years
-				#console.log year, obj
 				if year is obj
-					console.log $(year)
 					$(year).css('opacity', 1)
 					return
 				else
@@ -328,10 +320,7 @@ class Map
 
 
 					if name is 'student'
-						console.log student
 						g.on 'mouseover', @onLocationMouseOver
-					#console.log g
-					#.each('end', @trans)
 
 			when 'canvas'
 				@canvas.select('canvas')
@@ -358,7 +347,7 @@ class Map
 									.enter()
 									.append('path')
 									.attr('d', (d)=>
-										_d = d.location.coords[0] 
+										_d = d.location.coords[0]
 
 										m = 'M' + coords.join(' ')
 										l = 'L' + @projection([_d['longitude'], _d['latitude']]).join(' ')
@@ -530,7 +519,6 @@ class Map
 		@projection =	@projector[@projectionType]()
 						.scale(@scale)
 						.translate([(@width / 2) - @xOffset, (@height / 2) - @yOffset])
-						#.clipAngle(120)
 						.rotate( @startRotation )
 						.precision(.25)
 

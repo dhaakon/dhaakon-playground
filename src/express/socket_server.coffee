@@ -15,9 +15,6 @@ class SocketServer
 
 			@redis.client.get 'facebook', (err, resp)=>
 				obj = JSON.stringify resp		
-				console.log 'facebookLoaded'
-				console.log obj
-				
 				@socket.io.sockets.emit 'facebookLoaded', obj
 		)
 
@@ -64,6 +61,5 @@ class SocketServer
 		socket.emit 'location'
 
 	onGPSHandler			:		(event)->
-		console.log event
 		#@socket.emit 'receiveResponse', event
 
