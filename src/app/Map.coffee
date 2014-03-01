@@ -157,8 +157,8 @@ class Map
 
 		@drawMap()
 
-		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
+		@createPoints 'location', [], 'red'
 		@createPoints 'tedxteen', [], 'black'
 		@createPoints 'facebook', [], 'black'
 		@createPoints 'faculty', [], 'black'
@@ -170,8 +170,8 @@ class Map
 
 		@drawMap()
 
-		@createPoints 'location', [], 'red'
 		@createPoints 'students', [], 'blue'
+		@createPoints 'location', [], 'red'
 		@createPoints 'tedxteen', [], 'yellow'
 		@createPoints 'faculty', [], 'yellow'
 
@@ -481,9 +481,9 @@ class Map
 			state			=	data[0].state
 
 			loc = ''
-			if city? then loc += city
-			loc += state
-			loc += ', ' + country
+			#if city? then loc += city
+			#loc += state
+			loc = country
 
 			obj=
 				location	:	loc

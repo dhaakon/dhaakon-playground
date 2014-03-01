@@ -73,7 +73,7 @@ class TGS
 			el.removeClass	'active'
 			el.addClass			'inactive'
 
-		len =  Math.min (l.length * Math.max(l.length, 15)), @maxLocationWdith
+		len =  Math.min (l.length * Math.max(l.length, 25)), @maxLocationWdith
 
 		@title.css( {'opacity': 1})
 		@title.html	'<p>' + l + '</p>'
@@ -109,17 +109,20 @@ class TGS
 		if @hasLines then @map.drawLines [	'students',	'location'	]
 	
 	onTGSFlickrDataLoaded			:		(@flickrData)->
-		@map.createPoints 'location', @flickrData, 'red'
 		d3.json @studentsSrc, _.bind @onTGSStudentsDataLoaded, @
 
 	onTGSFacultyLoaded				:		(@facultyData)->
-		@map.createPoints 'faculty', @facultyData, 'red'
 
 	onTGSStudentsDataLoaded		:		(@studentData)->
-		@map.createPoints 'students', @studentData, 'blue'
+		@createMapPoints()
 
 		if @hasLines then @map.drawLines ['students','location']
 		if @renderer is 'canvas' and @hasRotation then @startRotation()
+	createMapPoints		:	()->
+		@map.createPoints 'students', @studentData, 'blue'
+		@map.createPoints 'faculty', @facultyData, 'red'
+		@map.createPoints 'location', @flickrData, 'red'
+
 
 	createBookingData	:	()->
 		@booking = new Booking @CSV_PATH
@@ -199,7 +202,7 @@ class TGS
 		userElement.on 'click', f
 
 	onFacebookMarkersLoaded		:		(event)		=>
-		@map.createPoints 'facebook', event.locations, 'blue'
+		#@map.createPoints 'facebook', event.locations, 'blue'
 		null
 		
 	onFacebookLogin		: (event)=>
@@ -229,7 +232,7 @@ class TGS
 		d3.json @facultySRC, _.bind @onTGSFacultyLoaded, @
 				
 	onBookingLoaded		:	( event )=>
-		@map.createPoints @booking.data
+		#@map.createPoints @booking.data
 		@bookingInformation		=	new BookingInformation()
 
 		EventManager.addListener Events.MARKER_FOCUS, @onMarkerFocused

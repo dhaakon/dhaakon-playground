@@ -368,8 +368,8 @@
         return;
       }
       this.drawMap();
-      this.createPoints('location', [], 'red');
       this.createPoints('students', [], 'blue');
+      this.createPoints('location', [], 'red');
       this.createPoints('tedxteen', [], 'black');
       this.createPoints('facebook', [], 'black');
       return this.createPoints('faculty', [], 'black');
@@ -382,8 +382,8 @@
       }
       this.tedxteen = this.tedxteen.concat(event);
       this.drawMap();
-      this.createPoints('location', [], 'red');
       this.createPoints('students', [], 'blue');
+      this.createPoints('location', [], 'red');
       this.createPoints('tedxteen', [], 'yellow');
       return this.createPoints('faculty', [], 'yellow');
     };
@@ -686,11 +686,7 @@
         }
         state = data[0].state;
         loc = '';
-        if (city != null) {
-          loc += city;
-        }
-        loc += state;
-        loc += ', ' + country;
+        loc = country;
         obj = {
           location: loc,
           latitude: data[0].longitude,
@@ -998,7 +994,7 @@
         el.removeClass('active');
         el.addClass('inactive');
       }
-      len = Math.min(l.length * Math.max(l.length, 15), this.maxLocationWdith);
+      len = Math.min(l.length * Math.max(l.length, 25), this.maxLocationWdith);
       this.title.css({
         'opacity': 1
       });
@@ -1044,24 +1040,28 @@
 
     TGS.prototype.onTGSFlickrDataLoaded = function(flickrData) {
       this.flickrData = flickrData;
-      this.map.createPoints('location', this.flickrData, 'red');
       return d3.json(this.studentsSrc, _.bind(this.onTGSStudentsDataLoaded, this));
     };
 
     TGS.prototype.onTGSFacultyLoaded = function(facultyData) {
       this.facultyData = facultyData;
-      return this.map.createPoints('faculty', this.facultyData, 'red');
     };
 
     TGS.prototype.onTGSStudentsDataLoaded = function(studentData) {
       this.studentData = studentData;
-      this.map.createPoints('students', this.studentData, 'blue');
+      this.createMapPoints();
       if (this.hasLines) {
         this.map.drawLines(['students', 'location']);
       }
       if (this.renderer === 'canvas' && this.hasRotation) {
         return this.startRotation();
       }
+    };
+
+    TGS.prototype.createMapPoints = function() {
+      this.map.createPoints('students', this.studentData, 'blue');
+      this.map.createPoints('faculty', this.facultyData, 'red');
+      return this.map.createPoints('location', this.flickrData, 'red');
     };
 
     TGS.prototype.createBookingData = function() {
@@ -1150,7 +1150,6 @@
     };
 
     TGS.prototype.onFacebookMarkersLoaded = function(event) {
-      this.map.createPoints('facebook', event.locations, 'blue');
       return null;
     };
 
@@ -1186,7 +1185,6 @@
     };
 
     TGS.prototype.onBookingLoaded = function(event) {
-      this.map.createPoints(this.booking.data);
       this.bookingInformation = new BookingInformation();
       return EventManager.addListener(Events.MARKER_FOCUS, this.onMarkerFocused);
     };
