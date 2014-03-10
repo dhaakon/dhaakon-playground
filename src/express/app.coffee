@@ -15,7 +15,7 @@ class Server
 
 	constructor		:	()->
 		@app	=	@express()
-		@redis = new Redis()
+		#@redis = new Redis()
 
 		@setUpExpress()
 		@createServer()
@@ -49,6 +49,7 @@ class Server
 		@app.get		'/faculty/',											Router.getfaculty
 		@app.get		'/tgslocations/',									Router.tgslocations
 		@app.get		'/tgs-dual/',											Router.dual
+		@app.get		'/d3/:type/',											Router.d3
 
 		@app.post('/tgs-facebook/', (request, response)->
 			response.redirect('/tgs-facebook/')
@@ -62,8 +63,9 @@ class Server
 		@app.http().io()
 		
 		@setUpRoutes()
+		#console.log 'server'
 		
-		@socket = new SocketServer(@app, @redis)
+		#@socket = new SocketServer(@app, @redis)
 
 		@app.listen( @app.get 'port' )
 

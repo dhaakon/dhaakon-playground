@@ -11,9 +11,10 @@ module.exports = (grunt) ->
 			coffee		:
 				files		:	['src/app/**/*.coffee', 'src/routes/**/*.coffee']
 				tasks		:	[
-									'percolator:main',
-									'percolator:routes',
-									'percolator:dev',
+									#'percolator:main',
+									#'percolator:routes',
+									#'percolator:dev',
+									'percolator:d3',
 									'copy:codemirror'
 								]
 			assets		:
@@ -91,6 +92,12 @@ module.exports = (grunt) ->
 				main	:	'main.coffee'
 				compile	:	true
 				#opts	:	'--bare'
+				#
+			d3				:
+				source	:	'./src/app/d3'
+				output	:	'./public/javascripts/main.d3.js'
+				main		:	'Main.coffee'
+				compile	:	true
 
 		express		:
 			prod		:
@@ -127,8 +134,13 @@ module.exports = (grunt) ->
 					'percolator:server',
 					'foreman'
 					]
+		d3		:	[
+					'percolator:d3'
+					'watch'
+					]
 
-	grunt.registerTask		'dev',		devOpts.default
-	grunt.registerTask		'serve',	devOpts.serve
+	grunt.registerTask		'dev',			devOpts.default
+	grunt.registerTask		'd3',				devOpts.d3
+	grunt.registerTask		'serve',		devOpts.serve
 	grunt.registerTask		'default',	devOpts.default
-	grunt.registerTask		'build',	devOpts.build
+	grunt.registerTask		'build',		devOpts.build

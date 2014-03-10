@@ -575,4 +575,12 @@
     return geo.getLocationByLatLong(coords, cb);
   };
 
+  exports.d3 = function(req, res) {
+    var obj;
+    obj = {
+      type: req.params['type']
+    };
+    return res.render('d3', obj);
+  };
+
 }).call(this);

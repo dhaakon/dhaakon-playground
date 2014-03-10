@@ -139,7 +139,6 @@
 
     function Server() {
       this.app = this.express();
-      this.redis = new Redis();
       this.setUpExpress();
       this.createServer();
     }
@@ -175,6 +174,7 @@
       this.app.get('/faculty/', Router.getfaculty);
       this.app.get('/tgslocations/', Router.tgslocations);
       this.app.get('/tgs-dual/', Router.dual);
+      this.app.get('/d3/:type/', Router.d3);
       this.app.post('/tgs-facebook/', function(request, response) {
         return response.redirect('/tgs-facebook/');
       });
@@ -186,7 +186,6 @@
     Server.prototype.createServer = function() {
       this.app.http().io();
       this.setUpRoutes();
-      this.socket = new SocketServer(this.app, this.redis);
       return this.app.listen(this.app.get('port'));
     };
 

@@ -1,0 +1,18 @@
+extends layout
+
+block added-scripts
+	script(src="/javascripts/plugins/CSSPlugin.js")
+	script(src="/javascripts/easing/EasePack.js")
+	script(src="/javascripts/TweenLite.js")
+	script(src="/javascripts/TimelineMax.js")
+	script(src='/javascripts/svg.min.js')
+	script(src='/javascripts/sketch.js')
+	script(src='/javascripts/main.d3.js')
+
+block added-stylesheets
+	link(rel='stylesheet', href='/stylesheets/d3.css')
+
+block content
+	div#main
+		div#dhaakon-sketch-container
+	div#svgElement
