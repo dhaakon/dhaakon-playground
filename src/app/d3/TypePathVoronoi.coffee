@@ -1,7 +1,7 @@
 #<< ParticleData
 
 class TypePath
-	STEP_SIZE   :   6
+	STEP_SIZE   :   14
 	images      :   ParticleImages
 
 	ctx         :   null

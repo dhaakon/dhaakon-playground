@@ -30,7 +30,7 @@
   ];
 
   TypePath = (function() {
-    TypePath.prototype.STEP_SIZE = 6;
+    TypePath.prototype.STEP_SIZE = 14;
 
     TypePath.prototype.images = ParticleImages;
 
