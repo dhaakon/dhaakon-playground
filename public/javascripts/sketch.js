@@ -544,7 +544,7 @@ var Sketch = (function() {
     scope[ b ] = rAF = rAF || function( callback ) {
 
         var now = +new Date();
-        var dt = M.max( 0, 16 - ( now - then ) );
+        var dt = M.max( 0, 1 - ( now - then ) );
         var id = setTimeout( function() {
             callback( now + dt );
         }, dt );

@@ -1,11 +1,11 @@
 #<< ParticleData
 
 class TypePath
-  STEP_SIZE   :  5
+  STEP_SIZE   :   8
+  images      :   ParticleImages
 
   ctx         :   null
   lines       :   []
-  images      :   ParticleImages
   imagesData  :   []
   paths       :   []
 

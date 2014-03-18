@@ -37,8 +37,7 @@ class PhysicsDemo
 		@createSketch()
 
 		@max_index = @pathImages.length
-    #@setupGUI()
-		#
+
 	changeImage     : (index) ->
 		@currentIndex = index
 
@@ -47,29 +46,6 @@ class PhysicsDemo
 
 		@createParticles(@pathImages[@currentIndex].points)
 
-	destroySketch   : (cb) ->
-		@destroy = true
-		EventManager.removeListener Events.WINDOW_RESIZE, @onresize
-		if @timeline._duration == 0 then @reset()
-		@timeline.eventCallback 'onReverseComplete', ()=>
-			@destroy = false
-			@reset()
-			if cb then cb()
-
-		@timeline.timeScale 5.3
-		@timeline.reverse()
-    #@timeline.play()
-    #@timeline.restart()
-
-	reset            : () ->
-		@counter = 0
-		@sketch.stop()
-		@sketch.clear()
-		@sketch.destroy()
-		@destroyParticles()
-
-	destroyParticles : () ->
-		@engine.destroy()
 
 	setupGUI         : () ->
 		@gui.add @, 'AVOID_MOUSE_STRENGTH', 5000, 15000
@@ -195,8 +171,44 @@ class PhysicsDemo
 		#@sketch.shadowColor = 'black'
 		@sketch[type]()
 
+	#events
+	#----------
+
 	onmousemove     : () =>
 		@avoidMouse.target.x = @sketch.mouse.x
 		@avoidMouse.target.y = @sketch.mouse.y
 
+
+	#getters
+	#----------
+
 	getSketch       : () -> return @sketch
+
+	#destruction
+	#----------
+
+	destroySketch   : (cb) ->
+		@destroy = true
+		
+		EventManager.removeListener Events.WINDOW_RESIZE, @onresize
+
+		if @timeline._duration == 0 then @reset()
+		
+		@timeline.eventCallback 'onReverseComplete', ()=>
+			@destroy = false
+			@reset()
+			if cb then cb()
+
+		@timeline.timeScale 5.3
+		@timeline.reverse()
+
+	reset            : () ->
+		@counter = 0
+		@sketch.stop()
+		@sketch.clear()
+		@sketch.destroy()
+		@destroyParticles()
+
+	destroyParticles : () ->
+		@engine.destroy()
+
