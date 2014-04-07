@@ -46,7 +46,6 @@ class PhysicsDemo
 
 		@createParticles(@pathImages[@currentIndex].points)
 
-
 	setupGUI         : () ->
 		@gui.add @, 'AVOID_MOUSE_STRENGTH', 5000, 15000
 

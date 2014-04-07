@@ -2,6 +2,8 @@
 #import TypePathVoronoi.coffee
 #import EventManager.coffee
 #import PhysicsDemo.coffee
+#import NodeViewer.coffee
+
 CANVAS				=		'#dhaakon-sketch-container'
 
 mr = Math.random
@@ -20,19 +22,24 @@ class Voronoi
 	ctx						:		null
 	voronoi				:		null
 	t							:		0
-	numParticles	:		20
+	numParticles	:		40
 	pulls					:		[]
-	stepSize			:		20
+	stepSize			:		8
 
 	X_OFFSET			: 400
 	Y_OFFSET			: -200
 	AVOID_MOUSE_STRENGTH : 25000
 
-
 	constructor		:		()->
-		#@createPaths()
-		#return
-		tp = new TypePath() 
+
+		@nv = new NodeViewer('/json/tiger.json')
+
+		cb = (d)-> console.log d
+
+		EventManager.addListener 'onNodeDataLoaded', cb
+
+		return
+		tp = new TypePath()
 
 		@width	= $(window).width()
 		@height	= $(window).height()
@@ -42,25 +49,21 @@ class Voronoi
 		@rand = d3.range(@numPoints)
 								 .map(fn)
 
-		@vertices = tp.getPaths()[2].points[0].pathData
+		@vertices = tp.getPaths()[0].points[0].pathData
+
 		for point in @vertices
 			point[0] += ((@width/2) - @X_OFFSET)
 			point[1] += ((@height/2) + @Y_OFFSET)
 
-		#@vertices.push @rand
-
-		#_.extend @vertices, @rand	
-
 		@voronoi = d3.geom.voronoi().clipExtent([0.0],[@width, @height])
 
 		@particle = new Particle( 3 )
-		#@createPaths()
-		#@createSVG()
 		@createSketch()
 
 		@redraw()
 	
 	createPhysics	:		()->
+		console.log 'b'
 		@engine = new Physics()
 		@engine.integrator = new Verlet
 		@avoidMouse = new Attraction()
@@ -84,30 +87,16 @@ class Voronoi
 			particle.behaviours.push pull
 			@engine.particles.push particle
 
-		#@avoidMouse.setRadius 100
-		#@avoidMouse.strength = -@AVOID_MOUSE_STRENGTH
-
 		return
 
 	redraw				:		()=>
 		@triangles = @voronoi.triangles @vertices
 
-		#@sketch.clear()
 		@sketch.fillStyle = 'rgba(' + [ 211,211,211, 0.27].join(',') + ')'
 		@sketch.fillRect(0,0,@width, @height)
 
 		for triangle in @triangles	
-			@sketch.beginPath()
-			@sketch.moveTo(triangle[0][0], triangle[0][1])
-			@sketch.lineTo(triangle[1][0], triangle[1][1])
-			@sketch.lineTo(triangle[2][0], triangle[2][1])
-			@sketch.lineTo(triangle[0][0], triangle[0][1])
-			@sketch.fillStyle = @fill()
-			@sketch.fill()
-			#@sketch.strokeColor = @fill()
-			@sketch.strokeStyle = @fill()
-			@sketch.lineWidth = '0.1px'
-			@sketch.stroke()
+			@createTriangle triangle
 
 		return
 
@@ -125,6 +114,20 @@ class Voronoi
 
 		path.order()
 
+	createTriangle	:		(triangle)->
+		@sketch.beginPath()
+		
+		@sketch.moveTo triangle[0][0], triangle[0][1]
+		@sketch.lineTo triangle[1][0], triangle[1][1]
+		@sketch.lineTo triangle[2][0], triangle[2][1]
+		@sketch.lineTo triangle[0][0], triangle[0][1]
+
+		@sketch.fillStyle = @fill()
+		@sketch.fill()
+		
+		@sketch.strokeStyle = @fill()
+		@sketch.stroke()
+
 	fill					:		(d)->
 		r = mf mr() * btw(0, 255)
 		g = mf mr() * btw(55, 65)
@@ -138,11 +141,6 @@ class Voronoi
 	polygon				:		(d)->
 		return	'M' + d.join('L') + 'Z'
     
-	createPaths		:		()->
-		#return
-		tp = new TypePath()
-		new PhysicsDemo tp.getPaths()
-
 	createSketch	:		()->
 		opts =
 			container		:		$(CANVAS)[0]
@@ -150,13 +148,13 @@ class Voronoi
 		@sketch = Sketch.create opts
 		@createPhysics()
 		@sketch.draw = @draw
+		@sketch.lineWidth = '0.1px'
 
 		@sketch.mousemove = @mousemove
 
 		return
 
 	mousemove			:		(e)=>
-		
 		#@currentMouse = [@sketch.mouse.x, @sketch.mouse.y]
 		#@avoidMouse.target.x = @sketch.mouse.x
 		#@avoidMouse.target.y = @sketch.mouse.y
@@ -167,11 +165,10 @@ class Voronoi
 		#@redraw()
 
 	draw					:		()=>
+		console.log 'a'
 		@t++
 
-		#console.log @t % 100
 		if @t % 100 is 1
-			#console.log 'yup'
 			for pull in @pulls
 				pull.target.x = random @width
 				pull.target.y = random @height
@@ -198,8 +195,6 @@ class Voronoi
 						 .attr('height', @height)
 						 .on("mousemove", ()=>
 								@currentMouse = d3.mouse($('svg')[0])
-								#@vertices[0] = @currentMouse
-								
 								@redraw()
 							)
 
@@ -221,7 +216,7 @@ class RGB
 		@sketch.clear()
 		
 init = () =>
-	#new RGB()
+	console.log 'a'
 	new Voronoi()
 
 $(window).ready (=>init())

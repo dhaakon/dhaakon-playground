@@ -1,0 +1,440 @@
+[
+  {
+    name: "Spritesheets",
+    children: [
+      {
+        name: "id:man-spinning_x3B_startFrame:1_x3B_numImages:10_x3B_parallax:0_x3B_",
+        shape: {
+          type: "image",
+          width: 500,
+          height: 684,
+          src: "../../html/img/scene1/imageSequence/image001.png",
+          
+        },
+        transform: {
+          xx: 1,
+          yx: 0,
+          xy: 0,
+          yy: 1,
+          dx: -64,
+          dy: 84,
+          
+        }
+      },
+      
+    ],
+    
+  },
+  {
+    name: "Images",
+    children: [
+      {
+        name: "id:titleD_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 299,
+          height: 88,
+          src: "../../html/img/scene1/title4.png",
+          
+        },
+        transform: {
+          xx: 1.0246,
+          yx: 0,
+          xy: 0,
+          yy: 1.0246,
+          dx: 489.3159,
+          dy: 293.7139,
+          
+        }
+      },
+      {
+        name: "id:titleB_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 335,
+          height: 74,
+          src: "../../html/img/scene1/title2.png",
+          
+        },
+        transform: {
+          xx: 0.9388,
+          yx: 0,
+          xy: 0,
+          yy: 0.9388,
+          dx: 443.9399,
+          dy: 425,
+          
+        }
+      },
+      {
+        name: "id:title_x3B_opacity:1_x3B_",
+        shape: {
+          type: "image",
+          width: 291,
+          height: 26,
+          src: "../../html/img/scene1/title.png",
+          
+        },
+        transform: {
+          xx: 1,
+          yx: 0,
+          xy: 0,
+          yy: 1,
+          dx: 505,
+          dy: 317.5,
+          
+        }
+      },
+      {
+        name: "id:cornIcon_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 113,
+          height: 171,
+          src: "../../html/img/scene1/images/iconsA_02.png",
+          
+        },
+        transform: {
+          xx: 0.9381,
+          yx: 0,
+          xy: 0,
+          yy: 0.9415,
+          dx: 536.4473,
+          dy: 130.4014,
+          
+        }
+      },
+      {
+        name: "id:windmillIcon_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 114,
+          height: 169,
+          src: "../../html/img/scene1/images/iconsA_05.png",
+          
+        },
+        transform: {
+          xx: 0.9231,
+          yx: 0,
+          xy: 0,
+          yy: 0.9231,
+          dx: 657.5,
+          dy: 178.7271,
+          
+        }
+      },
+      {
+        name: "id:truckIcon_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 126,
+          height: 92,
+          src: "../../html/img/scene1/images/iconsA_08.png",
+          
+        },
+        transform: {
+          xx: 0.9722,
+          yx: 0,
+          xy: 0,
+          yy: 0.9722,
+          dx: 427.25,
+          dy: 294.7759,
+          
+        }
+      },
+      {
+        name: "id:iconA_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 201,
+          height: 123,
+          src: "../../html/img/scene1/images/iconsB_03.png",
+          
+        },
+        transform: {
+          xx: 0.8479,
+          yx: 0,
+          xy: 0,
+          yy: 0.8479,
+          dx: 356.5303,
+          dy: 124.4995,
+          
+        }
+      },
+      {
+        name: "id:iconB_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 90,
+          height: 119,
+          src: "../../html/img/scene1/images/iconsB_09.png",
+          
+        },
+        transform: {
+          xx: 0.8487,
+          yx: 0,
+          xy: 0,
+          yy: 0.8487,
+          dx: 598.8184,
+          dy: 205.8335,
+          
+        }
+      },
+      {
+        name: "id:iconC_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 145,
+          height: 115,
+          src: "../../html/img/scene1/images/iconsB_22.png",
+          
+        },
+        transform: {
+          xx: 0.8712,
+          yx: 0,
+          xy: 0,
+          yy: 0.8712,
+          dx: 501.9995,
+          dy: 560.5,
+          
+        }
+      },
+      {
+        name: "id:iconD_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 77,
+          height: 120,
+          src: "../../html/img/scene1/images/iconsB_25.png",
+          
+        },
+        transform: {
+          xx: 0.8134,
+          yx: 0,
+          xy: 0,
+          yy: 0.8134,
+          dx: 320.3384,
+          dy: 617.3398,
+          
+        }
+      },
+      {
+        name: "id:iconE_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 68,
+          height: 149,
+          src: "../../html/img/scene1/images/iconsB_19.png",
+          
+        },
+        transform: {
+          xx: 0.843,
+          yx: 0,
+          xy: 0,
+          yy: 0.843,
+          dx: 147.1431,
+          dy: 500.2812,
+          
+        }
+      },
+      {
+        name: "id:iconF_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 168,
+          height: 116,
+          src: "../../html/img/scene1/images/iconsB_14.png",
+          
+        },
+        transform: {
+          xx: 0.8387,
+          yx: 0,
+          xy: 0,
+          yy: 0.8387,
+          dx: 40.8994,
+          dy: 299.9272,
+          
+        }
+      },
+      {
+        name: "id:iconG_x3B_opacity:0_x3B_container:iconsB_x3B_",
+        shape: {
+          type: "image",
+          width: 138,
+          height: 48,
+          src: "../../html/img/scene1/images/iconsB_06.png",
+          
+        },
+        transform: {
+          xx: 0.8694,
+          yx: 0,
+          xy: 0,
+          yy: 0.8694,
+          dx: 113.8174,
+          dy: 178.2637,
+          
+        }
+      },
+      {
+        name: "id:titleCpartB_x3B_container:intro-titleC_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 351,
+          height: 73,
+          src: "../../html/img/scene1/titleBpartA.png",
+          
+        },
+        transform: {
+          xx: 1,
+          yx: 0,
+          xy: 0,
+          yy: 1,
+          dx: 221.0879,
+          dy: 423.2812,
+          
+        }
+      },
+      {
+        name: "id:titleCpartA_x3B_container:intro-titleC_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 378,
+          height: 73,
+          src: "../../html/img/scene1/titleBpartB.png",
+          
+        },
+        transform: {
+          xx: 1,
+          yx: 0,
+          xy: 0,
+          yy: 1,
+          dx: 221.3418,
+          dy: 320.5,
+          
+        }
+      },
+      
+    ],
+    
+  },
+  {
+    name: "Lines",
+    children: [
+      {
+        name: "id:lineE_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 555,
+          height: 64,
+          src: "../../html/img/scene1/lines/line1.png",
+          
+        },
+        transform: {
+          xx: 0.7095,
+          yx: 0.7047,
+          xy: -0.7047,
+          yy: 0.7095,
+          dx: 823.1621,
+          dy: 613.1631,
+          
+        }
+      },
+      {
+        name: "id:lineD_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 230,
+          height: 30,
+          src: "../../html/img/scene1/lines/line2.png",
+          
+        },
+        transform: {
+          xx: -0.299,
+          yx: -0.9542,
+          xy: 0.9542,
+          yy: -0.299,
+          dx: 608.2656,
+          dy: 203.498,
+          
+        }
+      },
+      {
+        name: "id:lineB_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 417,
+          height: 49,
+          src: "../../html/img/scene1/lines/line4.png",
+          
+        },
+        transform: {
+          xx: 0.5669,
+          yx: -0.8238,
+          xy: 0.8238,
+          yy: 0.5669,
+          dx: 872.6172,
+          dy: 278.7227,
+          
+        }
+      },
+      {
+        name: "id:lineA_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 620,
+          height: 57,
+          src: "../../html/img/scene1/lines/line5.png",
+          
+        },
+        transform: {
+          xx: -0.9893,
+          yx: 0.1461,
+          xy: -0.1461,
+          yy: -0.9893,
+          dx: 420.3379,
+          dy: 597.4102,
+          
+        }
+      },
+      {
+        name: "id:lineC_x3B_opacity:0_x3B_",
+        shape: {
+          type: "image",
+          width: 620,
+          height: 57,
+          src: "../../html/img/scene1/lines/line3.png",
+          
+        },
+        transform: {
+          xx: -0.9837,
+          yx: -0.1796,
+          xy: 0.1796,
+          yy: -0.9837,
+          dx: 313.9956,
+          dy: 370.9229,
+          
+        }
+      },
+      
+    ],
+    
+  },
+  {
+    name: "Meta",
+    children: [
+      {
+        name: "type:ScrollHintStart_x3B_id:scrollHint1_x3B_",
+        shape: {
+          type: "rect",
+          x: 582.494,
+          y: 426.643,
+          width: 120,
+          height: 120,
+          
+        },
+        fill: "#FFD4FF",
+        
+      }
+    ]
+  }
+]

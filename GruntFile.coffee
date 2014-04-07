@@ -68,7 +68,7 @@ module.exports = (grunt) ->
 
 		percolator	:
 			main		:
-				source		:	'./src/app/'
+				source		:	'./src/app'
 				output		:	'./public/javascripts/Main.js'
 				main	  	:	'Main.coffee'
 				compile		:	true
@@ -103,6 +103,21 @@ module.exports = (grunt) ->
 			prod		:
 				options		:
 					script		:	'./src/express/server.js'
+		###
+		xsltproc	:		
+			options		:
+				stylesheet	:		'./src/xslt/svg2gfx.xslt'
+			compile		:
+				files		:
+					'public/json/tiger.json'	:		['src/svg/tiger.svg']
+		###
+		svg2json	:
+			options		:
+				isAnimation		:		true
+			compile		:
+				files		:
+					'public/json/svg2json.json' : ['src/svg/*.svg']
+			
 				
 	grunt.initConfig options
 
@@ -112,8 +127,10 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks 'grunt-contrib-copy'
 	grunt.loadNpmTasks 'grunt-contrib-coffee'
 	grunt.loadNpmTasks 'grunt-foreman'
+	grunt.loadNpmTasks 'grunt-xsltproc'
+	grunt.loadNpmTasks 'grunt-svg2json'
 
-	devOpts =	
+	commands =	
 		default	:	[
 					'percolator:main',
 					'percolator:dev',
@@ -134,13 +151,22 @@ module.exports = (grunt) ->
 					'percolator:server',
 					'foreman'
 					]
+
 		d3		:	[
 					'percolator:d3'
 					'watch'
 					]
 
-	grunt.registerTask		'dev',			devOpts.default
-	grunt.registerTask		'd3',				devOpts.d3
-	grunt.registerTask		'serve',		devOpts.serve
-	grunt.registerTask		'default',	devOpts.default
-	grunt.registerTask		'build',		devOpts.build
+		xslt	: [
+					'xsltproc'
+					]
+
+		svg		:		['svg2json']
+
+	grunt.registerTask		'dev',			commands.default
+	grunt.registerTask		'd3',				commands.d3
+	grunt.registerTask		'serve',		commands.serve
+	grunt.registerTask		'default',	commands.default
+	grunt.registerTask		'build',		commands.build
+	grunt.registerTask		'xslt',			commands.xslt
+	grunt.registerTask		'svg',				commands.svg
